@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="he" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מגילת אסתר | Megillat Esther</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Frank+Ruhl+Libre:wght@400;500;700&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --parchment: #f8f4e8;
+            --parchment-dark: #e8e0cc;
+            --ink: #1a1612;
+            --ink-light: #4a4540;
+            --gold: #c9a227;
+            --gold-dark: #8b7019;
+            --burgundy: #6b2d3c;
+            --cream: #fffef9;
+            --shadow: rgba(26, 22, 18, 0.08);
+            --eng-color: #4a7c59;
+            --translit-color: #7c4a6b;
+            --rus-color: #4a5a7c;
+            --rus-translit-color: #7c6b4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Literata', Georgia, serif;
+            background: linear-gradient(180deg, var(--parchment) 0%, var(--cream) 50%, var(--parchment) 100%);
+            background-attachment: fixed;
+            color: var(--ink);
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(180deg, var(--parchment) 0%, rgba(248, 244, 232, 0.97) 100%);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            border-bottom: 1px solid var(--parchment-dark);
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0.75rem 2rem;
+        }
+
+        /* Title Block - shown when expanded */
+        .title-block {
+            text-align: center;
+            padding: 0.5rem 0;
+        }
+
+        .header.collapsed .title-block {
+            display: none;
+        }
+
+        .decorative-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .decorative-line {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .decorative-star {
+            color: var(--gold);
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: var(--burgundy);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.1rem;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel Decorative', 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--burgundy);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .chabad-credit {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--ink-light);
+            margin-top: 0.3rem;
+        }
+
+        .decorative-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 0.3rem;
+        }
+
+        /* Mini Header - shown when collapsed */
+        .mini-header {
+            display: none;
+            text-align: center;
+            padding: 0.3rem 0;
+            cursor: pointer;
+            border-bottom: 1px solid var(--parchment-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .mini-header:hover {
+            background: rgba(201, 162, 39, 0.05);
+        }
+
+        .header.collapsed .mini-header {
+            display: block;
+        }
+
+        .mini-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--burgundy);
+        }
+
+        .mini-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--gold-dark);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-left: 0.6rem;
+        }
+
+        .expand-hint {
+            font-size: 0.55rem;
+            color: var(--ink-light);
+            margin-left: 0.4rem;
+            opacity: 0.5;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .toggle-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.4rem 0.8rem;
+            border: 1.5px solid var(--gold);
+            background: transparent;
+            color: var(--gold-dark);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(201, 162, 39, 0.1);
+        }
+
+        .toggle-btn.active {
+            background: var(--gold);
+            color: var(--cream);
+        }
+
+        /* Color-coded toggle buttons */
+        .toggle-btn[data-layer="english-translation"].active {
+            background: var(--eng-color);
+            border-color: var(--eng-color);
+        }
+        .toggle-btn[data-layer="english-translit"].active {
+            background: var(--translit-color);
+            border-color: var(--translit-color);
+        }
+        .toggle-btn[data-layer="russian-translation"].active {
+            background: var(--rus-color);
+            border-color: var(--rus-color);
+        }
+        .toggle-btn[data-layer="russian-translit"].active {
+            background: var(--rus-translit-color);
+            border-color: var(--rus-translit-color);
+        }
+
+        /* Chapter Navigation */
+        .chapter-nav {
+            display: flex;
+            gap: 0.35rem;
+            margin-left: 1rem;
+            padding-left: 1rem;
+            border-left: 1px solid var(--parchment-dark);
+        }
+
+        .chapter-link {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+            width: 1.7rem;
+            height: 1.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--ink-light);
+            color: var(--ink-light);
+            text-decoration: none;
+            border-radius: 50%;
+            transition: all 0.15s ease;
+        }
+
+        .chapter-link:hover {
+            background: var(--burgundy);
+            border-color: var(--burgundy);
+            color: var(--cream);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 1.5rem 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chapter {
+            margin-bottom: 3rem;
+        }
+
+        .chapter-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--burgundy);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .chapter-title::before,
+        .chapter-title::after {
+            content: '✦';
+            font-size: 0.7rem;
+            color: var(--gold);
+        }
+
+        /* Verse Block - Column Layout */
+        .verse {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 254, 249, 0.8);
+            border-radius: 6px;
+            border-left: 3px solid var(--gold);
+            box-shadow: 0 1px 8px var(--shadow);
+        }
+
+        .verse-header {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+
+        .verse-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gold-dark);
+            background: rgba(201, 162, 39, 0.15);
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+        }
+
+        .verse-content {
+            display: grid;
+            gap: 0.5rem;
+            grid-template-columns: 1fr;
+        }
+
+        /* Dynamic columns based on visible layers */
+        .verse-content.cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .verse-content.cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .verse-content.cols-4 { grid-template-columns: repeat(4, 1fr); }
+        .verse-content.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+        /* Hebrew Text */
+        .hebrew {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            direction: rtl;
+            text-align: right;
+            color: var(--ink);
+            padding: 0.5rem 0.6rem;
+            background: rgba(201, 162, 39, 0.08);
+            border-radius: 4px;
+            border-right: 3px solid var(--gold);
+        }
+
+        /* Layer columns */
+        .layer {
+            display: none;
+            padding: 0.5rem 0.6rem;
+            border-radius: 4px;
+            background: rgba(248, 244, 232, 0.6);
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .layer.visible {
+            display: block;
+        }
+
+        .layer-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 0.25rem;
+            display: block;
+            opacity: 0.7;
+        }
+
+        .english-translation {
+            border-left: 3px solid var(--eng-color);
+        }
+        .english-translation .layer-label { color: var(--eng-color); }
+        .english-translation p {
+            font-family: 'Literata', Georgia, serif;
+            color: var(--ink);
+        }
+
+        .english-translit {
+            border-left: 3px solid var(--translit-color);
+        }
+        .english-translit .layer-label { color: var(--translit-color); }
+        .english-translit p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--ink-light);
+        }
+
+        .russian-translation {
+            border-left: 3px solid var(--rus-color);
+        }
+        .russian-translation .layer-label { color: var(--rus-color); }
+        .russian-translation p {
+            font-family: 'Literata', Georgia, serif;
+            color: var(--ink);
+        }
+
+        .russian-translit {
+            border-left: 3px solid var(--rus-translit-color);
+        }
+        .russian-translit .layer-label { color: var(--rus-translit-color); }
+        .russian-translit p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: var(--ink-light);
+        }
+
+        /* Responsive columns */
+        @media (max-width: 700px) {
+            .verse-content.cols-2,
+            .verse-content.cols-3,
+            .verse-content.cols-4,
+            .verse-content.cols-5 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 701px) and (max-width: 1000px) {
+            .verse-content.cols-3,
+            .verse-content.cols-4,
+            .verse-content.cols-5 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1001px) and (max-width: 1300px) {
+            .verse-content.cols-4,
+            .verse-content.cols-5 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Footer ornament */
+        .scroll-ornament {
+            text-align: center;
+            margin-top: 3rem;
+            font-size: 1.3rem;
+            color: var(--gold);
+            letter-spacing: 0.8rem;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .header-content {
+                padding: 0.5rem 1rem;
+            }
+
+            h1 { font-size: 1.8rem; }
+            .subtitle { font-size: 0.8rem; }
+            .chabad-credit { font-size: 0.55rem; }
+
+            .controls { flex-direction: column; gap: 0.5rem; }
+
+            .chapter-nav {
+                margin-left: 0;
+                padding-left: 0;
+                border-left: none;
+                padding-top: 0.5rem;
+                border-top: 1px solid var(--parchment-dark);
+            }
+
+            main { padding: 1rem 0.75rem 4rem; }
+
+            .hebrew { font-size: 1.05rem; }
+            .layer { font-size: 0.85rem; }
+
+            .toggle-btn {
+                font-size: 0.8rem;
+                padding: 0.35rem 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="mini-header" id="miniHeader">
+                <span class="mini-title">מגילת אסתר</span>
+                <span class="mini-subtitle">Megillat Esther</span>
+                <span class="expand-hint">▼</span>
+            </div>
+            <div class="title-block">
+                <div class="decorative-top">
+                    <span class="decorative-line"></span>
+                    <span class="decorative-star">✦</span>
+                    <span class="decorative-line"></span>
+                </div>
+                <h1>מגילת אסתר</h1>
+                <p class="subtitle">Megillat Esther</p>
+                <p class="chabad-credit">A Project of Chabad of Eastern Queens</p>
+                <div class="decorative-bottom">❧ ✦ ❧</div>
+            </div>
+            <div class="controls">
+                <div class="toggle-group">
+                    <button class="toggle-btn" data-layer="english-translation">English</button>
+                    <button class="toggle-btn" data-layer="english-translit">Transliteration</button>
+                    <button class="toggle-btn" data-layer="russian-translation">Русский</button>
+                    <button class="toggle-btn" data-layer="russian-translit">Транслитерация</button>
+                </div>
+                <nav class="chapter-nav" aria-label="Chapter navigation">
+                    <a href="#chapter-1" class="chapter-link">1</a>
+                    <a href="#chapter-2" class="chapter-link">2</a>
+                    <a href="#chapter-3" class="chapter-link">3</a>
+                    <a href="#chapter-4" class="chapter-link">4</a>
+                    <a href="#chapter-5" class="chapter-link">5</a>
+                    <a href="#chapter-6" class="chapter-link">6</a>
+                    <a href="#chapter-7" class="chapter-link">7</a>
+                    <a href="#chapter-8" class="chapter-link">8</a>
+                    <a href="#chapter-9" class="chapter-link">9</a>
+                    <a href="#chapter-10" class="chapter-link">10</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="chapter" id="chapter-1">
+            <h2 class="chapter-title">פרק א — Chapter One</h2>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:1</span></div>
+                <div class="verse-content" data-verse="1">
+                    <div class="hebrew">וַיְהִי בִּימֵי אֲחַשְׁוֵרוֹשׁ הוּא אֲחַשְׁוֵרוֹשׁ הַמֹּלֵךְ מֵהֹדּוּ וְעַד־כּוּשׁ שֶׁבַע וְעֶשְׂרִים וּמֵאָה מְדִינָה׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And it came to pass in the days of Achashverosh—this is Achashverosh who reigned from Hodu to Kush, over one hundred and twenty-seven provinces.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(1) Vayhi bimei Achashverosh, hu Achashverosh hamolekh meHodu ve'ad Kush, sheva ve'esrim ume'a medina.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И было это в дни Ахашвероша — того Ахашвероша, который царствовал от Ходу до Куша над ста двадцатью семью областями.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(1) Вайhи бимей Ахашверош, hу Ахашверош hамолех меhоду веад Куш, шева веэсрим умеа медина.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:2</span></div>
+                <div class="verse-content" data-verse="2">
+                    <div class="hebrew">בַּיָּמִים הָהֵם כְּשֶׁבֶת הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ עַל כִּסֵּא מַלְכוּתוֹ אֲשֶׁר בְּשׁוּשַׁן הַבִּירָה׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>In those days, when King Achashverosh sat upon his royal throne, which was in Shushan the capital.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(2) Bayamim hahem, keshevet hamelekh Achashverosh al kise malkhuto, asher beShushan habira.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>В те дни, когда царь Ахашверош воссел на престол своего царства, который находился в Шушане, столице.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(2) Баямим hаhем, кешевет hамелех Ахашверош аль кисе малхуто, ашер беШушан hабира.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:3</span></div>
+                <div class="verse-content" data-verse="3">
+                    <div class="hebrew">בִּשְׁנַת שָׁלוֹשׁ לְמָלְכוֹ עָשָׂה מִשְׁתֶּה לְכָל־שָׂרָיו וַעֲבָדָיו חֵיל פָּרַס וּמָדַי הַפַּרְתְּמִים וְשָׂרֵי הַמְּדִינוֹת לְפָנָיו׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>In the third year of his reign, he made a feast for all his ministers and servants, the army of Persia and Media, the nobles and governors of the provinces, before him.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(3) Bishnat shalosh lemalcho, asa mishte lekhol sarav va'avadav, cheil Paras uMadai, hapartemim vesarei hamedinot lefanav.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>На третий год своего царствования он устроил пир для всех своих сановников и слуг, войска Персии и Мидии, знати и правителей областей пред ним.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(3) Бишнат шалош лемалхо, аса миште лехоль сарав ваавадав, хейль Парас уМадай, hапартемим весарей hамединот лефанав.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:4</span></div>
+                <div class="verse-content" data-verse="4">
+                    <div class="hebrew">בְּהַרְאֹתוֹ אֶת־עֹשֶׁר כְּבוֹד מַלְכוּתוֹ וְאֶת־יְקָר תִּפְאֶרֶת גְּדוּלָּתוֹ יָמִים רַבִּים שְׁמוֹנִים וּמְאַת יוֹם׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>When he displayed the riches of his glorious kingdom and the splendor of his excellent majesty for many days, one hundred and eighty days.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(4) Behar'oto et osher kevod malkhuto, ve'et yekar tif'eret gedulato, yamim rabim, shmonim ume'at yom.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Показывая богатство славы своего царства и великолепие величия своего, много дней — сто восемьдесят дней.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(4) Беhарото эт ошер кевод малхуто, веэт йекар тиферет гедулато, ямим рабим, шмоним умеат йом.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:5</span></div>
+                <div class="verse-content" data-verse="5">
+                    <div class="hebrew">וּבִמְלוֹאת הַיָּמִים הָאֵלֶּה עָשָׂה הַמֶּלֶךְ לְכָל־הָעָם הַנִּמְצְאִים בְּשׁוּשַׁן הַבִּירָה לְמִגָּדוֹל וְעַד־קָטָן מִשְׁתֶּה שִׁבְעַת יָמִים בַּחֲצַר גִּנַּת בִּיתַן הַמֶּלֶךְ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And when these days were completed, the king made a feast for all the people who were present in Shushan the capital, from the greatest to the smallest, for seven days, in the courtyard of the garden of the king's pavilion.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(5) Uvimlo'ot hayamim ha'ele, asa hamelekh lekhol ha'am hanimtse'im beShushan habira, lemigadol ve'ad katan, mishte shiv'at yamim, bachatsar ginat bitan hamelekh.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И когда исполнились эти дни, устроил царь для всего народа, находившегося в Шушане, столице, от большого до малого, пир на семь дней, во дворе сада царского павильона.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(5) Увимлоот hаямим hаэле, аса hамелех лехоль hаам hанимцеим беШушан hабира, лемигадоль веад катан, миште шиват ямим, бахацар гинат битан hамелех.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:6</span></div>
+                <div class="verse-content" data-verse="6">
+                    <div class="hebrew">חוּר כַּרְפַּס וּתְכֵלֶת אָחוּז בְּחַבְלֵי־בוּץ וְאַרְגָּמָן עַל־גְּלִילֵי כֶסֶף וְעַמּוּדֵי שֵׁשׁ מִטּוֹת זָהָב וָכֶסֶף עַל רִצְפַת בַּהַט־וָשֵׁשׁ וְדַר וְסֹחָרֶת׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>There were hangings of white, fine cotton, and blue, held by cords of fine linen and purple, upon silver rods and marble pillars; couches of gold and silver upon a pavement of alabaster, marble, mother-of-pearl, and precious stones.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(6) Chur karpas utekhelet, achuz bechavlei vutz ve'argaman, al gelilei khesef ve'amudei shesh, mitot zahav vakhesef, al ritzpat bahat vashesh vedar vesocharet.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Белые, хлопковые и голубые завесы были прикреплены шнурами из виссона и пурпура к серебряным кольцам и мраморным колоннам; ложа золотые и серебряные на помосте из алебастра, мрамора, перламутра и драгоценных камней.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(6) Хур карпас утхелет, ахуз бехавлей вуц веаргаман, аль гелилей кесеф веамудей шеш, митот заhав вахесеф, аль рицпат баhат вашеш ведар весохарет.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:7</span></div>
+                <div class="verse-content" data-verse="7">
+                    <div class="hebrew">וְהַשְׁקוֹת בִּכְלֵי זָהָב וְכֵלִים מִכֵּלִים שׁוֹנִים וְיֵין מַלְכוּת רָב כְּיַד הַמֶּלֶךְ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And drinks were served in golden vessels, vessels of different kinds, and royal wine in abundance, according to the bounty of the king.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(7) Vehashkot bikhlei zahav, vekhelim mikhelim shonim, veyein malkhut rav keyad hamelekh.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И поили из золотых сосудов, сосудов различных видов, и царского вина было вдоволь, по щедрости царя.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(7) Веhашкот бихлей заhав, вехелим михелим шоним, вейейн малхут рав кеяд hамелех.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:8</span></div>
+                <div class="verse-content" data-verse="8">
+                    <div class="hebrew">וְהַשְּׁתִיָּה כַדָּת אֵין אֹנֵס כִּי־כֵן יִסַּד הַמֶּלֶךְ עַל כָּל־רַב בֵּיתוֹ לַעֲשׂוֹת כִּרְצוֹן אִישׁ־וָאִישׁ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And the drinking was according to the law, without compulsion, for so the king had instructed every steward of his house, that they should do according to each man's pleasure.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(8) Vehashtiya khadat, ein ones, ki khen yisad hamelekh al kol rav beito, la'asot kirtson ish va'ish.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И питьё было по установленному порядку, без принуждения, ибо так приказал царь каждому управителю своего дома — делать по желанию каждого.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(8) Веhаштия хадат, эйн онес, ки хен йисад hамелех аль коль рав бейто, лаасот кирцон иш ваиш.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:9</span></div>
+                <div class="verse-content" data-verse="9">
+                    <div class="hebrew">גַּם וַשְׁתִּי הַמַּלְכָּה עָשְׂתָה מִשְׁתֵּה נָשִׁים בֵּית הַמַּלְכוּת אֲשֶׁר לַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>Also Vashti the queen made a feast for the women in the royal house which belonged to King Achashverosh.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(9) Gam Vashti hamalka asta mishte nashim, beit hamalkhut asher lamelekh Achashverosh.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Также царица Вашти устроила пир для женщин в царском доме, принадлежавшем царю Ахашверошу.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(9) Гам Вашти hамалка аста миште нашим, бейт hамалхут ашер ламелех Ахашверош.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:10</span></div>
+                <div class="verse-content" data-verse="10">
+                    <div class="hebrew">בַּיּוֹם הַשְּׁבִיעִי כְּטוֹב לֵב־הַמֶּלֶךְ בַּיָּיִן אָמַר לִמְהוּמָן בִּזְּתָא חַרְבוֹנָא בִּגְתָא וַאֲבַגְתָא זֵתַר וְכַרְכַּס שִׁבְעַת הַסָּרִיסִים הַמְשָׁרְתִים אֶת־פְּנֵי הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>On the seventh day, when the heart of the king was merry with wine, he commanded Mehuman, Bizzetha, Charvona, Bigtha, Avagtha, Zetar, and Karkas, the seven chamberlains who served before King Achashverosh.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(10) Bayom hashvi'i, ketov lev hamelekh bayayin, amar liMhuman, Bizeta, Charvona, Bigta, va'Avagta, Zetar, veKharkas, shiv'at hasarisim hamsharetim et penei hamelekh Achashverosh.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>На седьмой день, когда сердце царя развеселилось от вина, он сказал Меhуману, Бизете, Харвоне, Бигте, Авагте, Зетару и Каркасу — семи евнухам, служившим пред царём Ахашверошем.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(10) Байом hашвии, кетов лев hамелех баяйин, амар лиМеhуман, Бизета, Харвона, Бигта, ваАвагта, Зетар, веХаркас, шиват hасарисим hамшаретим эт пеней hамелех Ахашверош.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:11</span></div>
+                <div class="verse-content" data-verse="11">
+                    <div class="hebrew">לְהָבִיא אֶת־וַשְׁתִּי הַמַּלְכָּה לִפְנֵי הַמֶּלֶךְ בְּכֶתֶר מַלְכוּת לְהַרְאוֹת הָעַמִּים וְהַשָּׂרִים אֶת־יָפְיָהּ כִּי־טוֹבַת מַרְאֶה הִיא׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>To bring Vashti the queen before the king with the royal crown, to show the peoples and the ministers her beauty, for she was fair to look upon.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(11) Lehavi et Vashti hamalka lifnei hamelekh bekheter malkhut, lehar'ot ha'amim vehasarim et yofya, ki tovat mar'e hi.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Привести царицу Вашти пред царя в царском венце, чтобы показать народам и сановникам её красоту, ибо она была прекрасна видом.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(11) Леhави эт Вашти hамалка лифней hамелех бехетер малхут, леhарот hаамим веhасарим эт йофья, ки товат маръэ hи.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:12</span></div>
+                <div class="verse-content" data-verse="12">
+                    <div class="hebrew">וַתְּמָאֵן הַמַּלְכָּה וַשְׁתִּי לָבוֹא בִּדְבַר הַמֶּלֶךְ אֲשֶׁר בְּיַד הַסָּרִיסִים וַיִּקְצֹף הַמֶּלֶךְ מְאֹד וַחֲמָתוֹ בָּעֲרָה בוֹ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>But Queen Vashti refused to come at the king's command conveyed by the chamberlains, and the king was very angry, and his wrath burned within him.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(12) Vatema'en hamalka Vashti lavo bidvar hamelekh asher beyad hasarisim, vayiktsof hamelekh me'od, vachamato ba'ara vo.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Но царица Вашти отказалась прийти по слову царя, переданному через евнухов, и царь очень разгневался, и ярость его разгорелась в нём.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(12) Ватемаэн hамалка Вашти лаво бидвар hамелех ашер беяд hасарисим, вайикцоф hамелех меод, вахамато баара во.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:13</span></div>
+                <div class="verse-content" data-verse="13">
+                    <div class="hebrew">וַיֹּאמֶר הַמֶּלֶךְ לַחֲכָמִים יֹדְעֵי הָעִתִּים כִּי־כֵן דְּבַר הַמֶּלֶךְ לִפְנֵי כָּל־יֹדְעֵי דָּת וָדִין׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>Then the king said to the wise men who knew the times—for this was the king's manner before all who knew law and judgment.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(13) Vayomer hamelekh lachakhamim yod'ei ha'itim, ki khen devar hamelekh lifnei kol yod'ei dat vadin.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И сказал царь мудрецам, знающим времена — ибо таково было правило царя перед всеми знающими закон и правосудие.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(13) Вайомер hамелех лахахамим йодей hаитим, ки хен девар hамелех лифней коль йодей дат вадин.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:14</span></div>
+                <div class="verse-content" data-verse="14">
+                    <div class="hebrew">וְהַקָּרֹב אֵלָיו כַּרְשְׁנָא שֵׁתָר אַדְמָתָא תַרְשִׁישׁ מֶרֶס מַרְסְנָא מְמוּכָן שִׁבְעַת שָׂרֵי פָּרַס וּמָדַי רֹאֵי פְּנֵי הַמֶּלֶךְ הַיֹּשְׁבִים רִאשֹׁנָה בַּמַּלְכוּת׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And those closest to him were Karshena, Shetar, Admata, Tarshish, Meres, Marsena, and Memukhan, the seven ministers of Persia and Media who saw the king's face and sat first in the kingdom.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(14) Vehakarov elav Karshena, Shetar, Admata, Tarshish, Meres, Marsena, Memukhan, shiv'at sarei Paras uMadai, ro'ei penei hamelekh, hayoshvim rishona bamalkhut.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>А ближайшие к нему были Каршена, Шетар, Адмата, Таршиш, Мерес, Марсена, Мемухан — семь сановников Персии и Мидии, видевших лицо царя и сидевших первыми в царстве.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(14) Веhакаров элав Каршена, Шетар, Адмата, Таршиш, Мерес, Марсена, Мемухан, шиват сарей Парас уМадай, роэй пеней hамелех, hайошвим ришона бамалхут.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:15</span></div>
+                <div class="verse-content" data-verse="15">
+                    <div class="hebrew">כְּדָת מַה־לַּעֲשׂוֹת בַּמַּלְכָּה וַשְׁתִּי עַל אֲשֶׁר לֹא־עָשְׂתָה אֶת־מַאֲמַר הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ בְּיַד הַסָּרִיסִים׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>"According to law, what is to be done with Queen Vashti, because she has not performed the command of King Achashverosh conveyed by the chamberlains?"</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(15) Kedat ma la'asot bamalka Vashti, al asher lo asta et ma'amar hamelekh Achashverosh beyad hasarisim.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>«По закону, что делать с царицей Вашти за то, что она не исполнила повеления царя Ахашвероша, переданного через евнухов?»</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(15) Кедат ма лаасот бамалка Вашти, аль ашер ло аста эт маамар hамелех Ахашверош беяд hасарисим.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:16</span></div>
+                <div class="verse-content" data-verse="16">
+                    <div class="hebrew">וַיֹּאמֶר מְמוּכָן לִפְנֵי הַמֶּלֶךְ וְהַשָּׂרִים לֹא עַל־הַמֶּלֶךְ לְבַדּוֹ עָוְתָה וַשְׁתִּי הַמַּלְכָּה כִּי עַל־כָּל־הַשָּׂרִים וְעַל־כָּל־הָעַמִּים אֲשֶׁר בְּכָל־מְדִינוֹת הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And Memukhan said before the king and the ministers: "Not against the king alone has Queen Vashti done wrong, but against all the ministers and all the peoples who are in all the provinces of King Achashverosh.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(16) Vayomer Memukhan lifnei hamelekh vehasarim, lo al hamelekh levado avta Vashti hamalka, ki al kol hasarim ve'al kol ha'amim asher bekhol medinot hamelekh Achashverosh.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И сказал Мемухан перед царём и сановниками: «Не против одного царя провинилась царица Вашти, но против всех сановников и всех народов, которые во всех областях царя Ахашвероша.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(16) Вайомер Мемухан лифней hамелех веhасарим, ло аль hамелех левадо авта Вашти hамалка, ки аль коль hасарим веаль коль hаамим ашер бехоль мединот hамелех Ахашверош.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:17</span></div>
+                <div class="verse-content" data-verse="17">
+                    <div class="hebrew">כִּי־יֵצֵא דְבַר־הַמַּלְכָּה עַל־כָּל־הַנָּשִׁים לְהַבְזוֹת בַּעְלֵיהֶן בְּעֵינֵיהֶן בְּאָמְרָם הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ אָמַר לְהָבִיא אֶת־וַשְׁתִּי הַמַּלְכָּה לְפָנָיו וְלֹא־בָאָה׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>For the queen's deed will go out to all the women, making them despise their husbands in their eyes, when they say: 'King Achashverosh commanded Vashti the queen to be brought before him, but she did not come.'</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(17) Ki yetse devar hamalka al kol hanashim, lehavzot ba'aleihen be'eineihen, be'omram hamelekh Achashverosh amar lehavi et Vashti hamalka lefanav, velo va'a.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Ибо разойдётся поступок царицы среди всех женщин, так что они станут презирать своих мужей в глазах своих, говоря: "Царь Ахашверош повелел привести царицу Вашти к нему, но она не пришла."</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(17) Ки йецэ девар hамалка аль коль hанашим, леhавзот баалейhен беэйнейhен, беомрам hамелех Ахашверош амар леhави эт Вашти hамалка лефанав, вело ваа.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:18</span></div>
+                <div class="verse-content" data-verse="18">
+                    <div class="hebrew">וְהַיּוֹם הַזֶּה תֹּאמַרְנָה שָׂרוֹת פָּרַס־וּמָדַי אֲשֶׁר שָׁמְעוּ אֶת־דְּבַר הַמַּלְכָּה לְכֹל שָׂרֵי הַמֶּלֶךְ וּכְדַי בִּזָּיוֹן וָקָצֶף׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And this very day, the noblewomen of Persia and Media who have heard of the queen's deed will say the same to all the king's ministers, and there will be much contempt and wrath.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(18) Vehayom haze tomarna sarot Paras uMadai asher sham'u et devar hamalka, lekhol sarei hamelekh, ukhedai bizayon vakatsef.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И сегодня же знатные женщины Персии и Мидии, которые услышали о поступке царицы, скажут то же всем сановникам царя, и будет много презрения и гнева.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(18) Веhайом hазе томарна сарот Парас уМадай ашер шаму эт девар hамалка, лехоль сарей hамелех, ухедай бизайон вакацеф.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:19</span></div>
+                <div class="verse-content" data-verse="19">
+                    <div class="hebrew">אִם־עַל־הַמֶּלֶךְ טוֹב יֵצֵא דְבַר־מַלְכוּת מִלְּפָנָיו וְיִכָּתֵב בְּדָתֵי פָרַס־וּמָדַי וְלֹא יַעֲבוֹר אֲשֶׁר לֹא־תָבוֹא וַשְׁתִּי לִפְנֵי הַמֶּלֶךְ אֲחַשְׁוֵרוֹשׁ וּמַלְכוּתָהּ יִתֵּן הַמֶּלֶךְ לִרְעוּתָהּ הַטּוֹבָה מִמֶּנָּה׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>If it please the king, let a royal edict go forth from him, and let it be written in the laws of Persia and Media, so that it cannot be revoked, that Vashti shall never again come before King Achashverosh, and let the king give her royal position to another who is better than she.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(19) Im al hamelekh tov, yetse devar malkhut milefanav, veyikatev bedatei Paras uMadai velo ya'avor, asher lo tavo Vashti lifnei hamelekh Achashverosh, umalkhuta yiten hamelekh lir'uta hatova mimena.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>Если царю угодно, пусть выйдет от него царский указ и будет записан в законах Персии и Мидии, чтобы не был отменён, что Вашти больше не придёт к царю Ахашверошу, а её царское достоинство царь передаст другой, лучшей, чем она.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(19) Им аль hамелех тов, йецэ девар малхут милефанав, вейикатев бедатей Парас уМадай вело яавор, ашер ло таво Вашти лифней hамелех Ахашверош, умалхута йитен hамелех лиреута hатова мимена.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:20</span></div>
+                <div class="verse-content" data-verse="20">
+                    <div class="hebrew">וְנִשְׁמַע פִּתְגָם הַמֶּלֶךְ אֲשֶׁר־יַעֲשֶׂה בְּכָל־מַלְכוּתוֹ כִּי רַבָּה הִיא וְכָל־הַנָּשִׁים יִתְּנוּ יְקָר לְבַעְלֵיהֶן לְמִגָּדוֹל וְעַד־קָטָן׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And when the king's decree which he shall make is heard throughout all his kingdom, great as it is, all the wives will give honor to their husbands, from the greatest to the smallest."</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(20) Venishma pitgam hamelekh asher ya'ase bekhol malkhuto, ki raba hi, vekhol hanashim yitnu yekar leva'aleihen, lemigadol ve'ad katan.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И когда указ царя, который он издаст, будет услышан во всём его царстве — а оно велико — все жёны будут почитать своих мужей, от большого до малого."</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(20) Венишма питгам hамелех ашер яасэ бехоль малхуто, ки раба hи, вехоль hанашим йитну йекар левааалейhен, лемигадоль веад катан.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:21</span></div>
+                <div class="verse-content" data-verse="21">
+                    <div class="hebrew">וַיִּיטַב הַדָּבָר בְּעֵינֵי הַמֶּלֶךְ וְהַשָּׂרִים וַיַּעַשׂ הַמֶּלֶךְ כִּדְבַר מְמוּכָן׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And the matter pleased the king and the ministers, and the king did according to the word of Memukhan.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(21) Vayitav hadavar be'einei hamelekh vehasarim, vaya'as hamelekh kidvar Memukhan.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И понравилось это дело царю и сановникам, и поступил царь по слову Мемухана.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(21) Вайитав hадавар беэйней hамелех веhасарим, ваяас hамелех кидвар Мемухан.</p></div>
+                </div>
+            </article>
+
+            <article class="verse">
+                <div class="verse-header"><span class="verse-number">1:22</span></div>
+                <div class="verse-content" data-verse="22">
+                    <div class="hebrew">וַיִּשְׁלַח סְפָרִים אֶל־כָּל־מְדִינוֹת הַמֶּלֶךְ אֶל־מְדִינָה וּמְדִינָה כִּכְתָבָהּ וְאֶל־עַם וָעָם כִּלְשׁוֹנוֹ לִהְיוֹת כָּל־אִישׁ שֹׂרֵר בְּבֵיתוֹ וּמְדַבֵּר כִּלְשׁוֹן עַמּוֹ׃</div>
+                    <div class="layer english-translation"><span class="layer-label">English</span><p>And he sent letters to all the king's provinces, to each province in its own script and to each people in its own language, that every man should be master in his own house and speak the language of his own people.</p></div>
+                    <div class="layer english-translit"><span class="layer-label">Transliteration</span><p>(22) Vayishlach sefarim el kol medinot hamelekh, el medina umedina kikhtava, ve'el am va'am kilshono, lihyot kol ish sorer beveito, umedaber kilshon amo.</p></div>
+                    <div class="layer russian-translation"><span class="layer-label">Русский</span><p>И разослал он письма во все области царя, в каждую область её письмом и каждому народу на его языке, чтобы каждый муж был господином в своём доме и говорил на языке своего народа.</p></div>
+                    <div class="layer russian-translit"><span class="layer-label">Транслитерация</span><p>(22) Вайишлах сефарим эль коль мединот hамелех, эль медина умедина кихтава, веэль ам ваам килшоно, лиhйот коль иш сорер бевейто, умедабер килшон амо.</p></div>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- Placeholder chapters -->
+        <section class="chapter" id="chapter-2"><h2 class="chapter-title">פרק ב — Chapter Two</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-3"><h2 class="chapter-title">פרק ג — Chapter Three</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-4"><h2 class="chapter-title">פרק ד — Chapter Four</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-5"><h2 class="chapter-title">פרק ה — Chapter Five</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-6"><h2 class="chapter-title">פרק ו — Chapter Six</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-7"><h2 class="chapter-title">פרק ז — Chapter Seven</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-8"><h2 class="chapter-title">פרק ח — Chapter Eight</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-9"><h2 class="chapter-title">פרק ט — Chapter Nine</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+        <section class="chapter" id="chapter-10"><h2 class="chapter-title">פרק י — Chapter Ten</h2><p style="text-align:center;color:var(--ink-light);font-style:italic;padding:2rem;">Coming soon...</p></section>
+
+        <div class="scroll-ornament">❧ ✦ ❧</div>
+    </main>
+
+    <script>
+        const header = document.getElementById('header');
+        const miniHeader = document.getElementById('miniHeader');
+        const toggleButtons = document.querySelectorAll('.toggle-btn');
+        const verseContents = document.querySelectorAll('.verse-content');
+
+        // Count visible layers and update grid columns
+        function updateColumns() {
+            const visibleCount = document.querySelectorAll('.toggle-btn.active').length;
+            const colClass = `cols-${visibleCount + 1}`; // +1 for Hebrew
+
+            verseContents.forEach(vc => {
+                vc.className = 'verse-content ' + colClass;
+            });
+        }
+
+        // Toggle layer visibility
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const layerClass = btn.dataset.layer;
+                btn.classList.toggle('active');
+
+                document.querySelectorAll(`.${layerClass}`).forEach(layer => {
+                    layer.classList.toggle('visible');
+                });
+
+                updateColumns();
+            });
+        });
+
+        // Smooth scroll for chapter links
+        document.querySelectorAll('.chapter-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                const headerHeight = header.offsetHeight;
+                const top = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 15;
+                window.scrollTo({ top, behavior: 'smooth' });
+            });
+        });
+
+        // Simple header collapse on scroll
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > 80) {
+                header.classList.add('collapsed');
+            } else {
+                header.classList.remove('collapsed');
+            }
+            lastScroll = currentScroll;
+        }, { passive: true });
+
+        // Click mini header to expand
+        miniHeader.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
