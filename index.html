@@ -641,46 +641,60 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* ─── MOBILE portrait: horizontal snap columns ─── */
+        /* ─── MOBILE portrait: true side-by-side, smaller fonts ─── */
         @media (max-width: 640px) {
             header { --header-h: 100px; }
             .header-inner { padding: 0.6rem 1rem; }
             .controls-bar { gap: 0.35rem; }
             .toggle-btn { font-size: 0.62rem; padding: 0.35rem 0.6rem; }
             .chapter-nav { margin-left: 0; padding-left: 0; border-left: none; border-top: 1px solid var(--parchment-dark); padding-top: 0.4rem; }
-            main { padding: 1rem 0.5rem 5rem; }
+            main { padding: 1rem 0.4rem 5rem; }
 
-            /* Keep side-by-side but allow horizontal scroll per verse */
-            .verse-content {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scroll-snap-type: x mandatory;
-                /* Show a subtle shadow on the right to hint there's more */
-            }
+            /* Tighter verse padding */
+            .verse { gap: 0; }
+            .verse-num-col { padding: 0.5rem 0.15rem 0.5rem 0.3rem; }
+            .verse-num { font-size: 0.48rem; }
+
+            /* Side-by-side columns with compact fonts */
+            .verse-content { flex-direction: row; overflow: visible; }
+
             .col-hebrew {
-                flex: 0 0 85vw;          /* ~85% of screen width */
-                min-width: 0;
-                scroll-snap-align: start;
+                flex: none !important;
+                width: 48% !important;
+                padding: 0.45rem 0.4rem;
+                border-right: 1px solid var(--parchment-dark);
             }
+            .col-hebrew p {
+                font-size: 0.88rem;
+                line-height: 1.75;
+            }
+
             .layer {
-                flex: 0 0 82vw;
+                flex: 1 !important;
                 min-width: 0;
-                scroll-snap-align: start;
+                padding: 0.45rem 0.4rem;
+                border-right: none;
             }
-            /* Override the has-N width classes on mobile */
-            .verse-content.has-0 .col-hebrew,
-            .verse-content.has-1 .col-hebrew,
-            .verse-content.has-2 .col-hebrew,
+            .layer p {
+                font-size: 0.75rem;
+                line-height: 1.5;
+            }
+
+            /* When only hebrew is shown (no layers), let it fill */
+            .verse-content.has-0 .col-hebrew {
+                width: 100% !important;
+                border-right: none;
+            }
+
+            /* With 3+ layers, make hebrew narrower */
             .verse-content.has-3 .col-hebrew,
-            .verse-content.has-4 .col-hebrew { width: auto; }
-
-            .col-hebrew p { font-size: 1.0rem; }
-            .layer p      { font-size: 0.82rem; }
-
-            /* Thin scrollbar */
-            .verse-content::-webkit-scrollbar       { height: 3px; }
-            .verse-content::-webkit-scrollbar-track { background: var(--parchment-dark); }
-            .verse-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+            .verse-content.has-4 .col-hebrew {
+                width: 40% !important;
+            }
+            .verse-content.has-3 .layer p,
+            .verse-content.has-4 .layer p {
+                font-size: 0.68rem;
+            }
         }
 
         /* Medium: 2-col comfortable */
@@ -779,8 +793,8 @@
 <div class="rotate-nudge" id="rotateNudge">
     <span class="rotate-nudge-icon">📱</span>
     <span class="rotate-nudge-text">
-        Rotate for side-by-side view
-        <small>Or swipe right on each verse</small>
+        Rotate for larger text
+        <small>Landscape gives more reading room</small>
     </span>
     <button class="rotate-nudge-dismiss" id="rotateNudgeDismiss" aria-label="Dismiss">✕</button>
 </div>
