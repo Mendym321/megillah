@@ -1406,11 +1406,20 @@
         // ========== AUDIO SETUP ==========
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
+        let audioInitialized = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            audioInitialized = true;
+        }
 
         function playGraggerSound() {
-            if (!audioCtx) audioCtx = new AudioContext();
-            
-            // Resume audio context (needed for mobile)
+            if (!audioCtx) initAudio();
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
@@ -1431,7 +1440,7 @@
                     source.buffer = buffer;
                     
                     const gainNode = audioCtx.createGain();
-                    gainNode.gain.value = 0.4;
+                    gainNode.gain.value = 0.5;
                     
                     const filter = audioCtx.createBiquadFilter();
                     filter.type = 'bandpass';
@@ -1466,6 +1475,12 @@
 
         // Start reading
         startBtn.addEventListener('click', () => {
+            // Initialize audio on this user interaction
+            initAudio();
+            
+            // Request motion permission on iOS
+            requestMotionPermission();
+            
             // Apply selected options
             welcomeOptions.forEach(opt => {
                 const layer = opt.dataset.layer;
@@ -1497,11 +1512,6 @@
             
             if (isMobile && isPortrait) {
                 rotateScreen.classList.add('show');
-            }
-            
-            // Initialize audio context on user interaction
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
             }
         });
 
@@ -1541,70 +1551,102 @@
             welcomeScreen.classList.remove('hidden');
         });
 
-        // ========== GRAGGER FUNCTIONALITY ==========
-        const shakeHint = document.getElementById('shakeHint');
-        let activeGragger = null;
+        // ========== SHAKE DETECTION ==========
         let shakeEnabled = false;
+        let lastShakeTime = 0;
+        let lastX = null, lastY = null, lastZ = null;
+        const SHAKE_THRESHOLD = 15;
+        const SHAKE_TIMEOUT = 300;
 
-        // Use event delegation for graggers
+        function requestMotionPermission() {
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                // iOS 13+ requires permission
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            enableShakeDetection();
+                        }
+                    })
+                    .catch(err => console.log('Motion permission error:', err));
+            } else if ('DeviceMotionEvent' in window) {
+                // Android and older iOS
+                enableShakeDetection();
+            }
+        }
+
+        function enableShakeDetection() {
+            if (shakeEnabled) return;
+            window.addEventListener('devicemotion', handleMotion, true);
+            shakeEnabled = true;
+            console.log('Shake detection enabled');
+        }
+
+        function handleMotion(event) {
+            const acc = event.accelerationIncludingGravity || event.acceleration;
+            if (!acc) return;
+
+            const x = acc.x || 0;
+            const y = acc.y || 0;
+            const z = acc.z || 0;
+
+            if (lastX !== null) {
+                const deltaX = Math.abs(x - lastX);
+                const deltaY = Math.abs(y - lastY);
+                const deltaZ = Math.abs(z - lastZ);
+                const totalDelta = deltaX + deltaY + deltaZ;
+
+                const now = Date.now();
+                if (totalDelta > SHAKE_THRESHOLD && now - lastShakeTime > SHAKE_TIMEOUT) {
+                    lastShakeTime = now;
+                    onShake();
+                }
+            }
+
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        }
+
+        function onShake() {
+            playGraggerSound();
+            
+            // Animate all visible graggers
+            document.querySelectorAll('.gragger').forEach(g => {
+                g.classList.add('shaking');
+                setTimeout(() => g.classList.remove('shaking'), 300);
+            });
+            
+            // Vibrate if supported
+            if (navigator.vibrate) {
+                navigator.vibrate([50, 30, 50]);
+            }
+        }
+
+        // ========== GRAGGER CLICK ==========
+        const shakeHint = document.getElementById('shakeHint');
+
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('gragger')) {
+                // Initialize audio on click
+                initAudio();
+                
                 const gragger = e.target;
                 playGraggerSound();
                 gragger.classList.add('shaking');
                 setTimeout(() => gragger.classList.remove('shaking'), 300);
 
+                // Vibrate if supported
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+
                 // Show shake hint on mobile
-                if ('DeviceMotionEvent' in window && window.innerWidth <= 768) {
-                    activeGragger = gragger;
+                if (window.innerWidth <= 768 && shakeEnabled) {
                     shakeHint.classList.add('show');
                     setTimeout(() => shakeHint.classList.remove('show'), 2500);
-                    
-                    // Enable shake detection
-                    if (!shakeEnabled) {
-                        enableShakeDetection();
-                    }
                 }
             }
         });
-
-        // Shake detection
-        let lastShake = 0;
-        function enableShakeDetection() {
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                // iOS 13+
-                DeviceMotionEvent.requestPermission()
-                    .then(response => {
-                        if (response === 'granted') {
-                            window.addEventListener('devicemotion', handleShake);
-                            shakeEnabled = true;
-                        }
-                    })
-                    .catch(console.error);
-            } else if ('DeviceMotionEvent' in window) {
-                // Non-iOS
-                window.addEventListener('devicemotion', handleShake);
-                shakeEnabled = true;
-            }
-        }
-
-        function handleShake(event) {
-            const acc = event.accelerationIncludingGravity;
-            if (!acc || !acc.x) return;
-
-            const totalAcceleration = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-            const now = Date.now();
-
-            if (totalAcceleration > 20 && now - lastShake > 250) {
-                lastShake = now;
-                playGraggerSound();
-                
-                if (activeGragger) {
-                    activeGragger.classList.add('shaking');
-                    setTimeout(() => activeGragger.classList.remove('shaking'), 300);
-                }
-            }
-        }
 
         // ========== EXISTING FUNCTIONALITY ==========
         const header = document.getElementById('header');
