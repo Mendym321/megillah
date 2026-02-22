@@ -59,7 +59,7 @@
         ════════════════════════════════ */
         .welcome-screen {
             position: fixed; inset: 0;
-            background: linear-gradient(160deg, #110e09 0%, #1e1810 60%, #110e09 100%);
+            background: radial-gradient(ellipse at 50% 25%, #2a1f0e 0%, #110e09 55%, #080603 100%);
             z-index: 1000;
             display: flex;
             flex-direction: column;
@@ -68,18 +68,75 @@
             padding: 2rem 1.5rem;
             text-align: center;
             overflow-y: auto;
+            overflow-x: hidden;
         }
         .welcome-screen.hidden { display: none; }
 
+        /* Particle canvas */
+        #particleCanvas {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 1001;
+        }
+
+        /* Warm glow orb */
+        .welcome-glow {
+            position: fixed;
+            top: 28%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(500px, 90vw); height: min(500px, 90vw);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(184,136,42,0.2) 0%, rgba(107,31,52,0.08) 45%, transparent 72%);
+            pointer-events: none;
+            z-index: 1002;
+            animation: pulseGlow 5s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%,100% { opacity: 0.65; transform: translate(-50%,-50%) scale(1); }
+            50%      { opacity: 1;    transform: translate(-50%,-50%) scale(1.15); }
+        }
+
+        /* Content wrapper — sits above canvas */
+        .welcome-content {
+            position: relative;
+            z-index: 1003;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* Staggered entrance for every direct child */
+        .welcome-content > * {
+            opacity: 0;
+            animation: fadeSlideUp 0.65s ease forwards;
+        }
+        .welcome-content > *:nth-child(1) { animation-delay: 0.05s; }
+        .welcome-content > *:nth-child(2) { animation-delay: 0.2s;  }
+        .welcome-content > *:nth-child(3) { animation-delay: 0.35s; }
+        .welcome-content > *:nth-child(4) { animation-delay: 0.47s; }
+        .welcome-content > *:nth-child(5) { animation-delay: 0.57s; }
+        .welcome-content > *:nth-child(6) { animation-delay: 0.66s; }
+        .welcome-content > *:nth-child(7) { animation-delay: 0.74s; }
+        .welcome-content > *:nth-child(8) { animation-delay: 0.81s; }
+        .welcome-content > *:nth-child(9) { animation-delay: 0.88s; }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating scroll icon */
         .welcome-scroll-icon {
             font-size: 3.5rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             display: block;
-            animation: floatIcon 4s ease-in-out infinite;
+            opacity: 0;
+            animation: fadeSlideUp 0.65s ease 0.05s forwards, floatIcon 4s ease-in-out 1s infinite;
+            filter: drop-shadow(0 0 20px rgba(212,165,58,0.7));
         }
         @keyframes floatIcon {
-            0%,100% { transform: translateY(0) rotate(-2deg); }
-            50%      { transform: translateY(-10px) rotate(2deg); }
+            0%,100% { transform: translateY(0)    rotate(-3deg); }
+            50%      { transform: translateY(-12px) rotate(3deg); }
         }
 
         .welcome-eyebrow {
@@ -88,79 +145,118 @@
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gold);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.55rem;
         }
+
+        /* Shimmering title */
         .welcome-title {
             font-family: 'Frank Ruhl Libre', serif;
             font-size: clamp(3rem, 10vw, 5rem);
             font-weight: 900;
-            color: var(--cream);
             line-height: 1;
             margin-bottom: 0.4rem;
+            background: linear-gradient(
+                90deg,
+                #c9a44a 0%,
+                #fdf8e8 25%,
+                #d4a53a 50%,
+                #fdf8e8 75%,
+                #c9a44a 100%
+            );
+            background-size: 250% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeSlideUp 0.65s ease 0.35s forwards, shimmerText 5s linear 1s infinite;
+            opacity: 0;
         }
+        @keyframes shimmerText {
+            0%   { background-position: 250% center; }
+            100% { background-position: -250% center; }
+        }
+
         .welcome-subtitle {
             font-family: 'Cinzel', serif;
             font-size: clamp(0.8rem, 2.5vw, 1.1rem);
             letter-spacing: 0.25em;
             color: var(--gold-bright);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
         }
         .welcome-tagline {
-            font-size: 0.95rem;
-            color: rgba(255,255,255,0.45);
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.38);
             font-style: italic;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.1rem;
         }
 
+        /* Expanding divider line */
         .welcome-divider {
-            width: 80px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            margin: 0 auto 1.5rem;
+            width: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+            margin: 0 auto 1.15rem;
+            opacity: 0;
+            animation: expandLine 0.9s ease 0.85s forwards;
+        }
+        @keyframes expandLine {
+            from { width: 0;    opacity: 0; }
+            to   { width: 80px; opacity: 1; }
         }
 
         .welcome-label {
             font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-            margin-bottom: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.6rem;
         }
 
         .welcome-options {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.42rem;
             width: 100%;
             max-width: 280px;
-            margin: 0 auto 1.75rem;
+            margin: 0 auto 1.4rem;
         }
         .welcome-option {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(184,136,42,0.25);
+            padding: 0.65rem 0.9rem;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(184,136,42,0.2);
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .welcome-option:hover { border-color: var(--gold); background: rgba(184,136,42,0.08); }
-        .welcome-option.selected { border-color: var(--gold-bright); background: rgba(184,136,42,0.14); }
+        .welcome-option:hover {
+            border-color: var(--gold);
+            background: rgba(184,136,42,0.09);
+            transform: translateX(3px);
+        }
+        .welcome-option.selected {
+            border-color: var(--gold-bright);
+            background: rgba(184,136,42,0.13);
+        }
         .welcome-option input { display: none; }
         .welcome-check {
-            width: 20px; height: 20px;
-            border: 1.5px solid rgba(184,136,42,0.5);
+            width: 19px; height: 19px;
+            border: 1.5px solid rgba(184,136,42,0.45);
             border-radius: 4px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 12px; color: transparent;
+            font-size: 11px; color: transparent;
             flex-shrink: 0; transition: all 0.2s;
         }
-        .welcome-option.selected .welcome-check { background: var(--gold-bright); border-color: var(--gold-bright); color: #1a1612; }
-        .welcome-option-text { font-size: 0.95rem; color: rgba(255,255,255,0.85); text-align: left; }
-        .welcome-option-sub { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-top: 1px; }
+        .welcome-option.selected .welcome-check {
+            background: var(--gold-bright);
+            border-color: var(--gold-bright);
+            color: #1a1612;
+        }
+        .welcome-option-text { font-size: 0.9rem;  color: rgba(255,255,255,0.85); text-align: left; }
+        .welcome-option-sub  { font-size: 0.7rem;  color: rgba(255,255,255,0.3);  margin-top: 1px; }
 
+        /* Pulsing CTA button */
         .welcome-btn {
             font-family: 'Cinzel', serif;
             font-size: 0.85rem;
@@ -172,16 +268,83 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 24px rgba(184,136,42,0.35);
-            margin-bottom: 2rem;
+            transition: transform 0.25s, box-shadow 0.25s;
+            box-shadow: 0 4px 24px rgba(184,136,42,0.4);
+            margin-bottom: 1.4rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.65s ease 1.05s forwards, btnPulse 3s ease-in-out 2s infinite;
         }
-        .welcome-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(184,136,42,0.5); }
+        @keyframes btnPulse {
+            0%,100% { box-shadow: 0 4px 24px rgba(184,136,42,0.4); }
+            50%      { box-shadow: 0 6px 38px rgba(184,136,42,0.7); }
+        }
+        .welcome-btn:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 10px 40px rgba(184,136,42,0.65);
+        }
 
         .welcome-footer { text-align: center; }
-        .welcome-powered { font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.25rem; }
-        .welcome-org { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 0.4rem; }
-        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.8rem; color: rgba(255,255,255,0.3); direction: rtl; }
+        .welcome-powered    { font-size: 0.68rem; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
+        .welcome-org        { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 0.3rem; }
+        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.76rem; color: rgba(255,255,255,0.25); direction: rtl; }
+
+        /* ════════════════════════════════
+           ROTATE NUDGE — gentle toast, not blocking
+        ════════════════════════════════ */
+        .rotate-nudge {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            background: rgba(18,14,9,0.93);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(184,136,42,0.38);
+            border-radius: 30px;
+            padding: 0.5rem 0.75rem 0.5rem 0.65rem;
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            white-space: nowrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .rotate-nudge.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        .rotate-nudge-icon {
+            font-size: 1.2rem;
+            display: inline-block;
+            animation: tiltPhone 2.8s ease-in-out infinite;
+        }
+        @keyframes tiltPhone {
+            0%,25%  { transform: rotate(0deg); }
+            45%,70% { transform: rotate(90deg); }
+            90%,100%{ transform: rotate(0deg); }
+        }
+        .rotate-nudge-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.88rem;
+            color: rgba(255,255,255,0.82);
+            line-height: 1.3;
+        }
+        .rotate-nudge-text small {
+            display: block;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.38);
+        }
+        .rotate-nudge-dismiss {
+            background: none; border: none; cursor: pointer;
+            color: rgba(255,255,255,0.35);
+            font-size: 1rem; line-height: 1;
+            padding: 0 0 0 0.2rem;
+            transition: color 0.2s;
+        }
+        .rotate-nudge-dismiss:hover { color: rgba(255,255,255,0.7); }
 
         /* ════════════════════════════════
            SETTINGS BUTTON
@@ -478,22 +641,46 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* ─── MOBILE ─── */
+        /* ─── MOBILE portrait: horizontal snap columns ─── */
         @media (max-width: 640px) {
             header { --header-h: 100px; }
             .header-inner { padding: 0.6rem 1rem; }
             .controls-bar { gap: 0.35rem; }
             .toggle-btn { font-size: 0.62rem; padding: 0.35rem 0.6rem; }
             .chapter-nav { margin-left: 0; padding-left: 0; border-left: none; border-top: 1px solid var(--parchment-dark); padding-top: 0.4rem; }
-            main { padding: 1rem 0.75rem 5rem; }
+            main { padding: 1rem 0.5rem 5rem; }
 
-            /* On small portrait: stack columns vertically */
-            .verse-content { flex-direction: column; }
-            .col-hebrew { width: 100% !important; border-right: none; border-bottom: 1px solid var(--parchment-dark); }
-            .layer { border-right: none; border-bottom: 1px solid rgba(184,136,42,0.1); }
-            .layer:last-child { border-bottom: none; }
-            .col-hebrew p { font-size: 1.05rem; }
-            .layer p { font-size: 0.85rem; }
+            /* Keep side-by-side but allow horizontal scroll per verse */
+            .verse-content {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                /* Show a subtle shadow on the right to hint there's more */
+            }
+            .col-hebrew {
+                flex: 0 0 85vw;          /* ~85% of screen width */
+                min-width: 0;
+                scroll-snap-align: start;
+            }
+            .layer {
+                flex: 0 0 82vw;
+                min-width: 0;
+                scroll-snap-align: start;
+            }
+            /* Override the has-N width classes on mobile */
+            .verse-content.has-0 .col-hebrew,
+            .verse-content.has-1 .col-hebrew,
+            .verse-content.has-2 .col-hebrew,
+            .verse-content.has-3 .col-hebrew,
+            .verse-content.has-4 .col-hebrew { width: auto; }
+
+            .col-hebrew p { font-size: 1.0rem; }
+            .layer p      { font-size: 0.82rem; }
+
+            /* Thin scrollbar */
+            .verse-content::-webkit-scrollbar       { height: 3px; }
+            .verse-content::-webkit-scrollbar-track { background: var(--parchment-dark); }
+            .verse-content::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
         }
 
         /* Medium: 2-col comfortable */
@@ -527,58 +714,75 @@
      WELCOME SCREEN
 ════════════════════════════════════════ -->
 <div class="welcome-screen" id="welcomeScreen">
-    <span class="welcome-scroll-icon">📜</span>
+    <!-- Animated background elements -->
+    <canvas id="particleCanvas"></canvas>
+    <div class="welcome-glow"></div>
 
-    <p class="welcome-eyebrow">Interactive Reading for Purim</p>
-    <h1 class="welcome-title">מגילת אסתר</h1>
-    <p class="welcome-subtitle">Megillat Esther</p>
-    <p class="welcome-tagline">Read along, follow the text, and celebrate!</p>
+    <!-- All visible content in one wrapper for staggered animation -->
+    <div class="welcome-content">
+        <span class="welcome-scroll-icon">📜</span>
 
-    <div class="welcome-divider"></div>
+        <p class="welcome-eyebrow">Interactive Reading for Purim</p>
+        <h1 class="welcome-title">מגילת אסתר</h1>
+        <p class="welcome-subtitle">Megillat Esther</p>
+        <p class="welcome-tagline">Read along, follow the text, and celebrate!</p>
 
-    <p class="welcome-label">Choose what to display alongside the Hebrew</p>
-    <div class="welcome-options">
-        <label class="welcome-option selected" data-layer="english-translation">
-            <input type="checkbox" checked>
-            <span class="welcome-check">✓</span>
-            <div>
-                <div class="welcome-option-text">English Translation</div>
-                <div class="welcome-option-sub">Readable, faithful to the source</div>
-            </div>
-        </label>
-        <label class="welcome-option" data-layer="english-translit">
-            <input type="checkbox">
-            <span class="welcome-check">✓</span>
-            <div>
-                <div class="welcome-option-text">English Transliteration</div>
-                <div class="welcome-option-sub">Sephardic pronunciation guide</div>
-            </div>
-        </label>
-        <label class="welcome-option" data-layer="russian-translation">
-            <input type="checkbox">
-            <span class="welcome-check">✓</span>
-            <div>
-                <div class="welcome-option-text">Русский перевод</div>
-                <div class="welcome-option-sub">Russian translation</div>
-            </div>
-        </label>
-        <label class="welcome-option" data-layer="russian-translit">
-            <input type="checkbox">
-            <span class="welcome-check">✓</span>
-            <div>
-                <div class="welcome-option-text">Транслитерация (рус.)</div>
-                <div class="welcome-option-sub">Russian phonetic guide</div>
-            </div>
-        </label>
+        <div class="welcome-divider"></div>
+
+        <p class="welcome-label">Choose what to display alongside the Hebrew</p>
+        <div class="welcome-options">
+            <label class="welcome-option selected" data-layer="english-translation">
+                <input type="checkbox" checked>
+                <span class="welcome-check">✓</span>
+                <div>
+                    <div class="welcome-option-text">English Translation</div>
+                    <div class="welcome-option-sub">Readable, faithful to the source</div>
+                </div>
+            </label>
+            <label class="welcome-option" data-layer="english-translit">
+                <input type="checkbox">
+                <span class="welcome-check">✓</span>
+                <div>
+                    <div class="welcome-option-text">English Transliteration</div>
+                    <div class="welcome-option-sub">Sephardic pronunciation guide</div>
+                </div>
+            </label>
+            <label class="welcome-option" data-layer="russian-translation">
+                <input type="checkbox">
+                <span class="welcome-check">✓</span>
+                <div>
+                    <div class="welcome-option-text">Русский перевод</div>
+                    <div class="welcome-option-sub">Russian translation</div>
+                </div>
+            </label>
+            <label class="welcome-option" data-layer="russian-translit">
+                <input type="checkbox">
+                <span class="welcome-check">✓</span>
+                <div>
+                    <div class="welcome-option-text">Транслитерация (рус.)</div>
+                    <div class="welcome-option-sub">Russian phonetic guide</div>
+                </div>
+            </label>
+        </div>
+
+        <button class="welcome-btn" id="startReading">BEGIN READING ›</button>
+
+        <div class="welcome-footer">
+            <p class="welcome-powered">A project of</p>
+            <p class="welcome-org">Chabad of Eastern Queens</p>
+            <p class="welcome-dedication">לזכות רפואה שלימה לחנה בת לאה</p>
+        </div>
     </div>
+</div>
 
-    <button class="welcome-btn" id="startReading">BEGIN READING ›</button>
-
-    <div class="welcome-footer">
-        <p class="welcome-powered">A project of</p>
-        <p class="welcome-org">Chabad of Eastern Queens</p>
-        <p class="welcome-dedication">לזכות רפואה שלימה לחנה בת לאה</p>
-    </div>
+<!-- Rotate nudge toast (shown after entering reading on portrait mobile) -->
+<div class="rotate-nudge" id="rotateNudge">
+    <span class="rotate-nudge-icon">📱</span>
+    <span class="rotate-nudge-text">
+        Rotate for side-by-side view
+        <small>Or swipe right on each verse</small>
+    </span>
+    <button class="rotate-nudge-dismiss" id="rotateNudgeDismiss" aria-label="Dismiss">✕</button>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -1149,8 +1353,134 @@
 
 <script>
 // ═══════════════════════════════════════
-//  AUDIO — only fires on explicit click
+//  PARTICLES
 // ═══════════════════════════════════════
+(function() {
+    const canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Each particle is a small glowing dot or star
+    function Particle() {
+        this.reset();
+    }
+    Particle.prototype.reset = function() {
+        this.x    = Math.random() * W;
+        this.y    = Math.random() * H;
+        this.r    = 0.4 + Math.random() * 1.4;
+        this.vx   = (Math.random() - 0.5) * 0.18;
+        this.vy   = -0.08 - Math.random() * 0.22;   // drift upward
+        this.life = 0;
+        this.maxLife = 180 + Math.random() * 200;
+        // Gold / cream colours
+        const hues = ['rgba(212,165,58,', 'rgba(253,248,232,', 'rgba(184,136,42,', 'rgba(255,220,120,'];
+        this.color = hues[Math.floor(Math.random() * hues.length)];
+        // Occasional 4-pointed star shape
+        this.isStar = Math.random() < 0.15;
+    };
+    Particle.prototype.update = function() {
+        this.x    += this.vx;
+        this.y    += this.vy;
+        this.life += 1;
+        if (this.life > this.maxLife) this.reset();
+    };
+    Particle.prototype.draw = function() {
+        const progress = this.life / this.maxLife;
+        // Fade in then out
+        const alpha = progress < 0.15
+            ? progress / 0.15
+            : progress > 0.75
+                ? 1 - (progress - 0.75) / 0.25
+                : 1;
+        const a = alpha * (this.isStar ? 0.85 : 0.5);
+        ctx.save();
+        ctx.globalAlpha = a;
+        if (this.isStar) {
+            ctx.fillStyle = this.color + '1)';
+            ctx.translate(this.x, this.y);
+            const s = this.r * 2.5;
+            ctx.beginPath();
+            for (let i = 0; i < 4; i++) {
+                ctx.rotate(Math.PI / 2);
+                ctx.lineTo(0, s);
+                ctx.lineTo(s * 0.35, s * 0.35);
+            }
+            ctx.closePath();
+            ctx.fill();
+        } else {
+            const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3);
+            grad.addColorStop(0, this.color + '1)');
+            grad.addColorStop(1, this.color + '0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        ctx.restore();
+    };
+
+    // Create particles — fewer on mobile for performance
+    const count = window.innerWidth < 640 ? 45 : 90;
+    for (let i = 0; i < count; i++) {
+        const p = new Particle();
+        p.life = Math.random() * p.maxLife; // randomise start phase
+        particles.push(p);
+    }
+
+    let animId;
+    function loop() {
+        // Only animate while welcome screen is visible
+        if (document.getElementById('welcomeScreen').classList.contains('hidden')) {
+            ctx.clearRect(0, 0, W, H);
+            return;
+        }
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => { p.update(); p.draw(); });
+        animId = requestAnimationFrame(loop);
+    }
+    loop();
+})();
+
+// ═══════════════════════════════════════
+//  ROTATE NUDGE
+// ═══════════════════════════════════════
+const rotateNudge        = document.getElementById('rotateNudge');
+const rotateNudgeDismiss = document.getElementById('rotateNudgeDismiss');
+let nudgeDismissed = false;
+
+function checkRotateNudge() {
+    if (nudgeDismissed) return;
+    const isMobile   = window.innerWidth <= 768;
+    const isPortrait = window.innerHeight > window.innerWidth;
+    if (isMobile && isPortrait) {
+        rotateNudge.classList.add('show');
+        // Auto-dismiss after 6 s
+        setTimeout(() => {
+            if (!nudgeDismissed) rotateNudge.classList.remove('show');
+        }, 6000);
+    } else {
+        rotateNudge.classList.remove('show');
+    }
+}
+
+rotateNudgeDismiss.addEventListener('click', () => {
+    nudgeDismissed = true;
+    rotateNudge.classList.remove('show');
+});
+
+// Hide nudge when user rotates to landscape
+window.addEventListener('orientationchange', () => {
+    setTimeout(checkRotateNudge, 200);
+}, false);
+window.addEventListener('resize', checkRotateNudge, { passive: true });
 let audioCtx = null;
 
 function ensureAudio() {
@@ -1228,6 +1558,8 @@ startBtn.addEventListener('click', () => {
     applySelections();
     welcomeScreen.classList.add('hidden');
     settingsBtn.classList.add('visible');
+    // Show rotate nudge on portrait mobile after a short delay
+    setTimeout(checkRotateNudge, 600);
 });
 
 settingsBtn.addEventListener('click', () => {
