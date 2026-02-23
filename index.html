@@ -1020,12 +1020,18 @@
         }
         .gragger-btn:hover { background: var(--burgundy-light); transform: scale(1.05); }
         .gragger-btn .rattle-icon { font-size: 0.9rem; transition: transform 0.15s; }
-        .gragger-btn.rattling .rattle-icon { animation: rattle 0.25s ease-in-out; }
+        .gragger-btn.rattling .rattle-icon { animation: rattle 0.7s ease-in-out; }
         @keyframes rattle {
-            0%   { transform: rotate(0deg); }
-            25%  { transform: rotate(-20deg) scale(1.15); }
-            75%  { transform: rotate(20deg) scale(1.15); }
-            100% { transform: rotate(0deg); }
+            0%   { transform: rotate(0deg)   scale(1); }
+            10%  { transform: rotate(-22deg) scale(1.15); }
+            22%  { transform: rotate(22deg)  scale(1.18); }
+            34%  { transform: rotate(-20deg) scale(1.16); }
+            46%  { transform: rotate(20deg)  scale(1.16); }
+            58%  { transform: rotate(-16deg) scale(1.12); }
+            70%  { transform: rotate(16deg)  scale(1.1); }
+            82%  { transform: rotate(-8deg)  scale(1.05); }
+            91%  { transform: rotate(6deg)   scale(1.02); }
+            100% { transform: rotate(0deg)   scale(1); }
         }
 
         /* ─── MOBILE portrait: true side-by-side, smaller fonts ─── */
@@ -1859,7 +1865,7 @@
                 <div class="mitzvah-body">
                     <div class="mitzvah-desc">
                         The Megillah — the Book of Esther — is read <strong>twice on Purim</strong>: once at night after nightfall, and once during the day. The entire congregation listens carefully, and every single word must be heard.
-                        <span class="mitzvah-tip">💡 Every time Haman's name is mentioned, make noise with a gragger to drown it out! His name appears 54 times in the Megillah.</span>
+                        <span class="mitzvah-tip">💡 We make noise specifically when Haman is mentioned <em>with his title</em> — "Haman the Agagite" or "Haman son of Hammedatha." Not every mention — just the titled ones, where he gets his full villainous introduction!</span>
                     </div>
                 </div>
             </div>
@@ -1993,27 +1999,117 @@ function ensureAudio() {
 }
 function playRattle() {
     ensureAudio();
-    [0, 60, 120].forEach(delayMs => {
-        setTimeout(() => {
-            const dur=0.07, sr=audioCtx.sampleRate;
-            const buf=audioCtx.createBuffer(1,sr*dur,sr);
-            const data=buf.getChannelData(0);
-            for(let i=0;i<buf.length;i++) data[i]=(Math.random()*2-1)*Math.pow(1-i/buf.length,0.4);
-            const src=audioCtx.createBufferSource(); src.buffer=buf;
-            const filt=audioCtx.createBiquadFilter(); filt.type='bandpass';
-            filt.frequency.value=700+Math.random()*500; filt.Q.value=1.5;
-            const gain=audioCtx.createGain(); gain.gain.value=0.45;
-            src.connect(filt); filt.connect(gain); gain.connect(audioCtx.destination); src.start();
-        }, delayMs);
-    });
+    const ctx = audioCtx;
+    const now = ctx.currentTime;
+
+    // ── Helper: create a buffer of filtered noise ──
+    function makeNoiseBurst(startTime, duration, freq, q, gainVal, fadeIn=0.005, fadeOut=0.04) {
+        const sr = ctx.sampleRate;
+        const buf = ctx.createBuffer(1, Math.ceil(sr * duration), sr);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+
+        const filt = ctx.createBiquadFilter();
+        filt.type = 'bandpass';
+        filt.frequency.value = freq;
+        filt.Q.value = q;
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0, startTime);
+        gain.gain.linearRampToValueAtTime(gainVal, startTime + fadeIn);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - fadeOut);
+
+        src.connect(filt);
+        filt.connect(gain);
+        gain.connect(ctx.destination);
+        src.start(startTime);
+        src.stop(startTime + duration);
+    }
+
+    // ── Helper: wooden click (short pitched thump) ──
+    function makeClick(startTime, freq, gainVal, dur=0.035) {
+        const osc = ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * 2.2, startTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, startTime + dur);
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(gainVal, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(startTime);
+        osc.stop(startTime + dur);
+    }
+
+    // ── Helper: body resonance (low wooden thud) ──
+    function makeThud(startTime, gainVal) {
+        const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.12), ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+
+        const lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass';
+        lp.frequency.value = 280;
+
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(gainVal, startTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
+
+        src.connect(lp);
+        lp.connect(gain);
+        gain.connect(ctx.destination);
+        src.start(startTime);
+    }
+
+    // ══════════════════════════════════════
+    // THE RATTLE: ~0.7s of 5 back-and-forth shakes
+    // Each "shake" = click + seed noise burst + body thud
+    // ══════════════════════════════════════
+    const shakeCount = 5;
+    const shakeDur   = 0.13; // seconds between shakes
+
+    for (let i = 0; i < shakeCount; i++) {
+        const t = now + i * shakeDur;
+
+        // Alternate pitch slightly for back-and-forth feel
+        const pitchMod = i % 2 === 0 ? 1.0 : 0.88;
+        // Louder in the middle, softer at start/end
+        const env = Math.sin((i / (shakeCount - 1)) * Math.PI);
+        const vol = 0.35 + env * 0.35;
+
+        // Wooden click at the turn
+        makeClick(t, 380 * pitchMod, vol * 0.7);
+
+        // Seed rattle — high freq noise (the beads/seeds inside)
+        makeNoiseBurst(t + 0.005, 0.07, 2800 + Math.random()*600, 2.5, vol * 0.6, 0.003, 0.025);
+        makeNoiseBurst(t + 0.005, 0.07, 1600 + Math.random()*400, 1.8, vol * 0.4, 0.003, 0.025);
+
+        // Body resonance on every other shake
+        if (i % 2 === 0) makeThud(t, vol * 0.5);
+    }
+
+    // Vibration pattern that matches the shakes
+    if (navigator.vibrate) {
+        navigator.vibrate([30, 60, 30, 60, 40, 60, 40, 60, 30]);
+    }
 }
+
 document.addEventListener('click', e => {
     const btn = e.target.closest('.gragger-btn');
     if (!btn) return;
+    ensureAudio();
     playRattle();
+    // Animate for the full duration of the sound (~0.7s)
     btn.classList.add('rattling');
-    if (navigator.vibrate) navigator.vibrate(40);
-    setTimeout(() => btn.classList.remove('rattling'), 300);
+    setTimeout(() => btn.classList.remove('rattling'), 700);
 });
 
 // ═══════════════════════════════════════
