@@ -264,7 +264,7 @@
             transition: all 0.2s;
         }
         .welcome-option:hover {
-            border-color: rgba(196,154,42,0.5);
+            border-color: rgba(196,154,42,0.85);
             background: rgba(196,154,42,0.07);
         }
         .welcome-option.selected {
@@ -338,66 +338,7 @@
         .welcome-footer { text-align: center; }
         .welcome-powered    { font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 500; color: rgba(255,255,255,0.2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
         .welcome-org        { font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
-        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.78rem; color: rgba(255,255,255,0.22); direction: rtl; }
-
-        /* ════════════════════════════════
-           ROTATE NUDGE — gentle toast, not blocking
-        ════════════════════════════════ */
-        .rotate-nudge {
-            position: fixed;
-            bottom: 1.5rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(12px);
-            background: rgba(18,14,9,0.93);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(184,136,42,0.38);
-            border-radius: 30px;
-            padding: 0.5rem 0.75rem 0.5rem 0.65rem;
-            display: flex;
-            align-items: center;
-            gap: 0.55rem;
-            z-index: 500;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            white-space: nowrap;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-        }
-        .rotate-nudge.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-            pointer-events: auto;
-        }
-        .rotate-nudge-icon {
-            font-size: 1.2rem;
-            display: inline-block;
-            animation: tiltPhone 2.8s ease-in-out infinite;
-        }
-        @keyframes tiltPhone {
-            0%,25%  { transform: rotate(0deg); }
-            45%,70% { transform: rotate(90deg); }
-            90%,100%{ transform: rotate(0deg); }
-        }
-        .rotate-nudge-text {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.88rem;
-            color: rgba(255,255,255,0.82);
-            line-height: 1.3;
-        }
-        .rotate-nudge-text small {
-            display: block;
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.38);
-        }
-        .rotate-nudge-dismiss {
-            background: none; border: none; cursor: pointer;
-            color: rgba(255,255,255,0.35);
-            font-size: 1rem; line-height: 1;
-            padding: 0 0 0 0.2rem;
-            transition: color 0.2s;
-        }
-        .rotate-nudge-dismiss:hover { color: rgba(255,255,255,0.7); }
-
+        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.78rem; color: rgba(255,255,255,0.7); direction: rtl; }
         /* ════════════════════════════════
            TAB NAVIGATION
         ════════════════════════════════ */
@@ -717,7 +658,7 @@
 
         /* Night done = pip border glows, half fill rises */
         .purim-pip[data-pip="megillah"].half {
-            border-color: rgba(196,154,42,0.5);
+            border-color: rgba(196,154,42,0.85);
         }
         .purim-pip[data-pip="megillah"].half .pip-half-fill {
             height: 50%;
@@ -737,27 +678,73 @@
         /* All done banner */
         .purim-all-done {
             display: none;
-            align-items: center;
+            flex-direction: column;
             gap: 0.75rem;
             margin-top: 0.75rem;
-            padding: 0.75rem 1rem;
-            background: linear-gradient(135deg, var(--burgundy), #3d0f1e);
-            border-radius: 10px;
-            font-size: 1.8rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #2d0a15, #1a0d12);
+            border: 1px solid rgba(196,154,42,0.3);
+            border-radius: 12px;
             animation: fadeSlideUp 0.5s ease;
         }
         .purim-all-done.show { display: flex; }
-        .purim-all-done strong {
+
+        .all-done-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .all-done-emoji { font-size: 1.8rem; flex-shrink: 0; }
+        .all-done-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.15rem;
+        }
+        .all-done-text strong {
             font-family: 'Frank Ruhl Libre', serif;
             font-size: 1rem;
             font-weight: 700;
             color: var(--cream);
-            display: block;
         }
-        .purim-all-done span:last-child {
+        .all-done-text span {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: rgba(255,255,255,0.55);
+        }
+
+        /* Share button */
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.65rem 1rem;
+            background: linear-gradient(135deg, rgba(196,154,42,0.2), rgba(196,154,42,0.1));
+            border: 1.5px solid rgba(196,154,42,0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--gold-bright);
+            text-transform: uppercase;
+        }
+        .share-btn:hover {
+            background: linear-gradient(135deg, rgba(196,154,42,0.35), rgba(196,154,42,0.15));
+            border-color: var(--gold-bright);
+            transform: scale(1.02);
+        }
+        .share-btn:active { transform: scale(0.98); }
+        .share-icon { font-size: 1rem; font-weight: 900; }
+
+        /* Copied confirmation state */
+        .share-btn.copied {
+            background: linear-gradient(135deg, rgba(46,122,68,0.25), rgba(46,122,68,0.1));
+            border-color: rgba(46,122,68,0.6);
+            color: #5ec47a;
         }
 
         /* ── Mitzvah cards — new design ── */
@@ -1218,7 +1205,7 @@
         .site-dedication-inline {
             font-family: 'Frank Ruhl Libre', serif;
             font-size: 0.65rem;
-            color: rgba(196,154,42,0.5);
+            color: rgba(196,154,42,0.85);
         }
 
         .header-inner {
@@ -1869,16 +1856,6 @@
             <p class="welcome-dedication">לזכות רפואה שלימה לחנה בת לאה</p>
         </div>
     </div>
-</div>
-
-<!-- Rotate nudge toast (shown after entering reading on portrait mobile) -->
-<div class="rotate-nudge" id="rotateNudge">
-    <span class="rotate-nudge-icon">📱</span>
-    <span class="rotate-nudge-text">
-        Rotate for larger text
-        <small>Landscape gives more reading room</small>
-    </span>
-    <button class="rotate-nudge-dismiss" id="rotateNudgeDismiss" aria-label="Dismiss">✕</button>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -2536,14 +2513,20 @@
             </div>
             <div class="purim-pip" data-pip="mishloach"><span class="pip-emoji">🎁</span><small>Mishloach<br>Manot</small></div>
             <div class="purim-pip" data-pip="matanot"><span class="pip-emoji">🤝</span><small>Matanot<br>L'evyonim</small></div>
-            <div class="purim-pip" data-pip="seudah"><span class="pip-emoji">🥂</span><small>Seudas<br>Purim</small></div>
+            <div class="purim-pip" data-pip="seudah"><span class="pip-emoji">🥂</span><small>Seudat<br>Purim</small></div>
         </div>
         <div class="purim-all-done" id="allDoneMsg">
-            <span>🎉</span>
-            <div>
-                <strong>Purim Sameach! פורים שמח</strong>
-                <span>All five mitzvot complete. May your Purim be filled with joy!</span>
+            <div class="all-done-content">
+                <span class="all-done-emoji">🎉</span>
+                <div class="all-done-text">
+                    <strong>פורים שמח! Purim Sameach!</strong>
+                    <span>You've completed all 4 mitzvot. May your Purim be full of joy!</span>
+                </div>
             </div>
+            <button class="share-btn" id="shareBtn">
+                <span class="share-icon">↗</span>
+                <span class="share-label">Share</span>
+            </button>
         </div>
     </div>
 
@@ -2701,7 +2684,7 @@
                 <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#4a1a00,#8a3a10);">🥂</div>
                 <div class="mitzvah-text-col">
                     <div class="mitzvah-heb">סעודת פורים</div>
-                    <div class="mitzvah-name">Seudas Purim</div>
+                    <div class="mitzvah-name">Seudat Purim</div>
                     <div class="mitzvah-time">⏰ Purim day — the bigger the better!</div>
                 </div>
                 <button class="mitzvah-check-btn" data-check="seudah" aria-label="Mark done">
@@ -2738,7 +2721,7 @@
             </svg>
             <div class="gragger-overlay-icon">🪇</div>
         </div>
-        <p class="gragger-overlay-title">Shake to make noise!</p>
+        <p class="gragger-overlay-title">🪇 Shake to make noise!</p>
         <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">10</span>s</p>
         <button class="gragger-overlay-stop" id="graggerOverlayStop">Stop</button>
     </div>
@@ -2905,7 +2888,7 @@ function updateRing(secondsLeft) {
 
 function openGraggerOverlay() {
     shakeSecondsLeft = 10;
-    updateRing(20);
+    updateRing(10);
     graggerOverlay.classList.add('active');
 
     shakeCountdownInterval = setInterval(() => {
@@ -3067,7 +3050,6 @@ startBtn.addEventListener('click', () => {
     applySelections();
     welcomeScreen.classList.add('hidden');
     document.getElementById('tabBar').classList.add('visible');
-    setTimeout(checkRotateNudge, 600);
 });
 
 // ═══════════════════════════════════════
@@ -3178,28 +3160,42 @@ document.querySelectorAll('.chapter-link').forEach(a => {
         window.scrollTo({ top, behavior:'smooth' });
     });
 });
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+//  SHARE
+// ═══════════════════════════════════════
+const shareBtn = document.getElementById('shareBtn');
 
-// ═══════════════════════════════════════
-//  ROTATE NUDGE
-// ═══════════════════════════════════════
-const rotateNudge        = document.getElementById('rotateNudge');
-const rotateNudgeDismiss = document.getElementById('rotateNudgeDismiss');
-let nudgeDismissed = false;
-function checkRotateNudge() {
-    if (nudgeDismissed) return;
-    const isMobile = window.innerWidth <= 768, isPortrait = window.innerHeight > window.innerWidth;
-    if (isMobile && isPortrait) {
-        rotateNudge.classList.add('show');
-        setTimeout(() => { if (!nudgeDismissed) rotateNudge.classList.remove('show'); }, 6000);
+shareBtn.addEventListener('click', async () => {
+    const shareText = `🎉 I just completed all 4 Purim mitzvot!\n\n📜 Megillah (night & day)\n🎁 Mishloach Manot\n🤝 Matanot La'evyonim\n🥂 Seudat Purim\n\nפורים שמח! Chag Sameach! 🪇\n\nFollow along at Chabad of Eastern Queens:`;
+    const shareUrl  = window.location.href;
+
+    // Try native share sheet first (works on iOS & Android)
+    if (navigator.share) {
+        try {
+            await navigator.share({ title: 'פורים שמח! Purim Sameach!', text: shareText, url: shareUrl });
+        } catch(e) {
+            // User cancelled — no action needed
+        }
     } else {
-        rotateNudge.classList.remove('show');
+        // Desktop fallback: copy to clipboard
+        try {
+            await navigator.clipboard.writeText(shareText + '\n' + shareUrl);
+            shareBtn.classList.add('copied');
+            shareBtn.querySelector('.share-icon').textContent = '✓';
+            shareBtn.querySelector('.share-label').textContent = 'Copied!';
+            setTimeout(() => {
+                shareBtn.classList.remove('copied');
+                shareBtn.querySelector('.share-icon').textContent = '↗';
+                shareBtn.querySelector('.share-label').textContent = 'Share';
+            }, 2500);
+        } catch(e) {
+            // Clipboard also unavailable — show a prompt
+            window.prompt('Copy this message:', shareText + '\n' + shareUrl);
+        }
     }
-}
-rotateNudgeDismiss.addEventListener('click', () => { nudgeDismissed = true; rotateNudge.classList.remove('show'); });
-window.addEventListener('orientationchange', () => setTimeout(checkRotateNudge, 200));
-window.addEventListener('resize', checkRotateNudge, { passive: true });
+});
 
-// ═══════════════════════════════════════
 //  CONFETTI
 // ═══════════════════════════════════════
 const confCanvas = document.getElementById('confettiCanvas');
