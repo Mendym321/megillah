@@ -1757,6 +1757,41 @@
             .layer p { font-size: 0.83rem; }
         }
 
+        /* ─── BLESSINGS CHAPTERS ─── */
+        /* Uses same .chapter card and .verse structure as Megillah chapters */
+        /* Just needs a few extras for instruction rows and language switching */
+
+        /* Full-width instruction row spanning both columns */
+        .blessing-instruction-row {
+            padding: 0.55rem 1rem 0.45rem;
+            background: rgba(107,31,56,0.04);
+            border-bottom: 1px solid var(--parchment-mid);
+            border-top: 1px solid var(--parchment-mid);
+        }
+        .lang-instruction {
+            font-family: 'Literata', Georgia, serif;
+            font-size: 0.8rem;
+            font-style: italic;
+            color: var(--burgundy);
+            display: none;
+            line-height: 1.5;
+        }
+
+        /* Show English instruction by default */
+        .eng-instruction { display: inline; }
+
+        /* When a Russian layer is active, swap instruction language */
+        body.lang-russian .eng-instruction { display: none; }
+        body.lang-russian .rus-instruction { display: inline; }
+
+        /* Poem variant — slightly smaller Hebrew for longer text */
+        .col-hebrew-poem p { font-size: 1.05rem !important; line-height: 2 !important; }
+
+        /* Blessings: no verse-number sidebar */
+        .blessings-chapter .verse {
+            grid-template-columns: 1fr;
+        }
+
         /* ─── COMING SOON ─── */
         .coming-soon {
             text-align: center;
@@ -1968,6 +2003,84 @@
      MAIN CONTENT
 ════════════════════════════════════════ -->
 <main>
+<!-- BEFORE BLESSINGS -->
+<section class="chapter blessings-chapter" id="blessings-before">
+    <h2 class="chapter-title">
+        <span class="ch-heb">ברכות לפני המגילה</span>
+        <span>Before the Megillah Reading</span>
+    </h2>
+
+    <!-- Full-width instruction row -->
+    <div class="blessing-instruction-row">
+        <span class="lang-instruction eng-instruction">Before reading the Megillah, the reader recites the following three blessings:</span>
+        <span class="lang-instruction rus-instruction">Перед чтением Мегилы чтец произносит следующие три благословения:</span>
+    </div>
+
+    <!-- Blessing 1 -->
+    <article class="verse">
+        <div class="verse-content">
+            <div class="col-hebrew">
+                <p>בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, אֲשֶׁר קִדְּשָׁנוּ בְּמִצְוֹתָיו, וְצִוָּֽנוּ עַל מִקְרָא מְגִלָּה:</p>
+            </div>
+            <div class="layer english-translation">
+                <p>Blessed are You, Lord our God, King of the universe, Who has sanctified us with His commandments and commanded us regarding the reading of the Megillah.</p>
+            </div>
+            <div class="layer english-translit">
+                <p>Baruch Ata Adonai Eloheinu Melech ha'olam, asher kidshanu b'mitzvotav, v'tzivanu al mikra Megillah.</p>
+            </div>
+            <div class="layer russian-translation">
+                <p>Благословен Ты, Господь, Бог наш, Царь вселенной, освятивший нас Своими заповедями и повелевший нам читать Мегилу.</p>
+            </div>
+            <div class="layer russian-translit">
+                <p>Барух Ата Адонай Элоhейну Мелех hаолам, ашер кидшану бемицвотав, вецивану аль микра Мегила.</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Blessing 2 -->
+    <article class="verse">
+        <div class="verse-content">
+            <div class="col-hebrew">
+                <p>בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶֽלֶךְ הָעוֹלָם, שֶׁעָשָׂה נִסִּים לַאֲבוֹתֵינוּ, בַּיָּמִים הָהֵם בִּזְּמַן הַזֶּה:</p>
+            </div>
+            <div class="layer english-translation">
+                <p>Blessed are You, Lord our God, King of the universe, Who performed miracles for our ancestors in those days at this season.</p>
+            </div>
+            <div class="layer english-translit">
+                <p>Baruch Ata Adonai Eloheinu Melech ha'olam, she'asa nisim la'avoteinu, ba'yamim ha'hem biz'man ha'ze.</p>
+            </div>
+            <div class="layer russian-translation">
+                <p>Благословен Ты, Господь, Бог наш, Царь вселенной, сотворивший чудеса для наших отцов в те дни в это время года.</p>
+            </div>
+            <div class="layer russian-translit">
+                <p>Барух Ата Адонай Элоhейну Мелех hаолам, шеаса нисим лаавотейну, баямим hаhем бизман hазе.</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Blessing 3 -->
+    <article class="verse">
+        <div class="verse-content">
+            <div class="col-hebrew">
+                <p>בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶלֶךְ הָעוֹלָם, שֶׁהֶחֱיָֽנוּ וְקִיְּמָנוּ וְהִגִּיעָֽנוּ לִזְּמַן הַזֶּה:</p>
+            </div>
+            <div class="layer english-translation">
+                <p>Blessed are You, Lord our God, King of the universe, Who has kept us alive, sustained us and brought us to this season.</p>
+            </div>
+            <div class="layer english-translit">
+                <p>Baruch Ata Adonai Eloheinu Melech ha'olam, shehecheyanu v'kiy'manu v'higi'anu laz'man ha'ze.</p>
+            </div>
+            <div class="layer russian-translation">
+                <p>Благословен Ты, Господь, Бог наш, Царь вселенной, давший нам жизнь, поддержавший нас и позволивший нам достичь этого времени.</p>
+            </div>
+            <div class="layer russian-translit">
+                <p>Барух Ата Адонай Элоhейну Мелех hаолам, шеhехеяну векиеману веhигиану лазман hазе.</p>
+            </div>
+        </div>
+    </article>
+
+</section>
+
     <section class="chapter" id="ch1">
         <h2 class="chapter-title"><span class="ch-heb">פרק א</span><span>Chapter One</span></h2>
 
@@ -2465,6 +2578,7 @@
 
     </section>
 
+
     <!-- Placeholder chapters 2–10 -->
     <section class="chapter" id="ch2"><h2 class="chapter-title"><span class="ch-heb">פרק ב</span><span>Chapter Two</span></h2><p class="coming-soon">Coming soon…</p></section>
     <section class="chapter" id="ch3"><h2 class="chapter-title"><span class="ch-heb">פרק ג</span><span>Chapter Three</span></h2><p class="coming-soon">Coming soon…</p></section>
@@ -2475,6 +2589,68 @@
     <section class="chapter" id="ch8"><h2 class="chapter-title"><span class="ch-heb">פרק ח</span><span>Chapter Eight</span></h2><p class="coming-soon">Coming soon…</p></section>
     <section class="chapter" id="ch9"><h2 class="chapter-title"><span class="ch-heb">פרק ט</span><span>Chapter Nine</span></h2><p class="coming-soon">Coming soon…</p></section>
     <section class="chapter" id="ch10"><h2 class="chapter-title"><span class="ch-heb">פרק י</span><span>Chapter Ten</span></h2><p class="coming-soon">Coming soon…</p></section>
+
+<!-- AFTER BLESSINGS -->
+<section class="chapter blessings-chapter" id="blessings-after">
+    <h2 class="chapter-title">
+        <span class="ch-heb">לאחר קריאת המגילה</span>
+        <span>After the Megillah Reading</span>
+    </h2>
+
+    <!-- Post-reading blessing instruction -->
+    <div class="blessing-instruction-row">
+        <span class="lang-instruction eng-instruction">The following blessing is recited by the reader after the reading, only when a minyan is present:</span>
+        <span class="lang-instruction rus-instruction">Следующее благословение чтец произносит после чтения только при наличии миньяна:</span>
+    </div>
+
+    <article class="verse">
+        <div class="verse-content">
+            <div class="col-hebrew">
+                <p>בָּרוּךְ אַתָּה יְיָ אֱלֹהֵינוּ מֶֽלֶךְ הָעוֹלָם, הָרָב אֶת־רִיבֵֽנוּ, וְהַדָּן אֶת־דִּינֵֽנוּ, וְהַנּוֹקֵם אֶת־נִקְמָתֵֽנוּ, וְהַנִּפְרָע לָֽנוּ מִצָּרֵינוּ, וְהַמְשַׁלֵּם גְּמוּל לְכָל־אוֹיְבֵי נַפְשֵֽׁנוּ. בָּרוּךְ אַתָּה יְיָ, הַנִּפְרָע לְעַמּוֹ יִשְׂרָאֵל מִכָּל־צָרֵיהֶם, הָאֵל הַמּוֹשִֽׁיעַ:</p>
+            </div>
+            <div class="layer english-translation">
+                <p>Blessed are You, Lord our God, King of the universe, Who pleads our cause, judges our claim, avenges our wrong, punishes our enemies, and brings retribution on all our mortal foes. Blessed are You, Lord, Who exacts retribution on behalf of His people Israel from all their foes, the God Who delivers.</p>
+            </div>
+            <div class="layer english-translit">
+                <p>Baruch Ata Adonai Eloheinu Melech ha'olam, ha'rav et rivenu, v'hadan et dineinu, v'hanokem et nikmateinu, v'hanifra lanu mitz'areinu, v'ham'shalem g'mul l'chol oyevei nafshenu. Baruch Ata Adonai, hanifra l'amo Yisrael mikol tzareihem, ha'El ham'oshi'a.</p>
+            </div>
+            <div class="layer russian-translation">
+                <p>Благословен Ты, Господь, Бог наш, Царь вселенной, отстаивающий наше дело, судящий нас, мстящий за нас, карающий наших врагов и воздающий должное всем ненавистникам нашей жизни. Благословен Ты, Господь, мстящий за Свой народ Израиль от всех его угнетателей, Бог-Спаситель.</p>
+            </div>
+            <div class="layer russian-translit">
+                <p>Барух Ата Адонай Элоhейну Мелех hаолам, hарав эт-рибейну, веhадан эт-дейнейну, веhаноkем эт-никматейну, веhанифра лану мицарейну, веhамшалем гемуль лехоль ойвей нафшейну. Барух Ата Адонай, hанифра леамо Исраэль миколь царейhем, hаЭль hамошиа.</p>
+            </div>
+        </div>
+    </article>
+
+    <!-- Shoshana instruction -->
+    <div class="blessing-instruction-row">
+        <span class="lang-instruction eng-instruction">All continue:</span>
+        <span class="lang-instruction rus-instruction">Все продолжают:</span>
+    </div>
+
+    <!-- Shoshanat Yaakov -->
+    <article class="verse">
+        <div class="verse-content">
+            <div class="col-hebrew col-hebrew-poem">
+                <p>שׁוֹשַׁנַּת יַעֲקֹב צָהֲלָה וְשָׂמֵחָה. בִּרְאוֹתָם יַחַד תְּכֵלֶת מָרְדְּכָי: תְּשׁוּעָתָם הָיִיתָ לָנֶצַח, וְתִקְוָתָם בְּכָל־דּוֹר וָדוֹר: לְהוֹדִיעַ שֶׁכָּל־קֹוֶיךָ לֹא יֵבֹשׁוּ, וְלֹא יִכָּלְמוּ לָנֶצַח כָּל־הַחוֹסִים בָּךְ: אָרוּר הָמָן אֲשֶׁר בִּקֵשׁ לְאַבְּדִי, בָּרוּךְ מָרְדְּכַי הַיְּהוּדִי: אֲרוּרָה זֶרֶשׁ אֵשֶׁת מַפְחִידִי, בְּרוּכָה אֶסְתֵּר בַּעֲדִי: אֲרוּרִים כָּל־הָרְשָׁעִים, בְּרוּכִים כָּל־הַצַּדִּיקִים, וְגַם חַרְבוֹנָה זָכוּר לַטּוֹב:</p>
+            </div>
+            <div class="layer english-translation">
+                <p>The rose of Jacob was cheerful and glad when they beheld together the blue of Mordechai. You have been their salvation forever, and their hope in every generation. To make known that all who hope in You will not be put to shame, and all who take refuge in You will never be disgraced. Cursed is Haman who sought to destroy me, blessed is Mordechai the Jew. Cursed is Zeresh the wife of him who terrified me, blessed is Esther who acted for me. Cursed are all the wicked, blessed are all the righteous — and Charvona too shall be remembered for good.</p>
+            </div>
+            <div class="layer english-translit">
+                <p>Shoshanat Ya'akov tzahala v'samecha, bir'otam yachad t'chelet Mordechai. T'shu'atam hayita lanetzach, v'tikvatam b'chol dor vador. L'hodi'a she'kol kovecha lo yevoshu, v'lo yikalmu lanetzach kol hachosim bach. Arur Haman asher bikesh l'ab'di, baruch Mordechai haY'hudi. Arurah Zeresh eshet mafchidi, b'rucha Esther ba'adi. Arurim kol har'sha'im, b'ruchim kol hatzadikim, v'gam Charvona zachur latov.</p>
+            </div>
+            <div class="layer russian-translation">
+                <p>Роза Яакова ликовала и радовалась, когда все вместе увидели голубые одежды Мордехая. Ты был их спасением вовеки, и их надеждой в каждом поколении. Дать знать, что все уповающие на Тебя не устыдятся, и все прибегающие к Тебе не опозорятся вовеки. Проклят Аман, стремившийся погубить меня, благословен Мордехай-иудей. Проклята Зерешь — жена пугавшего меня, благословенна Эстер, заступившаяся за меня. Прокляты все злодеи, благословенны все праведники — и Харвона тоже будет помянут добром.</p>
+            </div>
+            <div class="layer russian-translit">
+                <p>Шошанат Яаков цаhала весамеха, бир'отам яхад техелет Мордехай. Тешуатам hайита ланецах, ветикватам бехоль дор вадор. Леhодиа шеколь ковеха ло евошу, вело икалему ланецах коль hахосим бах. Арур hаман ашер бикеш леабди, барух Мордехай hайеhуди. Аруpа Зереш эшет мафхиди, беруха Эстер баади. Аруpим коль hарешаим, беруhим коль hацадикким, вегам Харвона захур латов.</p>
+            </div>
+        </div>
+    </article>
+
+</section>
 
     <div class="scroll-ornament">❧ ✦ ❧</div>
 </main>
@@ -3057,6 +3233,10 @@ function applySelections() {
 startBtn.addEventListener('click', () => {
     ensureAudio();
     applySelections();
+    // Set body lang class for blessing instructions
+    const activeLang = document.querySelector('.lang-option.active');
+    const isRus = activeLang && (activeLang.dataset.layer === 'russian-translation' || activeLang.dataset.layer === 'russian-translit');
+    document.body.classList.toggle('lang-russian', isRus);
     welcomeScreen.classList.add('hidden');
     document.getElementById('tabBar').classList.add('visible');
 });
@@ -3134,6 +3314,10 @@ langOptions.forEach(opt => {
         }
 
         updateColumnWidths();
+
+        // Update body class so blessing instructions switch language
+        const isRussian = opt.dataset.layer === 'russian-translation' || opt.dataset.layer === 'russian-translit';
+        document.body.classList.toggle('lang-russian', !wasActive && isRussian);
     });
 });
 
