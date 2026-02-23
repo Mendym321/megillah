@@ -1663,6 +1663,14 @@
             color: var(--cream);
         }
 
+        .gragger-ringer-hint {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.35);
+            margin-top: 0.25rem;
+            letter-spacing: 0.02em;
+        }
+
         .shake-toast {
             position: fixed;
             bottom: 5rem;
@@ -2722,8 +2730,9 @@
             <div class="gragger-overlay-icon">🪇</div>
         </div>
         <p class="gragger-overlay-title">🪇 Shake to make noise!</p>
-        <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">10</span>s</p>
+        <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">5</span>s</p>
         <button class="gragger-overlay-stop" id="graggerOverlayStop">Stop</button>
+        <p class="gragger-ringer-hint">🔇 No sound? Turn your ringer on!</p>
     </div>
 </div>
 
@@ -2866,12 +2875,12 @@ let lastShakeTime = 0;
 let lastX = null, lastY = null, lastZ = null;
 const SHAKE_THRESHOLD = 12;
 const SHAKE_COOLDOWN  = 110;
-const SHAKE_TIMEOUT_MS = 10000; // 10 seconds auto-off
+const SHAKE_TIMEOUT_MS = 5000; // 5 seconds auto-off
 const RING_CIRCUMFERENCE = 276.46; // 2π × 44
 
 let shakeCountdownInterval = null;
 let shakeTimeoutHandle = null;
-let shakeSecondsLeft = 10;
+let shakeSecondsLeft = 5;
 
 const graggerOverlay  = document.getElementById('graggerOverlay');
 const graggerRingFill = document.getElementById('graggerRingFill');
@@ -2879,7 +2888,7 @@ const graggerCountdown = document.getElementById('graggerCountdown');
 const graggerOverlayStop = document.getElementById('graggerOverlayStop');
 
 function updateRing(secondsLeft) {
-    const fraction = secondsLeft / 10;
+    const fraction = secondsLeft / 5;
     const offset = RING_CIRCUMFERENCE * (1 - fraction);
     graggerRingFill.style.strokeDashoffset = offset;
     graggerRingFill.classList.toggle('urgent', secondsLeft <= 5);
@@ -2887,8 +2896,8 @@ function updateRing(secondsLeft) {
 }
 
 function openGraggerOverlay() {
-    shakeSecondsLeft = 10;
-    updateRing(10);
+    shakeSecondsLeft = 5;
+    updateRing(5);
     graggerOverlay.classList.add('active');
 
     shakeCountdownInterval = setInterval(() => {
