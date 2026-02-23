@@ -347,23 +347,410 @@
         .rotate-nudge-dismiss:hover { color: rgba(255,255,255,0.7); }
 
         /* ════════════════════════════════
-           SETTINGS BUTTON
+           TAB NAVIGATION
         ════════════════════════════════ */
-        .settings-btn {
+        .tab-bar {
             position: fixed;
-            bottom: 1.25rem; right: 1.25rem;
-            width: 42px; height: 42px;
-            background: var(--burgundy);
-            color: var(--cream);
-            border: none; border-radius: 50%;
-            cursor: pointer; font-size: 18px;
-            z-index: 150;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.25);
-            transition: all 0.2s;
-            display: none; /* hidden until welcome dismissed */
+            bottom: 0; left: 0; right: 0;
+            height: 56px;
+            background: linear-gradient(180deg, rgba(247,242,227,0.97) 0%, var(--parchment) 100%);
+            backdrop-filter: blur(10px);
+            border-top: 1.5px solid var(--parchment-dark);
+            display: none; /* shown after welcome */
+            align-items: stretch;
+            z-index: 200;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
         }
-        .settings-btn.visible { display: flex; align-items: center; justify-content: center; }
-        .settings-btn:hover { background: var(--burgundy-light); transform: scale(1.1); }
+        .tab-bar.visible { display: flex; }
+
+        .tab-btn {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            color: var(--ink-light);
+            font-family: 'Cinzel', serif;
+            font-size: 0.55rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: color 0.15s;
+            padding: 0;
+            position: relative;
+        }
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 20%; right: 20%;
+            height: 2px;
+            background: var(--burgundy);
+            border-radius: 0 0 2px 2px;
+            transform: scaleX(0);
+            transition: transform 0.2s;
+        }
+        .tab-btn.active { color: var(--burgundy); }
+        .tab-btn.active::before { transform: scaleX(1); }
+        .tab-btn:hover { color: var(--burgundy); }
+        .tab-icon { font-size: 1.3rem; line-height: 1; }
+
+        /* ── Pages (views) ── */
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ════════════════════════════════
+           LANGUAGES PANEL (slide-up sheet)
+        ════════════════════════════════ */
+        .lang-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .lang-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .lang-panel {
+            position: fixed;
+            bottom: 56px; left: 0; right: 0;
+            background: var(--parchment);
+            border-top: 2px solid var(--parchment-dark);
+            border-radius: 16px 16px 0 0;
+            padding: 1.25rem 1.5rem 1.5rem;
+            z-index: 301;
+            transform: translateY(100%);
+            transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.12);
+        }
+        .lang-panel.open { transform: translateY(0); }
+
+        .lang-panel-handle {
+            width: 36px; height: 4px;
+            background: var(--parchment-dark);
+            border-radius: 2px;
+            margin: 0 auto 1rem;
+        }
+        .lang-panel-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .lang-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border: 1.5px solid var(--parchment-dark);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            background: rgba(255,255,255,0.5);
+        }
+        .lang-option:hover { border-color: var(--gold); }
+        .lang-option.active {
+            border-color: var(--gold-bright);
+            background: rgba(184,136,42,0.08);
+        }
+        .lang-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--parchment-dark);
+            flex-shrink: 0;
+            transition: all 0.15s;
+        }
+        .lang-option.active .lang-dot {
+            background: var(--gold-bright);
+            border-color: var(--gold-bright);
+        }
+        .lang-option[data-layer="english-translation"].active  { border-color: var(--eng-color); background: rgba(46,94,62,0.06); }
+        .lang-option[data-layer="english-translation"].active .lang-dot { background: var(--eng-color); border-color: var(--eng-color); }
+        .lang-option[data-layer="english-translit"].active     { border-color: var(--translit-color); background: rgba(94,46,80,0.06); }
+        .lang-option[data-layer="english-translit"].active .lang-dot { background: var(--translit-color); border-color: var(--translit-color); }
+        .lang-option[data-layer="russian-translation"].active  { border-color: var(--rus-color); background: rgba(30,58,94,0.06); }
+        .lang-option[data-layer="russian-translation"].active .lang-dot { background: var(--rus-color); border-color: var(--rus-color); }
+        .lang-option[data-layer="russian-translit"].active     { border-color: var(--rus-translit-color); background: rgba(94,74,30,0.06); }
+        .lang-option[data-layer="russian-translit"].active .lang-dot { background: var(--rus-translit-color); border-color: var(--rus-translit-color); }
+
+        .lang-option-label { font-size: 0.92rem; color: var(--ink); font-weight: 500; }
+        .lang-option-sub   { font-size: 0.72rem; color: var(--ink-light); margin-top: 1px; }
+
+        /* ════════════════════════════════
+           PURIM GUIDE PAGE
+        ════════════════════════════════ */
+        .purim-page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 1.5rem 1.25rem 6rem;
+        }
+
+        .purim-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem 1rem 1.5rem;
+            position: relative;
+        }
+        .purim-header-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(160deg, var(--burgundy) 0%, #3d0f1e 100%);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .purim-header-bg::after {
+            content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
+            position: absolute;
+            bottom: -8px; left: 0; right: 0;
+            font-size: 0.6rem;
+            letter-spacing: 0.8rem;
+            color: rgba(255,255,255,0.08);
+            text-align: center;
+        }
+        .purim-header-content { position: relative; z-index: 1; }
+        .purim-eyebrow {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold-pale);
+            margin-bottom: 0.5rem;
+        }
+        .purim-main-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            font-weight: 900;
+            color: var(--cream);
+            margin-bottom: 0.25rem;
+            line-height: 1.1;
+        }
+        .purim-main-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.55);
+            font-style: italic;
+        }
+        .purim-floating-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            font-size: 1.8rem;
+        }
+        .purim-floating-icons span {
+            display: inline-block;
+            animation: floatItem 3s ease-in-out infinite;
+        }
+        .purim-floating-icons span:nth-child(2) { animation-delay: 0.4s; }
+        .purim-floating-icons span:nth-child(3) { animation-delay: 0.8s; }
+        .purim-floating-icons span:nth-child(4) { animation-delay: 1.2s; }
+        @keyframes floatItem {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-6px); }
+        }
+
+        /* Progress bar */
+        .purim-progress-wrap {
+            margin-bottom: 1.5rem;
+        }
+        .purim-progress-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.4rem;
+        }
+        .purim-progress-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+        .purim-progress-count {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--burgundy);
+        }
+        .purim-progress-bar {
+            height: 6px;
+            background: var(--parchment-dark);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .purim-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--burgundy), var(--gold-bright));
+            border-radius: 3px;
+            transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
+            width: 0%;
+        }
+
+        /* Mitzvah cards */
+        .mitzvot-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mitzvah-card {
+            background: rgba(253,250,240,0.8);
+            border: 1.5px solid var(--parchment-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .mitzvah-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
+        .mitzvah-card.done {
+            border-color: var(--gold-bright);
+            background: linear-gradient(135deg, rgba(184,136,42,0.06) 0%, rgba(253,250,240,0.9) 100%);
+        }
+
+        .mitzvah-top {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.1rem;
+        }
+        .mitzvah-icon-wrap {
+            width: 52px; height: 52px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+        }
+        .mitzvah-card:hover .mitzvah-icon-wrap { transform: scale(1.08) rotate(-3deg); }
+        .mitzvah-card.done .mitzvah-icon-wrap  { animation: celebrateIcon 0.5s ease; }
+        @keyframes celebrateIcon {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.3) rotate(8deg); }
+            70%  { transform: scale(0.9) rotate(-4deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .mitzvah-text { flex: 1; min-width: 0; }
+        .mitzvah-heb {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--burgundy);
+            direction: rtl;
+            margin-bottom: 0.1rem;
+        }
+        .mitzvah-name {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-mid);
+            margin-bottom: 0.2rem;
+        }
+        .mitzvah-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+
+        .mitzvah-check {
+            width: 28px; height: 28px;
+            border-radius: 50%;
+            border: 2px solid var(--parchment-dark);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+            color: transparent;
+            transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+            background: transparent;
+        }
+        .mitzvah-card.done .mitzvah-check {
+            background: var(--gold-bright);
+            border-color: var(--gold-bright);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Expandable description */
+        .mitzvah-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease, padding 0.35s ease;
+            padding: 0 1.1rem;
+        }
+        .mitzvah-card.expanded .mitzvah-body {
+            max-height: 300px;
+            padding: 0 1.1rem 1rem;
+        }
+        .mitzvah-desc {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--ink-mid);
+            border-top: 1px solid var(--parchment-dark);
+            padding-top: 0.75rem;
+        }
+        .mitzvah-desc strong {
+            color: var(--burgundy);
+            font-weight: 600;
+        }
+        .mitzvah-desc .mitzvah-tip {
+            display: inline-block;
+            margin-top: 0.5rem;
+            background: rgba(184,136,42,0.1);
+            border-left: 3px solid var(--gold-bright);
+            padding: 0.4rem 0.65rem;
+            border-radius: 0 4px 4px 0;
+            font-size: 0.85rem;
+            font-style: normal;
+            color: var(--ink);
+            width: 100%;
+        }
+
+        /* Confetti canvas */
+        #confettiCanvas {
+            position: fixed; inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Celebration message */
+        .all-done-msg {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            background: linear-gradient(135deg, var(--burgundy), #3d0f1e);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .all-done-msg.show { opacity: 1; transform: translateY(0); }
+        .all-done-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+        .all-done-text {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--cream);
+            margin-bottom: 0.25rem;
+        }
+        .all-done-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+            font-style: italic;
+        }
 
         /* ════════════════════════════════
            HEADER
@@ -720,6 +1107,21 @@
             font-size: 1.2rem;
             letter-spacing: 0.8rem;
         }
+
+        /* ─── CONTROLS LABEL ─── */
+        .controls-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+
+        /* ─── BOTTOM PADDING for tab bar ─── */
+        main, .purim-page { padding-bottom: 5rem; }
+
+        /* ─── Hide pages / megillah main by default ─── */
+        #page-purim { display: none; }
     </style>
 </head>
 <body>
@@ -800,9 +1202,61 @@
 </div>
 
 <!-- ═══════════════════════════════════════
-     SETTINGS BUTTON
+     TAB BAR
 ════════════════════════════════════════ -->
-<button class="settings-btn" id="settingsBtn" title="Display options">⚙</button>
+<nav class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="megillah">
+        <span class="tab-icon">📖</span>
+        Megillah
+    </button>
+    <button class="tab-btn" data-tab="purim">
+        <span class="tab-icon">🎊</span>
+        Purim Guide
+    </button>
+    <button class="tab-btn" data-tab="languages">
+        <span class="tab-icon">🌐</span>
+        Languages
+    </button>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     LANGUAGES PANEL (slide-up sheet)
+════════════════════════════════════════ -->
+<div class="lang-overlay" id="langOverlay"></div>
+<div class="lang-panel" id="langPanel">
+    <div class="lang-panel-handle"></div>
+    <p class="lang-panel-title">Display Options</p>
+    <div class="lang-options">
+        <div class="lang-option active" data-layer="english-translation">
+            <span class="lang-dot"></span>
+            <div>
+                <div class="lang-option-label">English Translation</div>
+                <div class="lang-option-sub">Readable, faithful to the source</div>
+            </div>
+        </div>
+        <div class="lang-option" data-layer="english-translit">
+            <span class="lang-dot"></span>
+            <div>
+                <div class="lang-option-label">English Transliteration</div>
+                <div class="lang-option-sub">Sephardic pronunciation guide</div>
+            </div>
+        </div>
+        <div class="lang-option" data-layer="russian-translation">
+            <span class="lang-dot"></span>
+            <div>
+                <div class="lang-option-label">Русский перевод</div>
+                <div class="lang-option-sub">Russian translation</div>
+            </div>
+        </div>
+        <div class="lang-option" data-layer="russian-translit">
+            <span class="lang-dot"></span>
+            <div>
+                <div class="lang-option-label">Транслитерация (рус.)</div>
+                <div class="lang-option-sub">Russian phonetic guide</div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- ═══════════════════════════════════════
      HEADER
@@ -826,14 +1280,9 @@
             <span class="mini-heb">מגילת אסתר</span>
             <span class="mini-eng">Megillat Esther ▲</span>
         </div>
-        <!-- Controls -->
+        <!-- Controls (chapter nav only — language toggles moved to Languages tab) -->
         <div class="controls-bar">
-            <div class="toggle-group">
-                <button class="toggle-btn" data-layer="english-translation">English</button>
-                <button class="toggle-btn" data-layer="english-translit">Transliteration</button>
-                <button class="toggle-btn" data-layer="russian-translation">Русский</button>
-                <button class="toggle-btn" data-layer="russian-translit">Транслитерация</button>
-            </div>
+            <span class="controls-label">Jump to chapter:</span>
             <nav class="chapter-nav">
                 <a href="#ch1" class="chapter-link">1</a>
                 <a href="#ch2" class="chapter-link">2</a>
@@ -1365,170 +1814,197 @@
     <div class="scroll-ornament">❧ ✦ ❧</div>
 </main>
 
+<!-- ═══════════════════════════════════════
+     PURIM GUIDE PAGE
+════════════════════════════════════════ -->
+<div class="page" id="page-purim">
+    <div class="purim-page">
+
+        <div class="purim-header">
+            <div class="purim-header-bg"></div>
+            <div class="purim-header-content">
+                <p class="purim-eyebrow">The Four Mitzvot of</p>
+                <h2 class="purim-main-title">פורים שמח</h2>
+                <p class="purim-main-sub">Happy Purim — four ways to celebrate</p>
+                <div class="purim-floating-icons">
+                    <span>📜</span><span>🍷</span><span>🎁</span><span>🤝</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="purim-progress-wrap">
+            <div class="purim-progress-label">
+                <span class="purim-progress-text">Mitzvot completed today</span>
+                <span class="purim-progress-count" id="progressCount">0 / 4</span>
+            </div>
+            <div class="purim-progress-bar">
+                <div class="purim-progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="mitzvot-grid">
+
+            <div class="mitzvah-card" data-id="megillah">
+                <div class="mitzvah-top">
+                    <div class="mitzvah-icon-wrap" style="background:rgba(107,31,52,0.1);">📜</div>
+                    <div class="mitzvah-text">
+                        <div class="mitzvah-heb">מקרא מגילה</div>
+                        <div class="mitzvah-name">Mikra Megillah</div>
+                        <div class="mitzvah-tagline">Hear the Megillah read aloud</div>
+                    </div>
+                    <div class="mitzvah-check">✓</div>
+                </div>
+                <div class="mitzvah-body">
+                    <div class="mitzvah-desc">
+                        The Megillah — the Book of Esther — is read <strong>twice on Purim</strong>: once at night after nightfall, and once during the day. The entire congregation listens carefully, and every single word must be heard.
+                        <span class="mitzvah-tip">💡 Every time Haman's name is mentioned, make noise with a gragger to drown it out! His name appears 54 times in the Megillah.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mitzvah-card" data-id="mishloach">
+                <div class="mitzvah-top">
+                    <div class="mitzvah-icon-wrap" style="background:rgba(30,58,94,0.1);">🎁</div>
+                    <div class="mitzvah-text">
+                        <div class="mitzvah-heb">משלוח מנות</div>
+                        <div class="mitzvah-name">Mishloach Manot</div>
+                        <div class="mitzvah-tagline">Send food gifts to friends</div>
+                    </div>
+                    <div class="mitzvah-check">✓</div>
+                </div>
+                <div class="mitzvah-body">
+                    <div class="mitzvah-desc">
+                        Send a gift of <strong>at least two different ready-to-eat foods</strong> to at least one friend during Purim day. This strengthens love and friendship among the Jewish people.
+                        <span class="mitzvah-tip">💡 Classic choices: hamantaschen, wine, fruit, chocolates. It should be delivered — not left at the door — ideally by a messenger.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mitzvah-card" data-id="matanot">
+                <div class="mitzvah-top">
+                    <div class="mitzvah-icon-wrap" style="background:rgba(46,94,62,0.1);">🤝</div>
+                    <div class="mitzvah-text">
+                        <div class="mitzvah-heb">מתנות לאביונים</div>
+                        <div class="mitzvah-name">Matanot La'evyonim</div>
+                        <div class="mitzvah-tagline">Give charity to the poor</div>
+                    </div>
+                    <div class="mitzvah-check">✓</div>
+                </div>
+                <div class="mitzvah-body">
+                    <div class="mitzvah-desc">
+                        Give money or food to <strong>at least two poor people</strong> on Purim day, so that everyone can rejoice. This mitzvah is so beloved that the Sages say it's greater than the feast itself.
+                        <span class="mitzvah-tip">💡 "Whoever extends their hand on Purim, we give to them" — don't turn anyone away. Even a small gift fulfills this mitzvah.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mitzvah-card" data-id="seudah">
+                <div class="mitzvah-top">
+                    <div class="mitzvah-icon-wrap" style="background:rgba(94,74,30,0.1);">🥂</div>
+                    <div class="mitzvah-text">
+                        <div class="mitzvah-heb">סעודת פורים</div>
+                        <div class="mitzvah-name">Seudas Purim</div>
+                        <div class="mitzvah-tagline">Hold a festive Purim feast</div>
+                    </div>
+                    <div class="mitzvah-check">✓</div>
+                </div>
+                <div class="mitzvah-body">
+                    <div class="mitzvah-desc">
+                        Hold a festive meal <strong>during the daytime</strong> with bread, wine, and joyful celebration with family and friends. This is the climax of the Purim celebration.
+                        <span class="mitzvah-tip">💡 The Talmud says to drink wine until you can no longer distinguish "cursed is Haman" from "blessed is Mordechai." Many fulfill this by taking a nap after a glass or two!</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="all-done-msg" id="allDoneMsg">
+            <span class="all-done-emoji">🎉</span>
+            <div class="all-done-text">Purim Sameach! פורים שמח</div>
+            <div class="all-done-sub">All four mitzvot complete. May your Purim be filled with joy!</div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Confetti canvas -->
+<canvas id="confettiCanvas"></canvas>
+
 <script>
 // ═══════════════════════════════════════
-//  PARTICLES
+//  PARTICLES (welcome screen only)
 // ═══════════════════════════════════════
 (function() {
     const canvas = document.getElementById('particleCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let W, H, particles = [];
-
-    function resize() {
-        W = canvas.width  = window.innerWidth;
-        H = canvas.height = window.innerHeight;
-    }
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
     resize();
     window.addEventListener('resize', resize);
-
-    // Each particle is a small glowing dot or star
-    function Particle() {
-        this.reset();
-    }
+    function Particle() { this.reset(); }
     Particle.prototype.reset = function() {
-        this.x    = Math.random() * W;
-        this.y    = Math.random() * H;
-        this.r    = 0.4 + Math.random() * 1.4;
-        this.vx   = (Math.random() - 0.5) * 0.18;
-        this.vy   = -0.08 - Math.random() * 0.22;   // drift upward
-        this.life = 0;
-        this.maxLife = 180 + Math.random() * 200;
-        // Gold / cream colours
-        const hues = ['rgba(212,165,58,', 'rgba(253,248,232,', 'rgba(184,136,42,', 'rgba(255,220,120,'];
-        this.color = hues[Math.floor(Math.random() * hues.length)];
-        // Occasional 4-pointed star shape
-        this.isStar = Math.random() < 0.15;
+        this.x = Math.random()*W; this.y = Math.random()*H;
+        this.r = 0.4+Math.random()*1.4;
+        this.vx = (Math.random()-0.5)*0.18; this.vy = -0.08-Math.random()*0.22;
+        this.life = 0; this.maxLife = 180+Math.random()*200;
+        const hues = ['rgba(212,165,58,','rgba(253,248,232,','rgba(184,136,42,','rgba(255,220,120,'];
+        this.color = hues[Math.floor(Math.random()*hues.length)];
+        this.isStar = Math.random()<0.15;
     };
-    Particle.prototype.update = function() {
-        this.x    += this.vx;
-        this.y    += this.vy;
-        this.life += 1;
-        if (this.life > this.maxLife) this.reset();
-    };
+    Particle.prototype.update = function() { this.x+=this.vx; this.y+=this.vy; this.life++; if(this.life>this.maxLife) this.reset(); };
     Particle.prototype.draw = function() {
-        const progress = this.life / this.maxLife;
-        // Fade in then out
-        const alpha = progress < 0.15
-            ? progress / 0.15
-            : progress > 0.75
-                ? 1 - (progress - 0.75) / 0.25
-                : 1;
-        const a = alpha * (this.isStar ? 0.85 : 0.5);
-        ctx.save();
-        ctx.globalAlpha = a;
-        if (this.isStar) {
-            ctx.fillStyle = this.color + '1)';
-            ctx.translate(this.x, this.y);
-            const s = this.r * 2.5;
-            ctx.beginPath();
-            for (let i = 0; i < 4; i++) {
-                ctx.rotate(Math.PI / 2);
-                ctx.lineTo(0, s);
-                ctx.lineTo(s * 0.35, s * 0.35);
-            }
-            ctx.closePath();
-            ctx.fill();
+        const p=this.life/this.maxLife;
+        const alpha=p<0.15?p/0.15:p>0.75?1-(p-0.75)/0.25:1;
+        const a=alpha*(this.isStar?0.85:0.5);
+        ctx.save(); ctx.globalAlpha=a;
+        if(this.isStar){
+            ctx.fillStyle=this.color+'1)'; ctx.translate(this.x,this.y);
+            const s=this.r*2.5; ctx.beginPath();
+            for(let i=0;i<4;i++){ctx.rotate(Math.PI/2);ctx.lineTo(0,s);ctx.lineTo(s*0.35,s*0.35);}
+            ctx.closePath(); ctx.fill();
         } else {
-            const grad = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 3);
-            grad.addColorStop(0, this.color + '1)');
-            grad.addColorStop(1, this.color + '0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.r * 3, 0, Math.PI * 2);
-            ctx.fill();
+            const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.r*3);
+            g.addColorStop(0,this.color+'1)'); g.addColorStop(1,this.color+'0)');
+            ctx.fillStyle=g; ctx.beginPath(); ctx.arc(this.x,this.y,this.r*3,0,Math.PI*2); ctx.fill();
         }
         ctx.restore();
     };
-
-    // Create particles — fewer on mobile for performance
-    const count = window.innerWidth < 640 ? 45 : 90;
-    for (let i = 0; i < count; i++) {
-        const p = new Particle();
-        p.life = Math.random() * p.maxLife; // randomise start phase
-        particles.push(p);
-    }
-
-    let animId;
-    function loop() {
-        // Only animate while welcome screen is visible
-        if (document.getElementById('welcomeScreen').classList.contains('hidden')) {
-            ctx.clearRect(0, 0, W, H);
-            return;
-        }
-        ctx.clearRect(0, 0, W, H);
-        particles.forEach(p => { p.update(); p.draw(); });
-        animId = requestAnimationFrame(loop);
+    const count = window.innerWidth<640?45:90;
+    for(let i=0;i<count;i++){const p=new Particle();p.life=Math.random()*p.maxLife;particles.push(p);}
+    function loop(){
+        if(document.getElementById('welcomeScreen').classList.contains('hidden')){ctx.clearRect(0,0,W,H);return;}
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p=>{p.update();p.draw();});
+        requestAnimationFrame(loop);
     }
     loop();
 })();
 
 // ═══════════════════════════════════════
-//  ROTATE NUDGE
+//  AUDIO
 // ═══════════════════════════════════════
-const rotateNudge        = document.getElementById('rotateNudge');
-const rotateNudgeDismiss = document.getElementById('rotateNudgeDismiss');
-let nudgeDismissed = false;
-
-function checkRotateNudge() {
-    if (nudgeDismissed) return;
-    const isMobile   = window.innerWidth <= 768;
-    const isPortrait = window.innerHeight > window.innerWidth;
-    if (isMobile && isPortrait) {
-        rotateNudge.classList.add('show');
-        // Auto-dismiss after 6 s
-        setTimeout(() => {
-            if (!nudgeDismissed) rotateNudge.classList.remove('show');
-        }, 6000);
-    } else {
-        rotateNudge.classList.remove('show');
-    }
-}
-
-rotateNudgeDismiss.addEventListener('click', () => {
-    nudgeDismissed = true;
-    rotateNudge.classList.remove('show');
-});
-
-// Hide nudge when user rotates to landscape
-window.addEventListener('orientationchange', () => {
-    setTimeout(checkRotateNudge, 200);
-}, false);
-window.addEventListener('resize', checkRotateNudge, { passive: true });
 let audioCtx = null;
-
 function ensureAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
 }
-
 function playRattle() {
     ensureAudio();
-    // 3 quick noise bursts
     [0, 60, 120].forEach(delayMs => {
         setTimeout(() => {
-            const dur = 0.07;
-            const sr = audioCtx.sampleRate;
-            const buf = audioCtx.createBuffer(1, sr * dur, sr);
-            const data = buf.getChannelData(0);
-            for (let i = 0; i < buf.length; i++) {
-                data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / buf.length, 0.4);
-            }
-            const src = audioCtx.createBufferSource();
-            src.buffer = buf;
-            const filt = audioCtx.createBiquadFilter();
-            filt.type = 'bandpass';
-            filt.frequency.value = 700 + Math.random() * 500;
-            filt.Q.value = 1.5;
-            const gain = audioCtx.createGain();
-            gain.gain.value = 0.45;
-            src.connect(filt); filt.connect(gain); gain.connect(audioCtx.destination);
-            src.start();
+            const dur=0.07, sr=audioCtx.sampleRate;
+            const buf=audioCtx.createBuffer(1,sr*dur,sr);
+            const data=buf.getChannelData(0);
+            for(let i=0;i<buf.length;i++) data[i]=(Math.random()*2-1)*Math.pow(1-i/buf.length,0.4);
+            const src=audioCtx.createBufferSource(); src.buffer=buf;
+            const filt=audioCtx.createBiquadFilter(); filt.type='bandpass';
+            filt.frequency.value=700+Math.random()*500; filt.Q.value=1.5;
+            const gain=audioCtx.createGain(); gain.gain.value=0.45;
+            src.connect(filt); filt.connect(gain); gain.connect(audioCtx.destination); src.start();
         }, delayMs);
     });
 }
-
-// Delegate all gragger clicks
 document.addEventListener('click', e => {
     const btn = e.target.closest('.gragger-btn');
     if (!btn) return;
@@ -1542,11 +2018,9 @@ document.addEventListener('click', e => {
 //  WELCOME SCREEN
 // ═══════════════════════════════════════
 const welcomeScreen = document.getElementById('welcomeScreen');
-const settingsBtn   = document.getElementById('settingsBtn');
 const startBtn      = document.getElementById('startReading');
 const welcomeOpts   = document.querySelectorAll('.welcome-option');
 
-// Toggle checkboxes
 welcomeOpts.forEach(opt => {
     opt.addEventListener('click', e => {
         e.preventDefault();
@@ -1561,45 +2035,80 @@ function applySelections() {
         const layer = opt.dataset.layer;
         const on = opt.classList.contains('selected');
         document.querySelectorAll('.' + layer).forEach(el => el.classList.toggle('visible', on));
-        const btn = document.querySelector('.toggle-btn[data-layer="' + layer + '"]');
-        if (btn) btn.classList.toggle('active', on);
+        const langOpt = document.querySelector('.lang-option[data-layer="' + layer + '"]');
+        if (langOpt) langOpt.classList.toggle('active', on);
     });
     updateColumnWidths();
 }
 
 startBtn.addEventListener('click', () => {
-    ensureAudio(); // unlock audio on this gesture
+    ensureAudio();
     applySelections();
     welcomeScreen.classList.add('hidden');
-    settingsBtn.classList.add('visible');
-    // Show rotate nudge on portrait mobile after a short delay
+    document.getElementById('tabBar').classList.add('visible');
     setTimeout(checkRotateNudge, 600);
 });
 
-settingsBtn.addEventListener('click', () => {
-    // Sync toggle state back to welcome checkboxes
-    welcomeOpts.forEach(opt => {
-        const layer = opt.dataset.layer;
-        const btn = document.querySelector('.toggle-btn[data-layer="' + layer + '"]');
-        opt.classList.toggle('selected', btn && btn.classList.contains('active'));
-    });
-    welcomeScreen.classList.remove('hidden');
-});
+// ═══════════════════════════════════════
+//  TAB NAVIGATION
+// ═══════════════════════════════════════
+const megillahMain = document.querySelector('main');
+const purimPage    = document.getElementById('page-purim');
+const tabBtns      = document.querySelectorAll('.tab-btn');
+
+function switchTab(tabId) {
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
+    if (tabId === 'megillah') {
+        megillahMain.style.display = '';
+        purimPage.style.display    = 'none';
+        document.getElementById('header').style.display = '';
+        closeLangPanel();
+    } else if (tabId === 'purim') {
+        megillahMain.style.display = 'none';
+        purimPage.style.display    = 'block';
+        document.getElementById('header').style.display = 'none';
+        closeLangPanel();
+    } else if (tabId === 'languages') {
+        const isOpen = document.getElementById('langPanel').classList.contains('open');
+        if (isOpen) {
+            closeLangPanel();
+            const activeView = megillahMain.style.display === 'none' ? 'purim' : 'megillah';
+            tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === activeView));
+        } else {
+            openLangPanel();
+        }
+    }
+}
+tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 
 // ═══════════════════════════════════════
-//  TOGGLE BUTTONS
+//  LANGUAGES PANEL
 // ═══════════════════════════════════════
-document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const layer = btn.dataset.layer;
-        btn.classList.toggle('active');
-        document.querySelectorAll('.' + layer).forEach(el => el.classList.toggle('visible'));
+const langPanel   = document.getElementById('langPanel');
+const langOverlay = document.getElementById('langOverlay');
+const langOptions = document.querySelectorAll('.lang-option');
+
+function openLangPanel()  { langPanel.classList.add('open'); langOverlay.classList.add('open'); }
+function closeLangPanel() {
+    langPanel.classList.remove('open');
+    langOverlay.classList.remove('open');
+    const activeView = megillahMain.style.display === 'none' ? 'purim' : 'megillah';
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === activeView));
+}
+langOverlay.addEventListener('click', closeLangPanel);
+
+langOptions.forEach(opt => {
+    opt.addEventListener('click', () => {
+        const layer = opt.dataset.layer;
+        opt.classList.toggle('active');
+        const isOn = opt.classList.contains('active');
+        document.querySelectorAll('.' + layer).forEach(el => el.classList.toggle('visible', isOn));
         updateColumnWidths();
     });
 });
 
 // ═══════════════════════════════════════
-//  COLUMN WIDTHS — how many layers visible?
+//  COLUMN WIDTHS
 // ═══════════════════════════════════════
 function updateColumnWidths() {
     document.querySelectorAll('.verse-content').forEach(vc => {
@@ -1609,21 +2118,17 @@ function updateColumnWidths() {
 }
 
 // ═══════════════════════════════════════
-//  HEADER COLLAPSE ON SCROLL
+//  HEADER COLLAPSE
 // ═══════════════════════════════════════
-const header    = document.getElementById('header');
-const miniHdr   = document.getElementById('miniHeader');
-
+const header  = document.getElementById('header');
+const miniHdr = document.getElementById('miniHeader');
 window.addEventListener('scroll', () => {
     header.classList.toggle('collapsed', window.pageYOffset > 70);
 }, { passive: true });
-
-if (miniHdr) {
-    miniHdr.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-}
+if (miniHdr) miniHdr.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
 
 // ═══════════════════════════════════════
-//  CHAPTER SMOOTH SCROLL
+//  CHAPTER SCROLL
 // ═══════════════════════════════════════
 document.querySelectorAll('.chapter-link').forEach(a => {
     a.addEventListener('click', e => {
@@ -1631,9 +2136,118 @@ document.querySelectorAll('.chapter-link').forEach(a => {
         const target = document.querySelector(a.getAttribute('href'));
         if (!target) return;
         const top = target.getBoundingClientRect().top + window.pageYOffset - header.offsetHeight - 12;
-        window.scrollTo({ top, behavior: 'smooth' });
+        window.scrollTo({ top, behavior:'smooth' });
     });
 });
+
+// ═══════════════════════════════════════
+//  ROTATE NUDGE
+// ═══════════════════════════════════════
+const rotateNudge        = document.getElementById('rotateNudge');
+const rotateNudgeDismiss = document.getElementById('rotateNudgeDismiss');
+let nudgeDismissed = false;
+function checkRotateNudge() {
+    if (nudgeDismissed) return;
+    const isMobile = window.innerWidth <= 768, isPortrait = window.innerHeight > window.innerWidth;
+    if (isMobile && isPortrait) {
+        rotateNudge.classList.add('show');
+        setTimeout(() => { if (!nudgeDismissed) rotateNudge.classList.remove('show'); }, 6000);
+    } else {
+        rotateNudge.classList.remove('show');
+    }
+}
+rotateNudgeDismiss.addEventListener('click', () => { nudgeDismissed = true; rotateNudge.classList.remove('show'); });
+window.addEventListener('orientationchange', () => setTimeout(checkRotateNudge, 200));
+window.addEventListener('resize', checkRotateNudge, { passive: true });
+
+// ═══════════════════════════════════════
+//  CONFETTI
+// ═══════════════════════════════════════
+const confCanvas = document.getElementById('confettiCanvas');
+const confCtx    = confCanvas ? confCanvas.getContext('2d') : null;
+let confettiPieces = [], confRunning = false;
+function resizeConf() {
+    if (!confCanvas) return;
+    confCanvas.width = window.innerWidth; confCanvas.height = window.innerHeight;
+}
+resizeConf();
+window.addEventListener('resize', resizeConf);
+
+function launchConfetti() {
+    if (!confCtx) return;
+    const colors = ['#d4a53a','#6b1f34','#2e5e3e','#1e3a5e','#fdfaf0','#b8882a','#ff6b6b','#ffe66d'];
+    for (let i = 0; i < 120; i++) {
+        confettiPieces.push({
+            x: Math.random()*confCanvas.width, y: -10-Math.random()*100,
+            w: 6+Math.random()*8, h: 4+Math.random()*5,
+            color: colors[Math.floor(Math.random()*colors.length)],
+            vx: (Math.random()-0.5)*3, vy: 2+Math.random()*4,
+            angle: Math.random()*360, spin: (Math.random()-0.5)*8, life: 1
+        });
+    }
+    if (!confRunning) runConfetti();
+}
+function runConfetti() {
+    confRunning = true;
+    confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height);
+    confettiPieces = confettiPieces.filter(c => c.life > 0);
+    confettiPieces.forEach(c => {
+        c.x+=c.vx; c.y+=c.vy; c.angle+=c.spin; c.vy+=0.08; c.life-=0.008;
+        confCtx.save();
+        confCtx.globalAlpha = Math.max(0, c.life);
+        confCtx.translate(c.x, c.y);
+        confCtx.rotate(c.angle*Math.PI/180);
+        confCtx.fillStyle = c.color;
+        confCtx.fillRect(-c.w/2, -c.h/2, c.w, c.h);
+        confCtx.restore();
+    });
+    if (confettiPieces.length > 0) requestAnimationFrame(runConfetti);
+    else { confRunning = false; confCtx.clearRect(0, 0, confCanvas.width, confCanvas.height); }
+}
+
+// ═══════════════════════════════════════
+//  MITZVAH CARDS
+// ═══════════════════════════════════════
+const checkedMitzvot = new Set();
+const mitzvahCards   = document.querySelectorAll('.mitzvah-card');
+const progressFill   = document.getElementById('progressFill');
+const progressCount  = document.getElementById('progressCount');
+const allDoneMsg     = document.getElementById('allDoneMsg');
+
+mitzvahCards.forEach(card => {
+    // Tap the card body to expand description
+    card.addEventListener('click', e => {
+        if (e.target.closest('.mitzvah-check')) return;
+        const wasExpanded = card.classList.contains('expanded');
+        mitzvahCards.forEach(c => c.classList.remove('expanded'));
+        if (!wasExpanded) card.classList.add('expanded');
+    });
+    // Tap the checkmark circle to mark done
+    card.querySelector('.mitzvah-check').addEventListener('click', e => {
+        e.stopPropagation();
+        const id = card.dataset.id;
+        if (checkedMitzvot.has(id)) {
+            checkedMitzvot.delete(id);
+            card.classList.remove('done');
+        } else {
+            checkedMitzvot.add(id);
+            card.classList.add('done');
+            launchConfetti();
+        }
+        updateProgress();
+    });
+});
+
+function updateProgress() {
+    const n = checkedMitzvot.size;
+    progressCount.textContent = n + ' / 4';
+    progressFill.style.width = (n / 4 * 100) + '%';
+    if (n === 4) {
+        setTimeout(() => { allDoneMsg.classList.add('show'); launchConfetti(); }, 400);
+    } else {
+        allDoneMsg.classList.remove('show');
+    }
+}
 </script>
 </body>
 </html>
