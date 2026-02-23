@@ -208,6 +208,32 @@
             to   { width: 80px; opacity: 1; }
         }
 
+        .welcome-feature-row {
+            display: flex;
+            gap: 0.75rem;
+            margin: 0.75rem 0 0;
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+        .welcome-feature {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.7rem 0.4rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(196,154,42,0.25);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.55);
+            letter-spacing: 0.04em;
+        }
+        .welcome-feature span:first-child { font-size: 1.4rem; }
+
         .welcome-label {
             font-family: 'Inter', sans-serif;
             font-size: 0.65rem;
@@ -513,233 +539,338 @@
         /* ════════════════════════════════
            PURIM GUIDE PAGE
         ════════════════════════════════ */
+        /* ════════════════════════════════
+           PURIM PAGE — full redesign
+        ════════════════════════════════ */
         .purim-page {
-            max-width: 680px;
+            max-width: 700px;
             margin: 0 auto;
-            padding: 1.5rem 1.25rem 6rem;
+            padding: 0 1rem 6rem;
         }
 
-        .purim-header {
-            text-align: center;
-            margin-bottom: 2rem;
-            padding: 2rem 1rem 1.5rem;
+        /* ── Hero (dark, like welcome screen) ── */
+        .purim-hero {
             position: relative;
-        }
-        .purim-header-bg {
-            position: absolute; inset: 0;
-            background: linear-gradient(160deg, var(--burgundy) 0%, #3d0f1e 100%);
-            border-radius: 12px;
+            background: linear-gradient(160deg, #1a0d12 0%, #2d1020 60%, #1a0d12 100%);
             overflow: hidden;
-        }
-        .purim-header-bg::after {
-            content: '✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦ ✦';
-            position: absolute;
-            bottom: -8px; left: 0; right: 0;
-            font-size: 0.6rem;
-            letter-spacing: 0.8rem;
-            color: rgba(255,255,255,0.08);
             text-align: center;
+            padding: 2.5rem 1.5rem 2rem;
+            margin: 0 -1rem 1.5rem;
         }
-        .purim-header-content { position: relative; z-index: 1; }
+        .purim-hero-canvas {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; opacity: 0.6;
+        }
+        .purim-hero-glow {
+            position: absolute;
+            top: -30px; left: 50%; transform: translateX(-50%);
+            width: 280px; height: 160px;
+            background: radial-gradient(ellipse, rgba(196,154,42,0.3) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .purim-hero-content { position: relative; z-index: 1; }
+
         .purim-eyebrow {
             font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.62rem;
             font-weight: 700;
-            letter-spacing: 0.25em;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: var(--gold-pale);
-            margin-bottom: 0.5rem;
+            color: var(--gold);
+            margin-bottom: 0.4rem;
         }
         .purim-main-title {
             font-family: 'Frank Ruhl Libre', serif;
-            font-size: clamp(1.8rem, 6vw, 2.8rem);
+            font-size: clamp(2rem, 7vw, 3.2rem);
             font-weight: 900;
-            color: var(--cream);
-            margin-bottom: 0.25rem;
-            line-height: 1.1;
+            line-height: 1;
+            margin-bottom: 0.2rem;
+            background: linear-gradient(90deg, #c9a44a 0%, #fdf8e8 40%, #d4a53a 70%, #fdf8e8 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 5s linear infinite;
         }
         .purim-main-sub {
             font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: rgba(255,255,255,0.55);
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.38);
+            margin-bottom: 1rem;
         }
         .purim-floating-icons {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-            font-size: 1.8rem;
+            gap: 1.2rem;
+            font-size: 2rem;
         }
         .purim-floating-icons span {
             display: inline-block;
             animation: floatItem 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(196,154,42,0.4));
         }
-        .purim-floating-icons span:nth-child(2) { animation-delay: 0.4s; }
-        .purim-floating-icons span:nth-child(3) { animation-delay: 0.8s; }
-        .purim-floating-icons span:nth-child(4) { animation-delay: 1.2s; }
         @keyframes floatItem {
-            0%,100% { transform: translateY(0); }
-            50%      { transform: translateY(-6px); }
+            0%,100% { transform: translateY(0) rotate(-3deg); }
+            50%      { transform: translateY(-8px) rotate(3deg); }
         }
 
-        /* Progress bar */
-        .purim-progress-wrap {
+        /* ── Segmented pip progress ── */
+        .purim-progress-section {
             margin-bottom: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: var(--cream);
+            border-radius: 14px;
+            border: 1px solid var(--parchment-mid);
+            box-shadow: var(--shadow-sm);
         }
-        .purim-progress-label {
+        .purim-progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.75rem;
         }
-        .purim-progress-text {
+        .purim-progress-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+        .purim-progress-fraction {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--burgundy);
+        }
+
+        /* Pip row */
+        .purim-pips {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .purim-pip {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.55rem 0.3rem;
+            background: var(--parchment);
+            border: 2px solid var(--parchment-dark);
+            border-radius: 10px;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            cursor: default;
+        }
+        .purim-pip span { font-size: 1.3rem; line-height: 1; transition: transform 0.3s; }
+        .purim-pip small {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.52rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--ink-light);
+            text-transform: uppercase;
+        }
+        .purim-pip.done {
+            background: linear-gradient(135deg, rgba(196,154,42,0.15), rgba(196,154,42,0.05));
+            border-color: var(--gold-bright);
+            transform: scale(1.08);
+        }
+        .purim-pip.done span { transform: scale(1.2); }
+        .purim-pip.done small { color: var(--gold); }
+
+        /* All done banner */
+        .purim-all-done {
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, var(--burgundy), #3d0f1e);
+            border-radius: 10px;
+            font-size: 1.8rem;
+            animation: fadeSlideUp 0.5s ease;
+        }
+        .purim-all-done.show { display: flex; }
+        .purim-all-done strong {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--cream);
+            display: block;
+        }
+        .purim-all-done span:last-child {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.55);
+        }
+
+        /* ── Mitzvah cards — new design ── */
+        .mitzvot-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+        }
+
+        .mitzvah-card {
+            background: var(--cream);
+            border: 1.5px solid var(--parchment-mid);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+        .mitzvah-card:hover { box-shadow: var(--shadow-md); }
+        .mitzvah-card.done {
+            border-color: var(--gold);
+            background: linear-gradient(to bottom, rgba(196,154,42,0.06) 0%, var(--cream) 60px);
+        }
+
+        /* Top row */
+        .mitzvah-card-inner {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            padding: 1rem 1rem 0.85rem;
+        }
+        .mitzvah-icon-wrap {
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.7rem;
+            flex-shrink: 0;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .mitzvah-card.done .mitzvah-icon-wrap { animation: celebrateIcon 0.5s ease; }
+        @keyframes celebrateIcon {
+            0%   { transform: scale(1); }
+            40%  { transform: scale(1.35) rotate(10deg); }
+            70%  { transform: scale(0.9) rotate(-5deg); }
+            100% { transform: scale(1); }
+        }
+
+        .mitzvah-text-col { flex: 1; min-width: 0; }
+        .mitzvah-heb {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--burgundy);
+            direction: rtl;
+            line-height: 1.2;
+        }
+        .mitzvah-name {
             font-family: 'Inter', sans-serif;
             font-size: 0.65rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--ink-light);
-        }
-        .purim-progress-count {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--burgundy);
-        }
-        .purim-progress-bar {
-            height: 6px;
-            background: var(--parchment-dark);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .purim-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--burgundy), var(--gold-bright));
-            border-radius: 3px;
-            transition: width 0.5s cubic-bezier(0.34,1.56,0.64,1);
-            width: 0%;
-        }
-
-        /* Mitzvah cards */
-        .mitzvot-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .mitzvah-card {
-            background: rgba(253,250,240,0.8);
-            border: 1.5px solid var(--parchment-dark);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-        }
-        .mitzvah-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.09); }
-        .mitzvah-card.done {
-            border-color: var(--gold-bright);
-            background: linear-gradient(135deg, rgba(184,136,42,0.06) 0%, rgba(253,250,240,0.9) 100%);
-        }
-
-        .mitzvah-top {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 1.1rem;
-        }
-        .mitzvah-icon-wrap {
-            width: 52px; height: 52px;
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem;
-            flex-shrink: 0;
-            transition: transform 0.3s;
-        }
-        .mitzvah-card:hover .mitzvah-icon-wrap { transform: scale(1.08) rotate(-3deg); }
-        .mitzvah-card.done .mitzvah-icon-wrap  { animation: celebrateIcon 0.5s ease; }
-        @keyframes celebrateIcon {
-            0%   { transform: scale(1); }
-            40%  { transform: scale(1.3) rotate(8deg); }
-            70%  { transform: scale(0.9) rotate(-4deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
-        .mitzvah-text { flex: 1; min-width: 0; }
-        .mitzvah-heb {
-            font-family: 'Frank Ruhl Libre', serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--burgundy);
-            direction: rtl;
-            margin-bottom: 0.1rem;
-        }
-        .mitzvah-name {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
             color: var(--ink-mid);
-            margin-bottom: 0.2rem;
         }
-        .mitzvah-tagline {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 400;
+        .mitzvah-time {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
             color: var(--ink-light);
+            margin-top: 0.15rem;
         }
 
-        .mitzvah-check {
-            width: 28px; height: 28px;
+        /* Check button */
+        .mitzvah-check-btn {
+            width: 34px; height: 34px;
             border-radius: 50%;
             border: 2px solid var(--parchment-dark);
+            background: transparent;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .mitzvah-check-btn .check-icon {
             font-size: 1rem;
             color: transparent;
-            transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
-            background: transparent;
+            transition: color 0.2s;
+            font-weight: 700;
         }
-        .mitzvah-card.done .mitzvah-check {
-            background: var(--gold-bright);
-            border-color: var(--gold-bright);
-            color: #fff;
-            transform: scale(1.1);
+        .mitzvah-check-btn:hover { border-color: var(--gold); transform: scale(1.1); }
+        .mitzvah-card.done .mitzvah-check-btn {
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+            border-color: var(--gold);
+            transform: scale(1.15);
+            box-shadow: 0 2px 12px rgba(196,154,42,0.4);
         }
+        .mitzvah-card.done .mitzvah-check-btn .check-icon { color: #fff; }
 
-        /* Expandable description */
+        /* Expandable body */
         .mitzvah-body {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.35s ease, padding 0.35s ease;
-            padding: 0 1.1rem;
+            transition: max-height 0.4s ease;
         }
-        .mitzvah-card.expanded .mitzvah-body {
-            max-height: 300px;
-            padding: 0 1.1rem 1rem;
+        .mitzvah-card.expanded .mitzvah-body { max-height: 600px; }
+
+        .mitzvah-source {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 0.92rem;
+            font-style: italic;
+            color: var(--burgundy);
+            background: rgba(122,31,56,0.05);
+            border-left: 3px solid var(--burgundy);
+            padding: 0.6rem 0.9rem;
+            margin: 0 1rem 0.75rem;
+            border-radius: 0 8px 8px 0;
+            line-height: 1.5;
         }
-        .mitzvah-desc {
+
+        .mitzvah-details {
+            padding: 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            margin-bottom: 0.75rem;
+        }
+        .mitzvah-detail-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
             font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            line-height: 1.7;
-            color: var(--ink-mid);
-            border-top: 1px solid var(--parchment-dark);
-            padding-top: 0.75rem;
-        }
-        .mitzvah-desc strong { color: var(--burgundy); font-weight: 700; }
-        .mitzvah-desc .mitzvah-tip {
-            display: block;
-            margin-top: 0.6rem;
-            background: rgba(196,154,42,0.1);
-            border-left: 3px solid var(--gold-bright);
-            padding: 0.45rem 0.7rem;
-            border-radius: 0 6px 6px 0;
             font-size: 0.82rem;
-            font-style: normal;
+            color: var(--ink-mid);
+            line-height: 1.55;
+        }
+        .detail-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 0.05rem; }
+        .mitzvah-detail-row strong { color: var(--burgundy); font-weight: 700; }
+
+        .mitzvah-tip {
+            margin: 0 1rem 1rem;
+            background: rgba(196,154,42,0.08);
+            border-left: 3px solid var(--gold-bright);
+            padding: 0.5rem 0.8rem;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
             color: var(--ink);
             line-height: 1.55;
         }
+
+        /* Expand button */
+        .mitzvah-expand-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.55rem;
+            background: var(--parchment);
+            border: none;
+            border-top: 1px solid var(--parchment-mid);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--ink-light);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .mitzvah-expand-btn:hover { background: var(--parchment-mid); color: var(--ink); }
+        .mitzvah-card.expanded .mitzvah-expand-btn { color: var(--burgundy); }
 
         /* Confetti canvas */
         #confettiCanvas {
@@ -748,51 +879,77 @@
             z-index: 9999;
         }
 
-        /* Celebration message */
-        .all-done-msg {
-            text-align: center;
-            padding: 1.5rem;
-            margin-top: 1rem;
-            background: linear-gradient(135deg, var(--burgundy), #3d0f1e);
-            border-radius: 12px;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-        .all-done-msg.show { opacity: 1; transform: translateY(0); }
-        .all-done-emoji { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
-        .all-done-text {
-            font-family: 'Frank Ruhl Libre', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--cream);
-            margin-bottom: 0.25rem;
-        }
-        .all-done-sub {
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.6);
-            font-style: italic;
-        }
-
         /* ════════════════════════════════
            HEADER
         ════════════════════════════════ */
         header {
             position: sticky; top: 0;
-            background: rgba(250,247,240,0.96);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             z-index: 100;
-            border-bottom: 1px solid var(--parchment-mid);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
             transition: all 0.3s;
+        }
+
+        /* Hero section of header (full, unscrolled) */
+        .header-hero {
+            position: relative;
+            background: linear-gradient(160deg, #1a0d12 0%, #2d1020 50%, #1a0d12 100%);
+            overflow: hidden;
+            padding: 1.2rem 1.5rem 0.9rem;
+            text-align: center;
+        }
+        .header-hero-glow {
+            position: absolute;
+            top: -40px; left: 50%; transform: translateX(-50%);
+            width: 300px; height: 200px;
+            background: radial-gradient(ellipse, rgba(196,154,42,0.25) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .header-hero-content { position: relative; z-index: 1; }
+        .header-eyebrow {
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+        }
+        .site-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: clamp(1.6rem, 5vw, 2.4rem);
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.15rem;
+            background: linear-gradient(90deg, #c9a44a 0%, #fdf8e8 40%, #d4a53a 70%, #fdf8e8 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 6s linear infinite;
+        }
+        .site-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            color: rgba(196,154,42,0.7);
+            margin-bottom: 0.3rem;
+        }
+        .site-credit {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+            color: rgba(255,255,255,0.28);
+        }
+        .site-dedication-inline {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 0.65rem;
+            color: rgba(196,154,42,0.5);
         }
 
         .header-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0.65rem 1.25rem;
         }
 
         /* Title block (full) */
@@ -852,17 +1009,47 @@
         .mini-eng { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.62rem; letter-spacing: 0.15em; color: var(--gold); margin-left: 0.5rem; text-transform: uppercase; }
 
         header.collapsed .title-block { display: none; }
-        header.collapsed .mini-title-row { display: block; }
+        header.collapsed .mini-title-row { display: flex; }
 
-        /* Controls bar */
+        /* Mini title bar (collapsed state) */
+        .mini-title-row {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.4rem 1rem;
+            background: #1a0d12;
+        }
+        .mini-title-row:hover { background: #221018; }
+        .mini-heb {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1rem; font-weight: 700;
+            background: linear-gradient(90deg, #c9a44a, #fdf8e8, #c9a44a);
+            background-size: 200% auto;
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .mini-eng {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; font-size: 0.55rem;
+            letter-spacing: 0.15em; color: rgba(196,154,42,0.55);
+            text-transform: uppercase;
+        }
+
+        /* Controls bar — sits below hero, light bg */
         .controls-bar {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            padding-top: 0.5rem;
-            border-top: 1px solid var(--parchment-dark);
+            padding: 0.5rem 1rem;
+            background: rgba(250,247,240,0.97);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--parchment-mid);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
         }
 
         .controls-label {
@@ -1090,7 +1277,109 @@
             100% { transform: rotate(0deg)   scale(1); }
         }
 
-        /* Shake mode tooltip */
+        /* ─── GRAGGER FULL-SCREEN OVERLAY ─── */
+        .gragger-overlay {
+            position: fixed; inset: 0;
+            background: rgba(10, 4, 8, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 500;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .gragger-overlay.active { display: flex; }
+
+        .gragger-overlay-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Countdown ring */
+        .gragger-countdown-ring {
+            position: relative;
+            width: 160px; height: 160px;
+            margin-bottom: 0.5rem;
+        }
+        .gragger-ring-svg {
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+        }
+        .gragger-ring-bg {
+            fill: none;
+            stroke: rgba(255,255,255,0.08);
+            stroke-width: 6;
+        }
+        .gragger-ring-fill {
+            fill: none;
+            stroke: var(--gold-bright);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 276.46; /* 2π × 44 */
+            stroke-dashoffset: 0;
+            transition: stroke-dashoffset 1s linear, stroke 0.5s;
+        }
+        .gragger-ring-fill.urgent { stroke: #e05050; }
+
+        .gragger-overlay-icon {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4.5rem;
+            line-height: 1;
+            animation: overlayShakeIcon 0.6s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(196,154,42,0.6));
+        }
+        @keyframes overlayShakeIcon {
+            from { transform: translate(-50%,-50%) rotate(-18deg) scale(1); }
+            to   { transform: translate(-50%,-50%) rotate(18deg)  scale(1.1); }
+        }
+
+        .gragger-overlay-title {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cream);
+            line-height: 1.1;
+        }
+        .gragger-overlay-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.45);
+            letter-spacing: 0.05em;
+        }
+        .gragger-overlay-sub span {
+            color: var(--gold-bright);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .gragger-overlay-stop {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.65rem 2.5rem;
+            background: transparent;
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+        .gragger-overlay-stop:hover {
+            border-color: rgba(255,255,255,0.6);
+            color: var(--cream);
+        }
+
         .shake-toast {
             position: fixed;
             bottom: 5rem;
@@ -1227,14 +1516,20 @@
     <div class="welcome-content">
         <span class="welcome-scroll-icon">📜</span>
 
-        <p class="welcome-eyebrow">Interactive Reading for Purim</p>
-        <h1 class="welcome-title">מגילת אסתר</h1>
-        <p class="welcome-subtitle">Megillat Esther</p>
-        <p class="welcome-tagline">Read along, follow the text, and celebrate!</p>
+        <p class="welcome-eyebrow">Chabad of Eastern Queens presents</p>
+        <h1 class="welcome-title">פורים</h1>
+        <p class="welcome-subtitle">Interactive Purim Hub</p>
+        <p class="welcome-tagline">Megillah · Guide · Gragger · Celebration</p>
+
+        <div class="welcome-feature-row">
+            <div class="welcome-feature"><span>📜</span><span>Megillah</span></div>
+            <div class="welcome-feature"><span>🎊</span><span>Purim Guide</span></div>
+            <div class="welcome-feature"><span>🪇</span><span>Shake Gragger</span></div>
+        </div>
 
         <div class="welcome-divider"></div>
 
-        <p class="welcome-label">Choose what to display alongside the Hebrew</p>
+        <p class="welcome-label">Megillah display options</p>
         <div class="welcome-options">
             <label class="welcome-option selected" data-layer="english-translation">
                 <input type="checkbox" checked>
@@ -1270,7 +1565,7 @@
             </label>
         </div>
 
-        <button class="welcome-btn" id="startReading">BEGIN READING ›</button>
+        <button class="welcome-btn" id="startReading">ENTER ›</button>
 
         <div class="welcome-footer">
             <p class="welcome-powered">A project of</p>
@@ -1352,17 +1647,17 @@
 ════════════════════════════════════════ -->
 <header id="header">
     <div class="header-inner">
-        <!-- Full title (shown when not scrolled) -->
+        <!-- Full hero title (shown when not scrolled) -->
         <div class="title-block">
-            <div class="ornament-row">
-                <span class="ornament-line"></span>
-                <span class="ornament-star">✦ ✦ ✦</span>
-                <span class="ornament-line"></span>
+            <div class="header-hero">
+                <div class="header-hero-glow"></div>
+                <div class="header-hero-content">
+                    <p class="header-eyebrow">✦ פורים שמח ✦</p>
+                    <h1 class="site-title">מגילת אסתר</h1>
+                    <p class="site-subtitle">MEGILLAT ESTHER</p>
+                    <p class="site-credit">Chabad of Eastern Queens &nbsp;·&nbsp; <span class="site-dedication-inline">לזכות רפואה שלימה לחנה בת לאה</span></p>
+                </div>
             </div>
-            <h1 class="site-title">מגילת אסתר</h1>
-            <p class="site-subtitle">Megillat Esther</p>
-            <p class="site-credit">A Project of Chabad of Eastern Queens</p>
-            <p class="site-dedication">לזכות רפואה שלימה לחנה בת לאה</p>
         </div>
         <!-- Mini title (shown when scrolled) -->
         <div class="mini-title-row" id="miniHeader">
@@ -1907,117 +2202,200 @@
      PURIM GUIDE PAGE
 ════════════════════════════════════════ -->
 <div class="page" id="page-purim">
-    <div class="purim-page">
+<div class="purim-page">
 
-        <div class="purim-header">
-            <div class="purim-header-bg"></div>
-            <div class="purim-header-content">
-                <p class="purim-eyebrow">The Four Mitzvot of</p>
-                <h2 class="purim-main-title">פורים שמח</h2>
-                <p class="purim-main-sub">Happy Purim — four ways to celebrate</p>
-                <div class="purim-floating-icons">
-                    <span>📜</span><span>🍷</span><span>🎁</span><span>🤝</span>
-                </div>
+    <!-- HERO HEADER — dark, like welcome screen -->
+    <div class="purim-hero">
+        <canvas class="purim-hero-canvas" id="purimParticleCanvas"></canvas>
+        <div class="purim-hero-glow"></div>
+        <div class="purim-hero-content">
+            <p class="purim-eyebrow">✦ The Four Mitzvot of ✦</p>
+            <h2 class="purim-main-title">פורים שמח</h2>
+            <p class="purim-main-sub">Happy Purim</p>
+            <div class="purim-floating-icons" id="purimFloatIcons">
+                <span style="animation-delay:0s">📜</span>
+                <span style="animation-delay:0.4s">🍷</span>
+                <span style="animation-delay:0.8s">🎁</span>
+                <span style="animation-delay:1.2s">🤝</span>
             </div>
         </div>
-
-        <div class="purim-progress-wrap">
-            <div class="purim-progress-label">
-                <span class="purim-progress-text">Mitzvot completed today</span>
-                <span class="purim-progress-count" id="progressCount">0 / 4</span>
-            </div>
-            <div class="purim-progress-bar">
-                <div class="purim-progress-fill" id="progressFill"></div>
-            </div>
-        </div>
-
-        <div class="mitzvot-grid">
-
-            <div class="mitzvah-card" data-id="megillah">
-                <div class="mitzvah-top">
-                    <div class="mitzvah-icon-wrap" style="background:rgba(107,31,52,0.1);">📜</div>
-                    <div class="mitzvah-text">
-                        <div class="mitzvah-heb">מקרא מגילה</div>
-                        <div class="mitzvah-name">Mikra Megillah</div>
-                        <div class="mitzvah-tagline">Hear the Megillah read aloud</div>
-                    </div>
-                    <div class="mitzvah-check">✓</div>
-                </div>
-                <div class="mitzvah-body">
-                    <div class="mitzvah-desc">
-                        The Megillah — the Book of Esther — is read <strong>twice on Purim</strong>: once at night after nightfall, and once during the day. The entire congregation listens carefully, and every single word must be heard.
-                        <span class="mitzvah-tip">💡 We make noise specifically when Haman is mentioned <em>with his title</em> — "Haman the Agagite" or "Haman son of Hammedatha." Not every mention — just the titled ones, where he gets his full villainous introduction!</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mitzvah-card" data-id="mishloach">
-                <div class="mitzvah-top">
-                    <div class="mitzvah-icon-wrap" style="background:rgba(30,58,94,0.1);">🎁</div>
-                    <div class="mitzvah-text">
-                        <div class="mitzvah-heb">משלוח מנות</div>
-                        <div class="mitzvah-name">Mishloach Manot</div>
-                        <div class="mitzvah-tagline">Send food gifts to friends</div>
-                    </div>
-                    <div class="mitzvah-check">✓</div>
-                </div>
-                <div class="mitzvah-body">
-                    <div class="mitzvah-desc">
-                        Send a gift of <strong>at least two different ready-to-eat foods</strong> to at least one friend during Purim day. This strengthens love and friendship among the Jewish people.
-                        <span class="mitzvah-tip">💡 Classic choices: hamantaschen, wine, fruit, chocolates. It should be delivered — not left at the door — ideally by a messenger.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mitzvah-card" data-id="matanot">
-                <div class="mitzvah-top">
-                    <div class="mitzvah-icon-wrap" style="background:rgba(46,94,62,0.1);">🤝</div>
-                    <div class="mitzvah-text">
-                        <div class="mitzvah-heb">מתנות לאביונים</div>
-                        <div class="mitzvah-name">Matanot La'evyonim</div>
-                        <div class="mitzvah-tagline">Give charity to the poor</div>
-                    </div>
-                    <div class="mitzvah-check">✓</div>
-                </div>
-                <div class="mitzvah-body">
-                    <div class="mitzvah-desc">
-                        Give money or food to <strong>at least two poor people</strong> on Purim day, so that everyone can rejoice. This mitzvah is so beloved that the Sages say it's greater than the feast itself.
-                        <span class="mitzvah-tip">💡 "Whoever extends their hand on Purim, we give to them" — don't turn anyone away. Even a small gift fulfills this mitzvah.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mitzvah-card" data-id="seudah">
-                <div class="mitzvah-top">
-                    <div class="mitzvah-icon-wrap" style="background:rgba(94,74,30,0.1);">🥂</div>
-                    <div class="mitzvah-text">
-                        <div class="mitzvah-heb">סעודת פורים</div>
-                        <div class="mitzvah-name">Seudas Purim</div>
-                        <div class="mitzvah-tagline">Hold a festive Purim feast</div>
-                    </div>
-                    <div class="mitzvah-check">✓</div>
-                </div>
-                <div class="mitzvah-body">
-                    <div class="mitzvah-desc">
-                        Hold a festive meal <strong>during the daytime</strong> with bread, wine, and joyful celebration with family and friends. This is the climax of the Purim celebration.
-                        <span class="mitzvah-tip">💡 The Talmud says to drink wine until you can no longer distinguish "cursed is Haman" from "blessed is Mordechai." Many fulfill this by taking a nap after a glass or two!</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="all-done-msg" id="allDoneMsg">
-            <span class="all-done-emoji">🎉</span>
-            <div class="all-done-text">Purim Sameach! פורים שמח</div>
-            <div class="all-done-sub">All four mitzvot complete. May your Purim be filled with joy!</div>
-        </div>
-
     </div>
-</div>
+
+    <!-- PROGRESS — segmented pips -->
+    <div class="purim-progress-section">
+        <div class="purim-progress-header">
+            <span class="purim-progress-label">Today's mitzvot</span>
+            <span class="purim-progress-fraction" id="progressFraction">0 / 5</span>
+        </div>
+        <div class="purim-pips" id="purimPips">
+            <div class="purim-pip" data-pip="0"><span>🌙</span><small>Night</small></div>
+            <div class="purim-pip" data-pip="1"><span>☀️</span><small>Day</small></div>
+            <div class="purim-pip" data-pip="2"><span>🎁</span><small>Gifts</small></div>
+            <div class="purim-pip" data-pip="3"><span>🤝</span><small>Charity</small></div>
+            <div class="purim-pip" data-pip="4"><span>🥂</span><small>Feast</small></div>
+        </div>
+        <div class="purim-all-done" id="allDoneMsg">
+            <span>🎉</span>
+            <div>
+                <strong>Purim Sameach! פורים שמח</strong>
+                <span>All five mitzvot complete. May your Purim be filled with joy!</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MITZVAH CARDS -->
+    <div class="mitzvot-grid">
+
+        <!-- 1. MEGILLAH — NIGHT -->
+        <div class="mitzvah-card" data-id="megillah-night">
+            <div class="mitzvah-card-inner">
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#1a0d20,#2d1a3d);">🌙</div>
+                <div class="mitzvah-text-col">
+                    <div class="mitzvah-heb">מקרא מגילה — לילה</div>
+                    <div class="mitzvah-name">Megillah Reading · Night</div>
+                    <div class="mitzvah-time">⏰ After nightfall on Purim eve</div>
+                </div>
+                <button class="mitzvah-check-btn" data-check="megillah-night" aria-label="Mark done">
+                    <span class="check-icon">✓</span>
+                </button>
+            </div>
+            <div class="mitzvah-body">
+                <div class="mitzvah-source">"וְלַיְלָה לְלַיְלָה יְחַוֶּה דָּעַת" — The Megillah is read after nightfall, when three medium stars are visible.</div>
+                <div class="mitzvah-details">
+                    <div class="mitzvah-detail-row"><span class="detail-icon">📍</span><span>Read in a synagogue with a minyan if possible</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">👂</span><span>Every single word must be heard — missing even one word may mean the mitzvah isn't fulfilled</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🪇</span><span>Make noise at <strong>Haman the Agagite</strong> and <strong>Haman son of Hammedatha</strong> — the titled mentions</span></div>
+                </div>
+                <div class="mitzvah-tip">💡 Women are equally obligated in this mitzvah — they were also part of the miracle!</div>
+            </div>
+            <button class="mitzvah-expand-btn" data-expand="megillah-night">Learn more ▾</button>
+        </div>
+
+        <!-- 2. MEGILLAH — DAY -->
+        <div class="mitzvah-card" data-id="megillah-day">
+            <div class="mitzvah-card-inner">
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#7a3a00,#c46a00);">☀️</div>
+                <div class="mitzvah-text-col">
+                    <div class="mitzvah-heb">מקרא מגילה — יום</div>
+                    <div class="mitzvah-name">Megillah Reading · Day</div>
+                    <div class="mitzvah-time">⏰ During Purim day, before sunset</div>
+                </div>
+                <button class="mitzvah-check-btn" data-check="megillah-day" aria-label="Mark done">
+                    <span class="check-icon">✓</span>
+                </button>
+            </div>
+            <div class="mitzvah-body">
+                <div class="mitzvah-source">"לַעֲשׂוֹת אוֹתָם יְמֵי מִשְׁתֶּה וְשִׂמְחָה" — The daytime reading is the primary one; the Talmud emphasizes it as the main fulfillment.</div>
+                <div class="mitzvah-details">
+                    <div class="mitzvah-detail-row"><span class="detail-icon">📖</span><span>The same scroll (Megillah) is read again during daylight hours</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🎭</span><span>Many communities have festive costumes and extra noise-making at this reading</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🪇</span><span>Use this app's Megillah tab to follow along word by word!</span></div>
+                </div>
+                <div class="mitzvah-tip">💡 The daytime Megillah reading is considered the fulfillment of the verse "my glory rejoices" — it carries special weight.</div>
+            </div>
+            <button class="mitzvah-expand-btn" data-expand="megillah-day">Learn more ▾</button>
+        </div>
+
+        <!-- 3. MISHLOACH MANOT -->
+        <div class="mitzvah-card" data-id="mishloach">
+            <div class="mitzvah-card-inner">
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#1a3a5e,#2a6090);">🎁</div>
+                <div class="mitzvah-text-col">
+                    <div class="mitzvah-heb">משלוח מנות</div>
+                    <div class="mitzvah-name">Mishloach Manot</div>
+                    <div class="mitzvah-time">⏰ Purim day only (not at night)</div>
+                </div>
+                <button class="mitzvah-check-btn" data-check="mishloach" aria-label="Mark done">
+                    <span class="check-icon">✓</span>
+                </button>
+            </div>
+            <div class="mitzvah-body">
+                <div class="mitzvah-source">"וּמִשְׁלוֹחַ מָנוֹת אִישׁ לְרֵעֵהוּ" — "And sending portions, each man to his friend" (Esther 9:22)</div>
+                <div class="mitzvah-details">
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🍽️</span><span><strong>At least 2 different</strong> ready-to-eat foods to <strong>at least 1 friend</strong></span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">📬</span><span>Should be delivered — ideally by a messenger, not left at a door</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🍮</span><span>Classic: hamantaschen, wine/grape juice, fruit, chocolates, baked goods</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">👑</span><span>The purpose: to increase love and friendship among the Jewish people</span></div>
+                </div>
+                <div class="mitzvah-tip">💡 More is more! The Sages praise those who send generously to many friends. Children love participating as messengers.</div>
+            </div>
+            <button class="mitzvah-expand-btn" data-expand="mishloach">Learn more ▾</button>
+        </div>
+
+        <!-- 4. MATANOT LA'EVYONIM -->
+        <div class="mitzvah-card" data-id="matanot">
+            <div class="mitzvah-card-inner">
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#1a4a2a,#2e7a44);">🤝</div>
+                <div class="mitzvah-text-col">
+                    <div class="mitzvah-heb">מתנות לאביונים</div>
+                    <div class="mitzvah-name">Matanot La'evyonim</div>
+                    <div class="mitzvah-time">⏰ Purim day only (not at night)</div>
+                </div>
+                <button class="mitzvah-check-btn" data-check="matanot" aria-label="Mark done">
+                    <span class="check-icon">✓</span>
+                </button>
+            </div>
+            <div class="mitzvah-body">
+                <div class="mitzvah-source">"וּמַתָּנוֹת לָאֶבְיֹנִים" — "And gifts to the poor" (Esther 9:22). The Rambam says this mitzvah is more beloved than all festive Purim expenses.</div>
+                <div class="mitzvah-details">
+                    <div class="mitzvah-detail-row"><span class="detail-icon">💰</span><span>Give money (or food) to <strong>at least 2 poor people</strong> — one gift each</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🙌</span><span>"Whoever extends their hand, we give to them" — don't turn anyone away on Purim</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">📱</span><span>Can donate to a charity that distributes on Purim day if no poor are nearby</span></div>
+                </div>
+                <div class="mitzvah-tip">💡 The amount should be enough for the person to buy a small meal. Even a few dollars fulfills the mitzvah — the act matters more than the amount.</div>
+            </div>
+            <button class="mitzvah-expand-btn" data-expand="matanot">Learn more ▾</button>
+        </div>
+
+        <!-- 5. SEUDAS PURIM -->
+        <div class="mitzvah-card" data-id="seudah">
+            <div class="mitzvah-card-inner">
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#4a1a00,#8a3a10);">🥂</div>
+                <div class="mitzvah-text-col">
+                    <div class="mitzvah-heb">סעודת פורים</div>
+                    <div class="mitzvah-name">Seudas Purim</div>
+                    <div class="mitzvah-time">⏰ Purim day — the bigger the better!</div>
+                </div>
+                <button class="mitzvah-check-btn" data-check="seudah" aria-label="Mark done">
+                    <span class="check-icon">✓</span>
+                </button>
+            </div>
+            <div class="mitzvah-body">
+                <div class="mitzvah-source">"יְמֵי מִשְׁתֶּה וְשִׂמְחָה" — "Days of feasting and joy" (Esther 9:22). The Talmud says the Purim feast must include bread and wine.</div>
+                <div class="mitzvah-details">
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🍞</span><span>Must include <strong>bread</strong> (lechem) and <strong>wine</strong> — these are required elements</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🥳</span><span>Invite guests, sing, tell the Purim story — the more joyful the better</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🍷</span><span>The Talmud says to drink until you cannot distinguish "cursed Haman" from "blessed Mordechai"</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">😴</span><span>Many fulfill the drinking obligation by having a little wine and taking a nap!</span></div>
+                </div>
+                <div class="mitzvah-tip">💡 Begin the feast before sunset. The feast is the climax of Purim — this is when the hidden miracle of the whole story is truly celebrated.</div>
+            </div>
+            <button class="mitzvah-expand-btn" data-expand="seudah">Learn more ▾</button>
+        </div>
+
+    </div><!-- end mitzvot-grid -->
+
+</div><!-- end purim-page -->
+</div><!-- end page-purim -->
 
 <!-- Confetti canvas -->
 <canvas id="confettiCanvas"></canvas>
+
+<!-- Shake mode overlay -->
+<div class="gragger-overlay" id="graggerOverlay">
+    <div class="gragger-overlay-content">
+        <div class="gragger-countdown-ring">
+            <svg viewBox="0 0 100 100" class="gragger-ring-svg">
+                <circle cx="50" cy="50" r="44" class="gragger-ring-bg"/>
+                <circle cx="50" cy="50" r="44" class="gragger-ring-fill" id="graggerRingFill"/>
+            </svg>
+            <div class="gragger-overlay-icon">🪇</div>
+        </div>
+        <p class="gragger-overlay-title">Shake to make noise!</p>
+        <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">20</span>s</p>
+        <button class="gragger-overlay-stop" id="graggerOverlayStop">Stop</button>
+    </div>
+</div>
 
 <!-- Shake mode toast -->
 <div class="shake-toast" id="shakeToast">📳 Now shake your phone!</div>
@@ -2151,32 +2529,70 @@ function playFullRattle() {
 // ═══════════════════════════════════════
 //  SHAKE MODE — continuous motion detection
 // ═══════════════════════════════════════
-let shakeMode = false;           // is a gragger in shake mode?
-let activeGraggerBtn = null;     // which button is armed
+let shakeMode = false;
+let activeGraggerBtn = null;
 let shakePermissionGranted = false;
 let lastShakeTime = 0;
 let lastX = null, lastY = null, lastZ = null;
 const SHAKE_THRESHOLD = 12;
-const SHAKE_COOLDOWN  = 110;      // ms minimum between shake sounds
-const shakeToast = document.getElementById('shakeToast');
+const SHAKE_COOLDOWN  = 110;
+const SHAKE_TIMEOUT_MS = 20000; // 20 seconds auto-off
+const RING_CIRCUMFERENCE = 276.46; // 2π × 44
 
-function setShakeMode(btn, on) {
-    shakeMode = on;
-    activeGraggerBtn = on ? btn : null;
+let shakeCountdownInterval = null;
+let shakeTimeoutHandle = null;
+let shakeSecondsLeft = 20;
 
-    // Update all gragger buttons
+const graggerOverlay  = document.getElementById('graggerOverlay');
+const graggerRingFill = document.getElementById('graggerRingFill');
+const graggerCountdown = document.getElementById('graggerCountdown');
+const graggerOverlayStop = document.getElementById('graggerOverlayStop');
+
+function updateRing(secondsLeft) {
+    const fraction = secondsLeft / 20;
+    const offset = RING_CIRCUMFERENCE * (1 - fraction);
+    graggerRingFill.style.strokeDashoffset = offset;
+    graggerRingFill.classList.toggle('urgent', secondsLeft <= 5);
+    graggerCountdown.textContent = secondsLeft;
+}
+
+function openGraggerOverlay() {
+    shakeSecondsLeft = 20;
+    updateRing(20);
+    graggerOverlay.classList.add('active');
+
+    shakeCountdownInterval = setInterval(() => {
+        shakeSecondsLeft--;
+        updateRing(shakeSecondsLeft);
+        if (shakeSecondsLeft <= 0) stopShakeMode();
+    }, 1000);
+
+    shakeTimeoutHandle = setTimeout(stopShakeMode, SHAKE_TIMEOUT_MS);
+}
+
+function closeGraggerOverlay() {
+    graggerOverlay.classList.remove('active');
+    clearInterval(shakeCountdownInterval);
+    clearTimeout(shakeTimeoutHandle);
+    shakeCountdownInterval = null;
+    shakeTimeoutHandle = null;
+}
+
+function stopShakeMode() {
+    shakeMode = false;
+    activeGraggerBtn = null;
+    closeGraggerOverlay();
+    window.removeEventListener('devicemotion', handleMotion, true);
+    // Reset all gragger buttons
     document.querySelectorAll('.gragger-btn').forEach(b => {
         b.classList.remove('shake-mode');
-        b.querySelector('.gragger-label').textContent = 'BOO!';
+        const lbl = b.querySelector('.gragger-label');
+        if (lbl) lbl.textContent = 'BOO!';
     });
-
-    if (on) {
-        btn.classList.add('shake-mode');
-        btn.querySelector('.gragger-label').textContent = 'SHAKING…';
-        shakeToast.classList.add('show');
-        setTimeout(() => shakeToast.classList.remove('show'), 3000);
-    }
+    lastX = null; lastY = null; lastZ = null;
 }
+
+graggerOverlayStop.addEventListener('click', stopShakeMode);
 
 function handleMotion(e) {
     if (!shakeMode) return;
@@ -2189,20 +2605,14 @@ function handleMotion(e) {
         const now = Date.now();
         if (delta > SHAKE_THRESHOLD && now - lastShakeTime > SHAKE_COOLDOWN) {
             lastShakeTime = now;
-            // Fire a single shake sound scaled by intensity
             const intensity = Math.min(delta / 40, 1);
             playOneShake(intensity);
 
-            // Animate the button icon
-            if (activeGraggerBtn) {
-                const icon = activeGraggerBtn.querySelector('.rattle-icon');
-                icon.style.animation = 'none';
-                icon.offsetHeight; // reflow
-                icon.style.animation = '';
-                activeGraggerBtn.classList.add('rattling');
-                setTimeout(() => activeGraggerBtn.classList.remove('rattling'), 150);
-            }
-            // Short vibration pulse
+            // Animate overlay icon (extra big shake)
+            graggerOverlay.querySelector('.gragger-overlay-icon').style.animation = 'none';
+            graggerOverlay.querySelector('.gragger-overlay-icon').offsetHeight;
+            graggerOverlay.querySelector('.gragger-overlay-icon').style.animation = '';
+
             if (navigator.vibrate) navigator.vibrate(18);
         }
     }
@@ -2210,10 +2620,9 @@ function handleMotion(e) {
 }
 
 async function enableShakeMode(btn) {
-    if (shakeMode && activeGraggerBtn === btn) {
-        // Tap again to disarm
-        setShakeMode(btn, false);
-        window.removeEventListener('devicemotion', handleMotion, true);
+    if (shakeMode) {
+        // Already active — stop
+        stopShakeMode();
         return;
     }
 
@@ -2224,7 +2633,6 @@ async function enableShakeMode(btn) {
         try {
             const result = await DeviceMotionEvent.requestPermission();
             if (result !== 'granted') {
-                // No permission — just play the rattle normally
                 playFullRattle();
                 return;
             }
@@ -2235,36 +2643,40 @@ async function enableShakeMode(btn) {
         }
     }
 
+    // Check if device motion is actually available
+    if (!('DeviceMotionEvent' in window)) {
+        // Desktop or no sensor — just play
+        playFullRattle();
+        btn.classList.add('rattling');
+        setTimeout(() => btn.classList.remove('rattling'), 700);
+        return;
+    }
+
+    shakeMode = true;
+    activeGraggerBtn = btn;
+    btn.classList.add('shake-mode');
+    const lbl = btn.querySelector('.gragger-label');
+    if (lbl) lbl.textContent = 'SHAKING…';
+
     window.removeEventListener('devicemotion', handleMotion, true);
     window.addEventListener('devicemotion', handleMotion, true);
-    setShakeMode(btn, true);
+    openGraggerOverlay();
 }
 
-// ── Click handler: on mobile arm shake mode, on desktop just play ──
+// ── Click handler ──
 document.addEventListener('click', e => {
     const btn = e.target.closest('.gragger-btn');
     if (!btn) return;
     ensureAudio();
-
-    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
-
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isMobile) {
         enableShakeMode(btn);
     } else {
-        // Desktop: just play full rattle on click
         playFullRattle();
         btn.classList.add('rattling');
         setTimeout(() => btn.classList.remove('rattling'), 700);
     }
 });
-
-// Tap anywhere else on mobile to disarm shake mode
-document.addEventListener('touchstart', e => {
-    if (!shakeMode) return;
-    if (!e.target.closest('.gragger-btn')) {
-        setShakeMode(activeGraggerBtn, false);
-    }
-}, { passive: true });
 
 // ═══════════════════════════════════════
 //  WELCOME SCREEN
@@ -2465,26 +2877,42 @@ function runConfetti() {
 }
 
 // ═══════════════════════════════════════
-//  MITZVAH CARDS
+//  MITZVAH CARDS — new card structure
 // ═══════════════════════════════════════
 const checkedMitzvot = new Set();
 const mitzvahCards   = document.querySelectorAll('.mitzvah-card');
-const progressFill   = document.getElementById('progressFill');
-const progressCount  = document.getElementById('progressCount');
+const progressFraction = document.getElementById('progressFraction');
 const allDoneMsg     = document.getElementById('allDoneMsg');
+const purimPips      = document.querySelectorAll('.purim-pip');
 
-mitzvahCards.forEach(card => {
-    // Tap the card body to expand description
-    card.addEventListener('click', e => {
-        if (e.target.closest('.mitzvah-check')) return;
-        const wasExpanded = card.classList.contains('expanded');
-        mitzvahCards.forEach(c => c.classList.remove('expanded'));
-        if (!wasExpanded) card.classList.add('expanded');
-    });
-    // Tap the checkmark circle to mark done
-    card.querySelector('.mitzvah-check').addEventListener('click', e => {
+// Pip data-id order: megillah-night, megillah-day, mishloach, matanot, seudah
+const PIP_ORDER = ['megillah-night','megillah-day','mishloach','matanot','seudah'];
+
+// Expand button toggles
+document.querySelectorAll('.mitzvah-expand-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
         e.stopPropagation();
-        const id = card.dataset.id;
+        const id = btn.dataset.expand;
+        const card = document.querySelector('.mitzvah-card[data-id="' + id + '"]');
+        const wasExpanded = card.classList.contains('expanded');
+        mitzvahCards.forEach(c => {
+            c.classList.remove('expanded');
+            const b = c.querySelector('.mitzvah-expand-btn');
+            if (b) b.textContent = 'Learn more ▾';
+        });
+        if (!wasExpanded) {
+            card.classList.add('expanded');
+            btn.textContent = 'Close ▴';
+        }
+    });
+});
+
+// Check buttons
+document.querySelectorAll('.mitzvah-check-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.dataset.check;
+        const card = document.querySelector('.mitzvah-card[data-id="' + id + '"]');
         if (checkedMitzvot.has(id)) {
             checkedMitzvot.delete(id);
             card.classList.remove('done');
@@ -2499,14 +2927,64 @@ mitzvahCards.forEach(card => {
 
 function updateProgress() {
     const n = checkedMitzvot.size;
-    progressCount.textContent = n + ' / 4';
-    progressFill.style.width = (n / 4 * 100) + '%';
-    if (n === 4) {
-        setTimeout(() => { allDoneMsg.classList.add('show'); launchConfetti(); }, 400);
+    const total = 5;
+    progressFraction.textContent = n + ' / ' + total;
+
+    // Update pips
+    purimPips.forEach((pip, i) => {
+        pip.classList.toggle('done', checkedMitzvot.has(PIP_ORDER[i]));
+    });
+
+    if (n === total) {
+        setTimeout(() => { allDoneMsg.classList.add('show'); launchConfetti(); launchConfetti(); }, 400);
     } else {
         allDoneMsg.classList.remove('show');
     }
 }
+
+// Spin up particles on purim page canvas
+(function() {
+    const canvas = document.getElementById('purimParticleCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    function resize() {
+        W = canvas.width = canvas.offsetWidth;
+        H = canvas.height = canvas.offsetHeight;
+    }
+    setTimeout(resize, 100);
+    window.addEventListener('resize', resize);
+    function Particle() { this.reset(); }
+    Particle.prototype.reset = function() {
+        this.x = Math.random()*W; this.y = Math.random()*H;
+        this.r = 0.3+Math.random()*1.2;
+        this.vx = (Math.random()-0.5)*0.15; this.vy = -0.07-Math.random()*0.18;
+        this.life = 0; this.maxLife = 160+Math.random()*180;
+        const hues = ['rgba(212,165,58,','rgba(253,248,232,','rgba(184,136,42,'];
+        this.color = hues[Math.floor(Math.random()*hues.length)];
+    };
+    for(let i=0;i<40;i++){const p=new Particle();p.life=Math.random()*p.maxLife;particles.push(p);}
+    function loop(){
+        if (!canvas.closest('#page-purim') || document.getElementById('page-purim').style.display==='none') {
+            requestAnimationFrame(loop); return;
+        }
+        ctx.clearRect(0,0,W,H);
+        particles.forEach(p=>{
+            p.x+=p.vx; p.y+=p.vy; p.life++;
+            if(p.life>p.maxLife) p.reset();
+            const frac=p.life/p.maxLife;
+            const alpha=frac<0.15?frac/0.15:frac>0.75?1-(frac-0.75)/0.25:1;
+            const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3);
+            g.addColorStop(0,p.color+''+alpha.toFixed(2)+')');
+            g.addColorStop(1,p.color+'0)');
+            ctx.beginPath(); ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);
+            ctx.fillStyle=g; ctx.fill();
+        });
+        requestAnimationFrame(loop);
+    }
+    loop();
+})();
+
 </script>
 </body>
 </html>
