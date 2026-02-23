@@ -273,18 +273,25 @@
         }
         .welcome-option input { display: none; }
         .welcome-check {
-            width: 22px; height: 22px;
+            width: 20px; height: 20px;
             border: 2px solid rgba(196,154,42,0.4);
-            border-radius: 6px;
+            border-radius: 50%; /* radio style */
             display: flex; align-items: center; justify-content: center;
-            font-size: 12px; color: transparent;
             flex-shrink: 0; transition: all 0.2s;
         }
+        .welcome-check::after {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
+        }
         .welcome-option.selected .welcome-check {
-            background: var(--gold-bright);
             border-color: var(--gold-bright);
-            color: #0e0c08;
-            font-weight: 900;
+            box-shadow: 0 0 8px rgba(196,154,42,0.4);
+        }
+        .welcome-option.selected .welcome-check::after {
+            background: var(--gold-bright);
         }
         .welcome-option-text {
             font-family: 'Inter', sans-serif;
@@ -514,24 +521,32 @@
             background: rgba(184,136,42,0.08);
         }
         .lang-dot {
-            width: 10px; height: 10px;
+            width: 16px; height: 16px;
             border-radius: 50%;
             border: 2px solid var(--parchment-dark);
             flex-shrink: 0;
-            transition: all 0.15s;
+            transition: all 0.2s;
+            position: relative;
         }
-        .lang-option.active .lang-dot {
-            background: var(--gold-bright);
-            border-color: var(--gold-bright);
+        .lang-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%,-50%);
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: transparent;
+            transition: background 0.2s;
         }
+        .lang-option.active .lang-dot::after { background: currentColor; }
         .lang-option[data-layer="english-translation"].active  { border-color: var(--eng-color); background: rgba(46,94,62,0.06); }
-        .lang-option[data-layer="english-translation"].active .lang-dot { background: var(--eng-color); border-color: var(--eng-color); }
+        .lang-option[data-layer="english-translation"].active .lang-dot { border-color: var(--eng-color); color: var(--eng-color); }
         .lang-option[data-layer="english-translit"].active     { border-color: var(--translit-color); background: rgba(94,46,80,0.06); }
-        .lang-option[data-layer="english-translit"].active .lang-dot { background: var(--translit-color); border-color: var(--translit-color); }
+        .lang-option[data-layer="english-translit"].active .lang-dot { border-color: var(--translit-color); color: var(--translit-color); }
         .lang-option[data-layer="russian-translation"].active  { border-color: var(--rus-color); background: rgba(30,58,94,0.06); }
-        .lang-option[data-layer="russian-translation"].active .lang-dot { background: var(--rus-color); border-color: var(--rus-color); }
+        .lang-option[data-layer="russian-translation"].active .lang-dot { border-color: var(--rus-color); color: var(--rus-color); }
         .lang-option[data-layer="russian-translit"].active     { border-color: var(--rus-translit-color); background: rgba(94,74,30,0.06); }
-        .lang-option[data-layer="russian-translit"].active .lang-dot { background: var(--rus-translit-color); border-color: var(--rus-translit-color); }
+        .lang-option[data-layer="russian-translit"].active .lang-dot { border-color: var(--rus-translit-color); color: var(--rus-translit-color); }
 
         .lang-option-label { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
         .lang-option-sub   { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--ink-light); margin-top: 2px; }
@@ -637,6 +652,14 @@
             text-transform: uppercase;
             color: var(--ink-light);
         }
+        .purim-progress-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            color: var(--ink-light);
+            opacity: 0.7;
+            margin-top: 0.1rem;
+            font-style: italic;
+        }
         .purim-progress-fraction {
             font-family: 'Outfit', sans-serif;
             font-size: 1.1rem;
@@ -660,9 +683,10 @@
             border: 2px solid var(--parchment-dark);
             border-radius: 10px;
             transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
-            cursor: default;
+            position: relative;
+            overflow: hidden;
         }
-        .purim-pip span { font-size: 1.3rem; line-height: 1; transition: transform 0.3s; }
+        .pip-emoji { font-size: 1.3rem; line-height: 1; display: block; position: relative; z-index: 1; }
         .purim-pip small {
             font-family: 'Inter', sans-serif;
             font-size: 0.52rem;
@@ -670,14 +694,45 @@
             letter-spacing: 0.05em;
             color: var(--ink-light);
             text-transform: uppercase;
+            text-align: center;
+            line-height: 1.3;
+            position: relative; z-index: 1;
         }
+
+        /* Half-fill mechanism for megillah pip */
+        .pip-fill-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pip-half-fill {
+            position: absolute;
+            bottom: -6px; left: -20px; right: -20px;
+            height: 0%;
+            background: linear-gradient(135deg, rgba(196,154,42,0.25), rgba(196,154,42,0.1));
+            transition: height 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            z-index: 0;
+        }
+
+        /* Night done = pip border glows, half fill rises */
+        .purim-pip[data-pip="megillah"].half {
+            border-color: rgba(196,154,42,0.5);
+        }
+        .purim-pip[data-pip="megillah"].half .pip-half-fill {
+            height: 50%;
+        }
+        .purim-pip[data-pip="megillah"].half small { color: rgba(196,154,42,0.8); }
+
+        /* Both done = full gold */
         .purim-pip.done {
-            background: linear-gradient(135deg, rgba(196,154,42,0.15), rgba(196,154,42,0.05));
+            background: linear-gradient(135deg, rgba(196,154,42,0.18), rgba(196,154,42,0.06));
             border-color: var(--gold-bright);
             transform: scale(1.08);
         }
-        .purim-pip.done span { transform: scale(1.2); }
+        .purim-pip.done .pip-emoji { transform: scale(1.2); }
         .purim-pip.done small { color: var(--gold); }
+        .purim-pip[data-pip="megillah"].done .pip-half-fill { height: 100%; }
 
         /* All done banner */
         .purim-all-done {
@@ -871,6 +926,202 @@
         }
         .mitzvah-expand-btn:hover { background: var(--parchment-mid); color: var(--ink); }
         .mitzvah-card.expanded .mitzvah-expand-btn { color: var(--burgundy); }
+
+        /* ── Charity action panel (Matanot card) ── */
+        .charity-panel {
+            padding: 0 1rem 1rem;
+            border-top: 1px solid var(--parchment-mid);
+        }
+        .charity-intro {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            line-height: 1.55;
+            color: var(--ink-mid);
+            padding: 0.7rem 0 0.75rem;
+        }
+        .charity-intro strong { color: var(--burgundy); }
+
+        .charity-orgs-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+            margin-bottom: 0.5rem;
+        }
+        .charity-orgs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .charity-org-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.65rem 0.8rem;
+            background: var(--parchment);
+            border: 1.5px solid var(--parchment-mid);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.15s;
+            cursor: pointer;
+        }
+        .charity-org-btn:hover {
+            background: rgba(46,122,68,0.06);
+            border-color: #2e7a44;
+            transform: translateX(3px);
+        }
+        .charity-org-icon { font-size: 1.3rem; flex-shrink: 0; }
+        .charity-org-info {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1rem;
+        }
+        .charity-org-info strong {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+        .charity-org-info small {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            color: var(--ink-light);
+        }
+        .charity-org-arrow {
+            font-size: 1rem;
+            color: #2e7a44;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Counter tracker */
+        .charity-tracker {
+            background: linear-gradient(135deg, rgba(46,122,68,0.08), rgba(46,122,68,0.03));
+            border: 1.5px solid rgba(46,122,68,0.2);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            text-align: center;
+        }
+        /* Megillah tracker overrides to burgundy theme */
+        #megillahTracker {
+            background: linear-gradient(135deg, rgba(107,31,52,0.08), rgba(107,31,52,0.03));
+            border-color: rgba(107,31,52,0.2);
+        }
+        #megillahTracker .charity-tracker-label { color: var(--burgundy); }
+        #megillahTracker .counter-btn {
+            color: var(--burgundy);
+            border-color: rgba(107,31,52,0.35);
+        }
+        #megillahTracker .counter-btn:hover { background: var(--burgundy); }
+        #megillahTracker .counter-unit { color: rgba(107,31,52,0.5); }
+
+        /* Night / Day reading state indicators */
+        .megillah-reading-states {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 0.5rem 0 0.55rem;
+        }
+        .reading-state {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            color: var(--ink-light);
+            transition: color 0.3s;
+        }
+        .reading-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--parchment-dark);
+            background: transparent;
+            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            flex-shrink: 0;
+        }
+        .reading-state.done .reading-dot {
+            background: var(--burgundy);
+            border-color: var(--burgundy);
+            transform: scale(1.3);
+            box-shadow: 0 0 6px rgba(107,31,52,0.4);
+        }
+        .reading-state.done {
+            color: var(--burgundy);
+            font-weight: 600;
+        }
+        .reading-label { line-height: 1; }
+        .charity-tracker-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #2e7a44;
+            margin-bottom: 0.6rem;
+        }
+        .charity-counter-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            margin-bottom: 0.55rem;
+        }
+        .counter-btn {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(46,122,68,0.35);
+            background: white;
+            font-size: 1.4rem;
+            font-weight: 300;
+            color: #2e7a44;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.15s;
+            line-height: 1;
+        }
+        .counter-btn:hover { background: #2e7a44; color: white; border-color: #2e7a44; transform: scale(1.1); }
+        .counter-btn:active { transform: scale(0.95); }
+        .counter-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            min-width: 60px;
+        }
+        .counter-num {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2e7a44;
+            line-height: 1;
+            transition: transform 0.15s;
+        }
+        .counter-num.bump { transform: scale(1.4); }
+        .counter-unit {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: rgba(46,122,68,0.6);
+            text-transform: uppercase;
+        }
+        .charity-status {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            color: var(--ink-light);
+            transition: color 0.3s;
+        }
+        .charity-status strong { color: var(--burgundy); }
+        .charity-status.fulfilled {
+            color: #2e7a44;
+            font-weight: 600;
+        }
+        .charity-status.fulfilled strong { color: #2e7a44; }
 
         /* Confetti canvas */
         #confettiCanvas {
@@ -1102,23 +1353,45 @@
 
         .chapter-title {
             font-family: 'Frank Ruhl Libre', serif;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--cream);
+            font-size: 1.2rem;
+            font-weight: 900;
             text-align: center;
-            padding: 0.9rem 1.5rem;
-            background: linear-gradient(135deg, var(--burgundy) 0%, #2d0a15 100%);
+            padding: 1rem 1.5rem 0.85rem;
+            background: linear-gradient(160deg, #1a0d12 0%, #2d1020 60%, #1a0d12 100%);
             display: flex; align-items: center; justify-content: center;
-            gap: 1rem;
-            letter-spacing: 0.02em;
+            gap: 0.85rem;
+            position: relative;
+            overflow: hidden;
         }
+        /* subtle glow behind chapter title */
+        .chapter-title::before {
+            content: '';
+            position: absolute;
+            top: -20px; left: 50%; transform: translateX(-50%);
+            width: 200px; height: 80px;
+            background: radial-gradient(ellipse, rgba(196,154,42,0.2) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        /* Hebrew part — shimmer gold */
+        .chapter-title .ch-heb {
+            background: linear-gradient(90deg, #c9a44a 0%, #fdf8e8 40%, #d4a53a 70%, #fdf8e8 100%);
+            background-size: 250% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmerText 6s linear infinite;
+            position: relative; z-index: 1;
+        }
+        /* English part — muted gold */
         .chapter-title span {
             font-family: 'Inter', sans-serif;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
-            letter-spacing: 0.2em;
-            opacity: 0.6;
+            letter-spacing: 0.25em;
+            color: rgba(196,154,42,0.55);
             text-transform: uppercase;
+            position: relative; z-index: 1;
+            -webkit-text-fill-color: rgba(196,154,42,0.55);
         }
 
         /* ─── VERSE ─── */
@@ -1529,11 +1802,11 @@
 
         <div class="welcome-divider"></div>
 
-        <p class="welcome-label">Megillah display options</p>
+        <p class="welcome-label">Choose one language to display alongside the Hebrew</p>
         <div class="welcome-options">
             <label class="welcome-option selected" data-layer="english-translation">
                 <input type="checkbox" checked>
-                <span class="welcome-check">✓</span>
+                <span class="welcome-check"></span>
                 <div>
                     <div class="welcome-option-text">English Translation</div>
                     <div class="welcome-option-sub">Readable, faithful to the source</div>
@@ -1541,7 +1814,7 @@
             </label>
             <label class="welcome-option" data-layer="english-translit">
                 <input type="checkbox">
-                <span class="welcome-check">✓</span>
+                <span class="welcome-check"></span>
                 <div>
                     <div class="welcome-option-text">English Transliteration</div>
                     <div class="welcome-option-sub">Sephardic pronunciation guide</div>
@@ -1549,7 +1822,7 @@
             </label>
             <label class="welcome-option" data-layer="russian-translation">
                 <input type="checkbox">
-                <span class="welcome-check">✓</span>
+                <span class="welcome-check"></span>
                 <div>
                     <div class="welcome-option-text">Русский перевод</div>
                     <div class="welcome-option-sub">Russian translation</div>
@@ -1557,7 +1830,7 @@
             </label>
             <label class="welcome-option" data-layer="russian-translit">
                 <input type="checkbox">
-                <span class="welcome-check">✓</span>
+                <span class="welcome-check"></span>
                 <div>
                     <div class="welcome-option-text">Транслитерация (рус.)</div>
                     <div class="welcome-option-sub">Russian phonetic guide</div>
@@ -1609,7 +1882,7 @@
 <div class="lang-overlay" id="langOverlay"></div>
 <div class="lang-panel" id="langPanel">
     <div class="lang-panel-handle"></div>
-    <p class="lang-panel-title">Display Options</p>
+    <p class="lang-panel-title">Choose one language</p>
     <div class="lang-options">
         <div class="lang-option active" data-layer="english-translation">
             <span class="lang-dot"></span>
@@ -1688,7 +1961,7 @@
 ════════════════════════════════════════ -->
 <main>
     <section class="chapter" id="ch1">
-        <h2 class="chapter-title">פרק א &nbsp;<span>Chapter One</span></h2>
+        <h2 class="chapter-title"><span class="ch-heb">פרק א</span><span>Chapter One</span></h2>
 
         <!-- 1:1 -->
         <article class="verse">
@@ -1709,13 +1982,13 @@
                     <p>It came to pass in the days of Achashverosh <button class="gragger-btn" aria-label="Make noise!"><span class="rattle-icon">🪇</span><span class="gragger-label">BOO!</span></button> — that same Achashverosh who reigned from Hodu to Kush, over one hundred and twenty-seven provinces.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:1) Vay'hi bi-m'ei Achashverosh, hu Achashverosh ha-molech me-Hodu ve-ad Kush, sheva ve-esrim u-me'ah medinah.</p>
+                    <p>Vay'hi bi-m'ei Achashverosh, hu Achashverosh ha-molech me-Hodu ve-ad Kush, sheva ve-esrim u-me'ah medinah.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>И было это в дни Ахашвероша — того самого Ахашвероша, который царствовал от Ходу до Куша над ста двадцатью семью областями.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:1) Вайhи бимей Ахашверош, hу Ахашверош hамолех меhоду веад Куш, шева веэсрим умеа медина.</p>
+                    <p>Вайhи бимей Ахашверош, hу Ахашверош hамолех меhоду веад Куш, шева веэсрим умеа медина.</p>
                 </div>
             </div>
         </article>
@@ -1731,13 +2004,13 @@
                     <p>In those days, when King Achashverosh sat upon his royal throne in Shushan the capital —</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:2) Ba-yamim ha-hem, ke-shevet ha-melech Achashverosh al ki-se malchuto, asher be-Shushan ha-birah.</p>
+                    <p>Ba-yamim ha-hem, ke-shevet ha-melech Achashverosh al ki-se malchuto, asher be-Shushan ha-birah.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>В те дни, когда царь Ахашверош воссел на престол своего царства в Шушане, столице —</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:2) Баямим hаhем, кешевет hамелех Ахашверош аль кисе малхуто, ашер беШушан hабира.</p>
+                    <p>Баямим hаhем, кешевет hамелех Ахашверош аль кисе малхуто, ашер беШушан hабира.</p>
                 </div>
             </div>
         </article>
@@ -1753,13 +2026,13 @@
                     <p>In the third year of his reign, he made a feast for all his ministers and servants — the army of Persia and Media, the nobles, and the governors of the provinces, in his presence.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:3) Bi-shnat shalosh le-malcho, asah mishteh le-chol sarav va-avadav, chel Paras u-Madai, ha-part'mim ve-sarei ha-medinot le-fanav.</p>
+                    <p>Bi-shnat shalosh le-malcho, asah mishteh le-chol sarav va-avadav, chel Paras u-Madai, ha-part'mim ve-sarei ha-medinot le-fanav.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>На третий год своего царствования он устроил пир для всех своих сановников и слуг — войска Персии и Мидии, знати и правителей областей — перед ним.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:3) Бишнат шалош лемалхо, аса миште лехоль сарав ваавадав, хейль Парас уМадай, hапартемим весарей hамединот лефанав.</p>
+                    <p>Бишнат шалош лемалхо, аса миште лехоль сарав ваавадав, хейль Парас уМадай, hапартемим весарей hамединот лефанав.</p>
                 </div>
             </div>
         </article>
@@ -1775,13 +2048,13 @@
                     <p>He displayed the riches of his glorious kingdom and the splendor of his great majesty for many days — one hundred and eighty days.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:4) Be-har'oto et osher kevod malchuto, ve-et yekar tif'eret gedullato, yamim rabim, shemonim u-me'at yom.</p>
+                    <p>Be-har'oto et osher kevod malchuto, ve-et yekar tif'eret gedullato, yamim rabim, shemonim u-me'at yom.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Показывая богатство и великолепие своего царства, блеск и роскошь своего величия много дней — сто восемьдесят дней.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:4) Беhарото эт ошер кевод малхуто, веэт йекар тиферет гедулато, ямим рабим, шмоним умеат йом.</p>
+                    <p>Беhарото эт ошер кевод малхуто, веэт йекар тиферет гедулато, ямим рабим, шмоним умеат йом.</p>
                 </div>
             </div>
         </article>
@@ -1797,13 +2070,13 @@
                     <p>When these days were completed, the king made a feast for all the people found in Shushan the capital, from the greatest to the smallest — a feast of seven days, in the courtyard of the garden of the king's pavilion.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:5) U-vi-mlot ha-yamim ha-eleh, asah ha-melech le-chol ha-am ha-nimtze'im be-Shushan ha-birah, le-migadol ve-ad katan, mishteh shivat yamim, ba-chatzer ginat bitan ha-melech.</p>
+                    <p>U-vi-mlot ha-yamim ha-eleh, asah ha-melech le-chol ha-am ha-nimtze'im be-Shushan ha-birah, le-migadol ve-ad katan, mishteh shivat yamim, ba-chatzer ginat bitan ha-melech.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Когда эти дни исполнились, царь устроил для всего народа, находившегося в Шушане, столице, от большого до малого, пир на семь дней во дворе сада царского павильона.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:5) Увимлоот hаямим hаэле, аса hамелех лехоль hаам hанимцеим беШушан hабира, лемигадоль веад катан, миште шиват ямим, бахацар гинат битан hамелех.</p>
+                    <p>Увимлоот hаямим hаэле, аса hамелех лехоль hаам hанимцеим беШушан hабира, лемигадоль веад катан, миште шиват ямим, бахацар гинат битан hамелех.</p>
                 </div>
             </div>
         </article>
@@ -1819,13 +2092,13 @@
                     <p>There were hangings of white and fine cotton and blue, fastened with cords of fine linen and purple to silver rods and marble columns; couches of gold and silver on a pavement of alabaster, marble, mother-of-pearl, and precious stone.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:6) Chur karpas u-techelet, achuz be-chavlei vuts ve-argaman, al gelilei chesef ve-amudei shesh, mitot zahav va-chesef, al ritzpat bahat va-shesh ve-dar ve-socharet.</p>
+                    <p>Chur karpas u-techelet, achuz be-chavlei vuts ve-argaman, al gelilei chesef ve-amudei shesh, mitot zahav va-chesef, al ritzpat bahat va-shesh ve-dar ve-socharet.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Белые, хлопчатые и голубые завесы прикреплены шнурами из виссона и пурпура к серебряным кольцам и мраморным колоннам; ложа из золота и серебра на помосте из алебастра, мрамора, перламутра и драгоценных камней.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:6) Хур карпас утхелет, ахуз бехавлей вуц веаргаман, аль гелилей кесеф веамудей шеш, митот заhав вахесеф, аль рицпат баhат вашеш ведар весохарет.</p>
+                    <p>Хур карпас утхелет, ахуз бехавлей вуц веаргаман, аль гелилей кесеф веамудей шеш, митот заhав вахесеф, аль рицпат баhат вашеш ведар весохарет.</p>
                 </div>
             </div>
         </article>
@@ -1841,13 +2114,13 @@
                     <p>Drinks were served in golden vessels — vessels of many different kinds — and royal wine flowed abundantly, as befitting the king's bounty.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:7) Ve-hashkot bi-chlei zahav, ve-chelim mi-chelim shonim, ve-yein malchut rav ke-yad ha-melech.</p>
+                    <p>Ve-hashkot bi-chlei zahav, ve-chelim mi-chelim shonim, ve-yein malchut rav ke-yad ha-melech.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Напитки подавались в золотых сосудах — сосудах всевозможных видов — и царского вина было в изобилии, по щедрости царя.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:7) Веhашкот бихлей заhав, вехелим михелим шоним, вейейн малхут рав кеяд hамелех.</p>
+                    <p>Веhашкот бихлей заhав, вехелим михелим шоним, вейейн малхут рав кеяд hамелех.</p>
                 </div>
             </div>
         </article>
@@ -1863,13 +2136,13 @@
                     <p>And the drinking was according to the law — without compulsion — for so the king had instructed every steward of his house, to do according to each man's pleasure.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:8) Ve-ha-shtiyah cha-dat, ein ones, ki chen yisad ha-melech al kol rav beito, la-asot ki-retzon ish va-ish.</p>
+                    <p>Ve-ha-shtiyah cha-dat, ein ones, ki chen yisad ha-melech al kol rav beito, la-asot ki-retzon ish va-ish.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Питьё было по установлению — без принуждения, — ибо так приказал царь каждому управителю своего дома: поступать по желанию каждого.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:8) Веhаштия хадат, эйн онес, ки хен йисад hамелех аль коль рав бейто, лаасот кирцон иш ваиш.</p>
+                    <p>Веhаштия хадат, эйн онес, ки хен йисад hамелех аль коль рав бейто, лаасот кирцон иш ваиш.</p>
                 </div>
             </div>
         </article>
@@ -1885,13 +2158,13 @@
                     <p>Queen Vashti too made a feast for the women in the royal palace that belonged to King Achashverosh.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:9) Gam Vashti ha-malkah as'tah mishteh nashim, beit ha-malchut asher la-melech Achashverosh.</p>
+                    <p>Gam Vashti ha-malkah as'tah mishteh nashim, beit ha-malchut asher la-melech Achashverosh.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Также и царица Вашти устроила пир для женщин в царском доме, принадлежавшем царю Ахашверошу.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:9) Гам Вашти hамалка аста миште нашим, бейт hамалхут ашер ламелех Ахашверош.</p>
+                    <p>Гам Вашти hамалка аста миште нашим, бейт hамалхут ашер ламелех Ахашверош.</p>
                 </div>
             </div>
         </article>
@@ -1907,13 +2180,13 @@
                     <p>On the seventh day, when the king's heart was merry with wine, he commanded Mehuman, Bizzetha, Charvona, Bigtha, Avagtha, Zetar, and Karkas — the seven chamberlains who attended before King Achashverosh —</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:10) Ba-yom ha-shvi'i, ke-tov lev ha-melech ba-yayin, amar li-Mehuman, Bizta, Charvona, Bigta, va-Avagta, Zetar, ve-Charkas, shivat ha-sarisim ha-meshar'tim et penei ha-melech Achashverosh.</p>
+                    <p>Ba-yom ha-shvi'i, ke-tov lev ha-melech ba-yayin, amar li-Mehuman, Bizta, Charvona, Bigta, va-Avagta, Zetar, ve-Charkas, shivat ha-sarisim ha-meshar'tim et penei ha-melech Achashverosh.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>На седьмой день, когда сердце царя развеселилось от вина, он повелел Меhуману, Бизете, Харвоне, Бигте, Авагте, Зетару и Каркасу — семи евнухам, прислуживавшим пред царём Ахашверошем —</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:10) Байом hашвии, кетов лев hамелех баяйин, амар лиМеhуман, Бизета, Харвона, Бигта, ваАвагта, Зетар, веХаркас, шиват hасарисим hамшаретим эт пеней hамелех Ахашверош.</p>
+                    <p>Байом hашвии, кетов лев hамелех баяйин, амар лиМеhуман, Бизета, Харвона, Бигта, ваАвагта, Зетар, веХаркас, шиват hасарисим hамшаретим эт пеней hамелех Ахашверош.</p>
                 </div>
             </div>
         </article>
@@ -1929,13 +2202,13 @@
                     <p>To bring Queen Vashti before the king wearing the royal crown, to show the peoples and the ministers her beauty — for she was fair to look upon.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:11) Le-havi et Vashti ha-malkah lifnei ha-melech be-cheter malchut, le-har'ot ha-amim ve-ha-sarim et yof'yah, ki tovat mar'eh hi.</p>
+                    <p>Le-havi et Vashti ha-malkah lifnei ha-melech be-cheter malchut, le-har'ot ha-amim ve-ha-sarim et yof'yah, ki tovat mar'eh hi.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Привести царицу Вашти пред царя в царском венце, чтобы показать народам и сановникам её красоту — ибо она была прекрасна видом.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:11) Леhави эт Вашти hамалка лифней hамелех бехетер малхут, леhарот hаамим веhасарим эт йофья, ки товат маръэ hи.</p>
+                    <p>Леhави эт Вашти hамалка лифней hамелех бехетер малхут, леhарот hаамим веhасарим эт йофья, ки товат маръэ hи.</p>
                 </div>
             </div>
         </article>
@@ -1951,13 +2224,13 @@
                     <p>But Queen Vashti refused to come at the king's command conveyed by the chamberlains. The king was furious, and his anger burned within him.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:12) Va-tima'en ha-malkah Vashti lavo bi-dvar ha-melech asher be-yad ha-sarisim, va-yiktzof ha-melech me'od, va-chamato ba-arah vo.</p>
+                    <p>Va-tima'en ha-malkah Vashti lavo bi-dvar ha-melech asher be-yad ha-sarisim, va-yiktzof ha-melech me'od, va-chamato ba-arah vo.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Но царица Вашти отказалась прийти по слову царя, переданному через евнухов, и царь сильно разгневался, ярость его разгорелась в нём.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:12) Ватемаэн hамалка Вашти лаво бидвар hамелех ашер беяд hасарисим, вайикцоф hамелех меод, вахамато баара во.</p>
+                    <p>Ватемаэн hамалка Вашти лаво бидвар hамелех ашер беяд hасарисим, вайикцоф hамелех меод, вахамато баара во.</p>
                 </div>
             </div>
         </article>
@@ -1973,13 +2246,13 @@
                     <p>The king then spoke to the wise men who knew the times — for such was the king's practice, to bring matters before all who knew law and judgment —</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:13) Va-yomer ha-melech la-chachamim yod'ei ha-itim, ki chen devar ha-melech lifnei kol yod'ei dat va-din.</p>
+                    <p>Va-yomer ha-melech la-chachamim yod'ei ha-itim, ki chen devar ha-melech lifnei kol yod'ei dat va-din.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>И обратился царь к мудрецам, знающим времена — ибо таков был обычай царя: разбирать дела перед всеми знатоками закона и права —</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:13) Вайомер hамелех лахахамим йодей hаитим, ки хен девар hамелех лифней коль йодей дат вадин.</p>
+                    <p>Вайомер hамелех лахахамим йодей hаитим, ки хен девар hамелех лифней коль йодей дат вадин.</p>
                 </div>
             </div>
         </article>
@@ -1995,13 +2268,13 @@
                     <p>The closest to him being Karshena, Shetar, Admata, Tarshish, Meres, Marsena, and Memukhan — the seven ministers of Persia and Media who saw the king's face and sat foremost in the kingdom.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:14) Ve-ha-karov elav Karsh'na, Shetar, Admata, Tarshish, Meres, Mars'na, Memuchan, shivat sarei Paras u-Madai, ro'ei penei ha-melech, ha-yoshvim rishonah ba-malchut.</p>
+                    <p>Ve-ha-karov elav Karsh'na, Shetar, Admata, Tarshish, Meres, Mars'na, Memuchan, shivat sarei Paras u-Madai, ro'ei penei ha-melech, ha-yoshvim rishonah ba-malchut.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>А ближайшие к нему — Каршена, Шетар, Адмата, Таршиш, Мерес, Марсена и Мемухан, семь сановников Персии и Мидии, видевших лицо царя и занимавших первые места в царстве.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:14) Веhакаров элав Каршена, Шетар, Адмата, Таршиш, Мерес, Марсена, Мемухан, шиват сарей Парас уМадай, роэй пеней hамелех, hайошвим ришона бамалхут.</p>
+                    <p>Веhакаров элав Каршена, Шетар, Адмата, Таршиш, Мерес, Марсена, Мемухан, шиват сарей Парас уМадай, роэй пеней hамелех, hайошвим ришона бамалхут.</p>
                 </div>
             </div>
         </article>
@@ -2017,13 +2290,13 @@
                     <p>"What, by law, is to be done with Queen Vashti, seeing that she has not obeyed the command of King Achashverosh conveyed by the chamberlains?"</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:15) Ke-dat mah la-asot ba-malkah Vashti, al asher lo as'tah et ma'amar ha-melech Achashverosh be-yad ha-sarisim.</p>
+                    <p>Ke-dat mah la-asot ba-malkah Vashti, al asher lo as'tah et ma'amar ha-melech Achashverosh be-yad ha-sarisim.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>«Что по закону следует сделать с царицей Вашти за то, что она не исполнила повеления царя Ахашвероша, переданного через евнухов?»</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:15) Кедат ма лаасот бамалка Вашти, аль ашер ло аста эт маамар hамелех Ахашверош беяд hасарисим.</p>
+                    <p>Кедат ма лаасот бамалка Вашти, аль ашер ло аста эт маамар hамелех Ахашверош беяд hасарисим.</p>
                 </div>
             </div>
         </article>
@@ -2039,13 +2312,13 @@
                     <p>Memukhan declared before the king and the ministers: "Queen Vashti has done wrong not only against the king, but against all the ministers and all the peoples in all the provinces of King Achashverosh.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:16) Va-yomer Memuchan lifnei ha-melech ve-ha-sarim, lo al ha-melech le-vado av'tah Vashti ha-malkah, ki al kol ha-sarim ve-al kol ha-amim asher be-chol medinot ha-melech Achashverosh.</p>
+                    <p>Va-yomer Memuchan lifnei ha-melech ve-ha-sarim, lo al ha-melech le-vado av'tah Vashti ha-malkah, ki al kol ha-sarim ve-al kol ha-amim asher be-chol medinot ha-melech Achashverosh.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Мемухан сказал перед царём и сановниками: «Царица Вашти провинилась не против одного царя, но против всех сановников и всех народов во всех областях царя Ахашвероша.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:16) Вайомер Мемухан лифней hамелех веhасарим, ло аль hамелех левадо авта Вашти hамалка, ки аль коль hасарим веаль коль hаамим ашер бехоль мединот hамелех Ахашверош.</p>
+                    <p>Вайомер Мемухан лифней hамелех веhасарим, ло аль hамелех левадо авта Вашти hамалка, ки аль коль hасарим веаль коль hаамим ашер бехоль мединот hамелех Ахашверош.</p>
                 </div>
             </div>
         </article>
@@ -2061,13 +2334,13 @@
                     <p>For the queen's deed will spread to all women, causing them to despise their husbands, when they say: 'King Achashverosh commanded Queen Vashti to be brought before him, but she did not come.'</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:17) Ki yetze devar ha-malkah al kol ha-nashim, le-havzot ba'aleihen be-eineihen, be-om'ram ha-melech Achashverosh amar le-havi et Vashti ha-malkah le-fanav ve-lo va'ah.</p>
+                    <p>Ki yetze devar ha-malkah al kol ha-nashim, le-havzot ba'aleihen be-eineihen, be-om'ram ha-melech Achashverosh amar le-havi et Vashti ha-malkah le-fanav ve-lo va'ah.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Ибо поступок царицы разойдётся среди всех женщин, и они станут презирать своих мужей, говоря: «Царь Ахашверош повелел привести царицу Вашти к нему, но она не пришла.»</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:17) Ки йецэ девар hамалка аль коль hанашим, леhавзот баалейhен беэйнейhен, беомрам hамелех Ахашверош амар леhави эт Вашти hамалка лефанав, вело ваа.</p>
+                    <p>Ки йецэ девар hамалка аль коль hанашим, леhавзот баалейhен беэйнейhен, беомрам hамелех Ахашверош амар леhави эт Вашти hамалка лефанав, вело ваа.</p>
                 </div>
             </div>
         </article>
@@ -2083,13 +2356,13 @@
                     <p>This very day, the noblewomen of Persia and Media who have heard of the queen's deed will be saying the same to all the king's ministers — and there will be no end of contempt and strife."</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:18) Ve-ha-yom ha-zeh tomar'nah sarot Paras u-Madai asher sham'u et devar ha-malkah, le-chol sarei ha-melech, u-ch'dai biz'yon va-katzef.</p>
+                    <p>Ve-ha-yom ha-zeh tomar'nah sarot Paras u-Madai asher sham'u et devar ha-malkah, le-chol sarei ha-melech, u-ch'dai biz'yon va-katzef.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>И сегодня же знатные женщины Персии и Мидии, услышавшие о поступке царицы, будут говорить то же всем сановникам царя — и не будет конца презрению и гневу."</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:18) Веhайом hазе томарна сарот Парас уМадай ашер шаму эт девар hамалка, лехоль сарей hамелех, ухедай бизайон вакацеф.</p>
+                    <p>Веhайом hазе томарна сарот Парас уМадай ашер шаму эт девар hамалка, лехоль сарей hамелех, ухедай бизайон вакацеф.</p>
                 </div>
             </div>
         </article>
@@ -2105,13 +2378,13 @@
                     <p>If it please the king, let a royal decree go forth from him and be written into the laws of Persia and Media so that it cannot be revoked: that Vashti shall come no more before King Achashverosh, and let the king give her royal position to another who is better than she.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:19) Im al ha-melech tov, yetze devar malchut mi-le-fanav, ve-yi-katev be-datei Paras u-Madai ve-lo ya'avor, asher lo tavo Vashti lifnei ha-melech Achashverosh, u-malchutah yiten ha-melech li-re'utah ha-tovah mi-menah.</p>
+                    <p>Im al ha-melech tov, yetze devar malchut mi-le-fanav, ve-yi-katev be-datei Paras u-Madai ve-lo ya'avor, asher lo tavo Vashti lifnei ha-melech Achashverosh, u-malchutah yiten ha-melech li-re'utah ha-tovah mi-menah.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Если царю угодно, пусть выйдет от него царский указ и будет записан в законах Персии и Мидии, чтобы не был отменён: Вашти больше не войдёт пред царя Ахашвероша, а её царское достоинство царь передаст другой, лучшей, чем она.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:19) Им аль hамелех тов, йецэ девар малхут милефанав, вейикатев бедатей Парас уМадай вело яавор, ашер ло таво Вашти лифней hамелех Ахашверош, умалхута йитен hамелех лиреута hатова мимена.</p>
+                    <p>Им аль hамелех тов, йецэ девар малхут милефанав, вейикатев бедатей Парас уМадай вело яавор, ашер ло таво Вашти лифней hамелех Ахашверош, умалхута йитен hамелех лиреута hатова мимена.</p>
                 </div>
             </div>
         </article>
@@ -2127,13 +2400,13 @@
                     <p>And when the king's decree which he shall issue is heard throughout his great kingdom, all wives will give honor to their husbands, from the greatest to the smallest."</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:20) Ve-nishma pit'gam ha-melech asher ya'aseh be-chol malchuto, ki rabah hi, ve-chol ha-nashim yit'nu yekar le-va'aleihen, le-migadol ve-ad katan.</p>
+                    <p>Ve-nishma pit'gam ha-melech asher ya'aseh be-chol malchuto, ki rabah hi, ve-chol ha-nashim yit'nu yekar le-va'aleihen, le-migadol ve-ad katan.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>И когда указ царя, который он издаст, будет услышан во всём его великом царстве, все жёны будут воздавать почёт своим мужьям, от большого до малого."</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:20) Венишма питгам hамелех ашер яасэ бехоль малхуто, ки раба hи, вехоль hанашим йитну йекар леваалейhен, лемигадоль веад катан.</p>
+                    <p>Венишма питгам hамелех ашер яасэ бехоль малхуто, ки раба hи, вехоль hанашим йитну йекар леваалейhен, лемигадоль веад катан.</p>
                 </div>
             </div>
         </article>
@@ -2149,13 +2422,13 @@
                     <p>This advice pleased the king and the ministers, and the king did according to the word of Memukhan.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:21) Va-yitav ha-davar be-einei ha-melech ve-ha-sarim, va-ya'as ha-melech ki-devar Memuchan.</p>
+                    <p>Va-yitav ha-davar be-einei ha-melech ve-ha-sarim, va-ya'as ha-melech ki-devar Memuchan.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>Это слово понравилось царю и сановникам, и царь поступил по слову Мемухана.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:21) Вайитав hадавар беэйней hамелех веhасарим, ваяас hамелех кидвар Мемухан.</p>
+                    <p>Вайитав hадавар беэйней hамелех веhасарим, ваяас hамелех кидвар Мемухан.</p>
                 </div>
             </div>
         </article>
@@ -2171,13 +2444,13 @@
                     <p>He sent letters to all the king's provinces, to each province in its own script and to each people in its own language, that every man should be master in his own home and speak the language of his own people.</p>
                 </div>
                 <div class="layer english-translit">
-                    <p>(1:22) Va-yishlach sfarim el kol medinot ha-melech, el medinah u-medinah ki-chtavah, ve-el am va-am ki-leshono, li-h'yot kol ish sorer be-veito, u-medaber ki-leshon amo.</p>
+                    <p>Va-yishlach sfarim el kol medinot ha-melech, el medinah u-medinah ki-chtavah, ve-el am va-am ki-leshono, li-h'yot kol ish sorer be-veito, u-medaber ki-leshon amo.</p>
                 </div>
                 <div class="layer russian-translation">
                     <p>И разослал он письма во все области царя — в каждую область её письмом и каждому народу на его языке, чтобы каждый муж был властелином в своём доме и говорил на языке своего народа.</p>
                 </div>
                 <div class="layer russian-translit">
-                    <p>(1:22) Вайишлах сефарим эль коль мединот hамелех, эль медина умедина кихтава, веэль ам ваам килшоно, лиhйот коль иш сорер бевейто, умедабер килшон амо.</p>
+                    <p>Вайишлах сефарим эль коль мединот hамелех, эль медина умедина кихтава, веэль ам ваам килшоно, лиhйот коль иш сорер бевейто, умедабер килшон амо.</p>
                 </div>
             </div>
         </article>
@@ -2185,15 +2458,15 @@
     </section>
 
     <!-- Placeholder chapters 2–10 -->
-    <section class="chapter" id="ch2"><h2 class="chapter-title">פרק ב <span>Chapter Two</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch3"><h2 class="chapter-title">פרק ג <span>Chapter Three</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch4"><h2 class="chapter-title">פרק ד <span>Chapter Four</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch5"><h2 class="chapter-title">פרק ה <span>Chapter Five</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch6"><h2 class="chapter-title">פרק ו <span>Chapter Six</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch7"><h2 class="chapter-title">פרק ז <span>Chapter Seven</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch8"><h2 class="chapter-title">פרק ח <span>Chapter Eight</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch9"><h2 class="chapter-title">פרק ט <span>Chapter Nine</span></h2><p class="coming-soon">Coming soon…</p></section>
-    <section class="chapter" id="ch10"><h2 class="chapter-title">פרק י <span>Chapter Ten</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch2"><h2 class="chapter-title"><span class="ch-heb">פרק ב</span><span>Chapter Two</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch3"><h2 class="chapter-title"><span class="ch-heb">פרק ג</span><span>Chapter Three</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch4"><h2 class="chapter-title"><span class="ch-heb">פרק ד</span><span>Chapter Four</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch5"><h2 class="chapter-title"><span class="ch-heb">פרק ה</span><span>Chapter Five</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch6"><h2 class="chapter-title"><span class="ch-heb">פרק ו</span><span>Chapter Six</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch7"><h2 class="chapter-title"><span class="ch-heb">פרק ז</span><span>Chapter Seven</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch8"><h2 class="chapter-title"><span class="ch-heb">פרק ח</span><span>Chapter Eight</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch9"><h2 class="chapter-title"><span class="ch-heb">פרק ט</span><span>Chapter Nine</span></h2><p class="coming-soon">Coming soon…</p></section>
+    <section class="chapter" id="ch10"><h2 class="chapter-title"><span class="ch-heb">פרק י</span><span>Chapter Ten</span></h2><p class="coming-soon">Coming soon…</p></section>
 
     <div class="scroll-ornament">❧ ✦ ❧</div>
 </main>
@@ -2221,18 +2494,26 @@
         </div>
     </div>
 
-    <!-- PROGRESS — segmented pips -->
+    <!-- PROGRESS — 4 pips -->
     <div class="purim-progress-section">
         <div class="purim-progress-header">
-            <span class="purim-progress-label">Today's mitzvot</span>
-            <span class="purim-progress-fraction" id="progressFraction">0 / 5</span>
+            <div>
+                <span class="purim-progress-label">4 Mitzvot of Purim</span>
+                <div class="purim-progress-sub">Megillah is read twice — night &amp; day</div>
+            </div>
+            <span class="purim-progress-fraction" id="progressFraction">0 / 4</span>
         </div>
         <div class="purim-pips" id="purimPips">
-            <div class="purim-pip" data-pip="0"><span>🌙</span><small>Night</small></div>
-            <div class="purim-pip" data-pip="1"><span>☀️</span><small>Day</small></div>
-            <div class="purim-pip" data-pip="2"><span>🎁</span><small>Gifts</small></div>
-            <div class="purim-pip" data-pip="3"><span>🤝</span><small>Charity</small></div>
-            <div class="purim-pip" data-pip="4"><span>🥂</span><small>Feast</small></div>
+            <div class="purim-pip" data-pip="megillah">
+                <div class="pip-fill-wrap">
+                    <span class="pip-emoji">📜</span>
+                    <div class="pip-half-fill" id="pipMegillahFill"></div>
+                </div>
+                <small>Megillah</small>
+            </div>
+            <div class="purim-pip" data-pip="mishloach"><span class="pip-emoji">🎁</span><small>Mishloach<br>Manot</small></div>
+            <div class="purim-pip" data-pip="matanot"><span class="pip-emoji">🤝</span><small>Matanot<br>L'evyonim</small></div>
+            <div class="purim-pip" data-pip="seudah"><span class="pip-emoji">🥂</span><small>Seudas<br>Purim</small></div>
         </div>
         <div class="purim-all-done" id="allDoneMsg">
             <span>🎉</span>
@@ -2247,53 +2528,58 @@
     <div class="mitzvot-grid">
 
         <!-- 1. MEGILLAH — NIGHT -->
-        <div class="mitzvah-card" data-id="megillah-night">
+        <!-- 1. MEGILLAH (combined night + day) -->
+        <div class="mitzvah-card" data-id="megillah">
             <div class="mitzvah-card-inner">
-                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#1a0d20,#2d1a3d);">🌙</div>
+                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#1a0d20,#3a1a50);">📜</div>
                 <div class="mitzvah-text-col">
-                    <div class="mitzvah-heb">מקרא מגילה — לילה</div>
-                    <div class="mitzvah-name">Megillah Reading · Night</div>
-                    <div class="mitzvah-time">⏰ After nightfall on Purim eve</div>
+                    <div class="mitzvah-heb">מקרא מגילה</div>
+                    <div class="mitzvah-name">Mikra Megillah</div>
+                    <div class="mitzvah-time">⏰ Twice — night &amp; day</div>
                 </div>
-                <button class="mitzvah-check-btn" data-check="megillah-night" aria-label="Mark done">
+                <button class="mitzvah-check-btn" data-check="megillah" aria-label="Mark done">
                     <span class="check-icon">✓</span>
                 </button>
             </div>
-            <div class="mitzvah-body">
-                <div class="mitzvah-source">"וְלַיְלָה לְלַיְלָה יְחַוֶּה דָּעַת" — The Megillah is read after nightfall, when three medium stars are visible.</div>
-                <div class="mitzvah-details">
-                    <div class="mitzvah-detail-row"><span class="detail-icon">📍</span><span>Read in a synagogue with a minyan if possible</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">👂</span><span>Every single word must be heard — missing even one word may mean the mitzvah isn't fulfilled</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">🪇</span><span>Make noise at <strong>Haman the Agagite</strong> and <strong>Haman son of Hammedatha</strong> — the titled mentions</span></div>
-                </div>
-                <div class="mitzvah-tip">💡 Women are equally obligated in this mitzvah — they were also part of the miracle!</div>
-            </div>
-            <button class="mitzvah-expand-btn" data-expand="megillah-night">Learn more ▾</button>
-        </div>
 
-        <!-- 2. MEGILLAH — DAY -->
-        <div class="mitzvah-card" data-id="megillah-day">
-            <div class="mitzvah-card-inner">
-                <div class="mitzvah-icon-wrap" style="background: linear-gradient(135deg,#7a3a00,#c46a00);">☀️</div>
-                <div class="mitzvah-text-col">
-                    <div class="mitzvah-heb">מקרא מגילה — יום</div>
-                    <div class="mitzvah-name">Megillah Reading · Day</div>
-                    <div class="mitzvah-time">⏰ During Purim day, before sunset</div>
+            <!-- Reading counter — always visible -->
+            <div class="charity-panel">
+                <p class="charity-intro">The Megillah is read <strong>twice on Purim</strong> — once at night after nightfall, and once during the day. Every word must be heard.</p>
+
+                <div class="charity-tracker" id="megillahTracker">
+                    <p class="charity-tracker-label">Mark each reading as you complete it</p>
+                    <div class="charity-counter-row">
+                        <button class="counter-btn counter-minus" id="megillahMinus">−</button>
+                        <div class="counter-display">
+                            <span class="counter-num" id="megillahCount" style="color: var(--burgundy)">0</span>
+                            <span class="counter-unit" style="color: rgba(107,31,52,0.5)">readings</span>
+                        </div>
+                        <button class="counter-btn counter-plus" id="megillahPlus" style="color: var(--burgundy); border-color: rgba(107,31,52,0.35)">+</button>
+                    </div>
+                    <div class="megillah-reading-states">
+                        <div class="reading-state" id="readingState0">
+                            <span class="reading-dot"></span><span class="reading-label">Night reading</span>
+                        </div>
+                        <div class="reading-state" id="readingState1">
+                            <span class="reading-dot"></span><span class="reading-label">Day reading</span>
+                        </div>
+                    </div>
+                    <p class="charity-status" id="megillahStatus">Tap <strong>+</strong> after each reading</p>
                 </div>
-                <button class="mitzvah-check-btn" data-check="megillah-day" aria-label="Mark done">
-                    <span class="check-icon">✓</span>
-                </button>
             </div>
+
             <div class="mitzvah-body">
-                <div class="mitzvah-source">"לַעֲשׂוֹת אוֹתָם יְמֵי מִשְׁתֶּה וְשִׂמְחָה" — The daytime reading is the primary one; the Talmud emphasizes it as the main fulfillment.</div>
+                <div class="mitzvah-source">The Megillah is the scroll of Esther, read publicly twice on Purim so every Jew can hear the full story of the miracle.</div>
                 <div class="mitzvah-details">
-                    <div class="mitzvah-detail-row"><span class="detail-icon">📖</span><span>The same scroll (Megillah) is read again during daylight hours</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">🎭</span><span>Many communities have festive costumes and extra noise-making at this reading</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">🪇</span><span>Use this app's Megillah tab to follow along word by word!</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🌙</span><span><strong>Night:</strong> After nightfall on Purim eve. Read in shul with a minyan if possible.</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">☀️</span><span><strong>Day:</strong> During daylight on Purim — the primary reading.</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">👂</span><span>Every single word must be heard — missing even one word may not fulfill the mitzvah.</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🪇</span><span>Make noise at <strong>Haman the Agagite</strong> and <strong>Haman son of Hammedatha</strong> — the titled mentions only.</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">👩</span><span>Women are equally obligated — they too were part of the miracle of Purim.</span></div>
                 </div>
-                <div class="mitzvah-tip">💡 The daytime Megillah reading is considered the fulfillment of the verse "my glory rejoices" — it carries special weight.</div>
+                <div class="mitzvah-tip">💡 Use this app's Megillah tab to follow along word by word in Hebrew, English, and transliteration!</div>
             </div>
-            <button class="mitzvah-expand-btn" data-expand="megillah-day">Learn more ▾</button>
+            <button class="mitzvah-expand-btn" data-expand="megillah">Learn more ▾</button>
         </div>
 
         <!-- 3. MISHLOACH MANOT -->
@@ -2314,10 +2600,9 @@
                 <div class="mitzvah-details">
                     <div class="mitzvah-detail-row"><span class="detail-icon">🍽️</span><span><strong>At least 2 different</strong> ready-to-eat foods to <strong>at least 1 friend</strong></span></div>
                     <div class="mitzvah-detail-row"><span class="detail-icon">📬</span><span>Should be delivered — ideally by a messenger, not left at a door</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">🍮</span><span>Classic: hamantaschen, wine/grape juice, fruit, chocolates, baked goods</span></div>
                     <div class="mitzvah-detail-row"><span class="detail-icon">👑</span><span>The purpose: to increase love and friendship among the Jewish people</span></div>
                 </div>
-                <div class="mitzvah-tip">💡 More is more! The Sages praise those who send generously to many friends. Children love participating as messengers.</div>
+                <div class="mitzvah-tip">💡 More is more! The Sages praise those who send generously to many friends.</div>
             </div>
             <button class="mitzvah-expand-btn" data-expand="mishloach">Learn more ▾</button>
         </div>
@@ -2329,23 +2614,79 @@
                 <div class="mitzvah-text-col">
                     <div class="mitzvah-heb">מתנות לאביונים</div>
                     <div class="mitzvah-name">Matanot La'evyonim</div>
-                    <div class="mitzvah-time">⏰ Purim day only (not at night)</div>
+                    <div class="mitzvah-time">⏰ Purim day only — give to at least 2 people</div>
                 </div>
                 <button class="mitzvah-check-btn" data-check="matanot" aria-label="Mark done">
                     <span class="check-icon">✓</span>
                 </button>
             </div>
+
+            <!-- Charity action panel — always visible inside card -->
+            <div class="charity-panel">
+                <p class="charity-intro">The Rambam says this mitzvah is <strong>greater than all other Purim spending</strong>. Give money to at least 2 poor people.</p>
+
+                <p class="charity-orgs-label">🔗 Give now — trusted organizations</p>
+                <div class="charity-orgs">
+                    <a class="charity-org-btn" href="https://www.chabadcentralqueens.com/donate" target="_blank" rel="noopener">
+                        <span class="charity-org-icon">🕍</span>
+                        <span class="charity-org-info">
+                            <strong>Chabad of Eastern Queens</strong>
+                            <small>Local — fulfills mitzvah in your community</small>
+                        </span>
+                        <span class="charity-org-arrow">↗</span>
+                    </a>
+                    <a class="charity-org-btn" href="https://masbia.org/donate" target="_blank" rel="noopener">
+                        <span class="charity-org-icon">🍞</span>
+                        <span class="charity-org-info">
+                            <strong>Masbia Soup Kitchen</strong>
+                            <small>NYC — feeds the hungry on Purim day</small>
+                        </span>
+                        <span class="charity-org-arrow">↗</span>
+                    </a>
+                    <a class="charity-org-btn" href="https://colelchabad.org/donate" target="_blank" rel="noopener">
+                        <span class="charity-org-icon">🌿</span>
+                        <span class="charity-org-info">
+                            <strong>Colel Chabad</strong>
+                            <small>Israel — distributes on Purim to thousands</small>
+                        </span>
+                        <span class="charity-org-arrow">↗</span>
+                    </a>
+                    <a class="charity-org-btn" href="https://charidy.com" target="_blank" rel="noopener">
+                        <span class="charity-org-icon">💛</span>
+                        <span class="charity-org-info">
+                            <strong>Charidy.com</strong>
+                            <small>Browse verified Jewish charities — give to any two</small>
+                        </span>
+                        <span class="charity-org-arrow">↗</span>
+                    </a>
+                </div>
+
+                <div class="charity-tracker">
+                    <p class="charity-tracker-label">Track your giving today</p>
+                    <div class="charity-counter-row">
+                        <button class="counter-btn counter-minus" id="counterMinus">−</button>
+                        <div class="counter-display">
+                            <span class="counter-num" id="charityCount">0</span>
+                            <span class="counter-unit">people</span>
+                        </div>
+                        <button class="counter-btn counter-plus" id="counterPlus">+</button>
+                    </div>
+                    <p class="charity-status" id="charityStatus">Give to at least <strong>2 people</strong> to fulfill the mitzvah</p>
+                </div>
+            </div>
+
             <div class="mitzvah-body">
                 <div class="mitzvah-source">"וּמַתָּנוֹת לָאֶבְיֹנִים" — "And gifts to the poor" (Esther 9:22). The Rambam says this mitzvah is more beloved than all festive Purim expenses.</div>
                 <div class="mitzvah-details">
                     <div class="mitzvah-detail-row"><span class="detail-icon">💰</span><span>Give money (or food) to <strong>at least 2 poor people</strong> — one gift each</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">🙌</span><span>"Whoever extends their hand, we give to them" — don't turn anyone away on Purim</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">📱</span><span>Can donate to a charity that distributes on Purim day if no poor are nearby</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">🙌</span><span>"Whoever extends their hand on Purim, we give to them" — don't turn anyone away</span></div>
+                    <div class="mitzvah-detail-row"><span class="detail-icon">📱</span><span>Donating online to a charity that distributes on Purim day fully counts!</span></div>
                 </div>
-                <div class="mitzvah-tip">💡 The amount should be enough for the person to buy a small meal. Even a few dollars fulfills the mitzvah — the act matters more than the amount.</div>
+                <div class="mitzvah-tip">💡 Even a few dollars fulfills the mitzvah — the act of giving matters more than the size of the gift.</div>
             </div>
             <button class="mitzvah-expand-btn" data-expand="matanot">Learn more ▾</button>
         </div>
+
 
         <!-- 5. SEUDAS PURIM -->
         <div class="mitzvah-card" data-id="seudah">
@@ -2366,7 +2707,6 @@
                     <div class="mitzvah-detail-row"><span class="detail-icon">🍞</span><span>Must include <strong>bread</strong> (lechem) and <strong>wine</strong> — these are required elements</span></div>
                     <div class="mitzvah-detail-row"><span class="detail-icon">🥳</span><span>Invite guests, sing, tell the Purim story — the more joyful the better</span></div>
                     <div class="mitzvah-detail-row"><span class="detail-icon">🍷</span><span>The Talmud says to drink until you cannot distinguish "cursed Haman" from "blessed Mordechai"</span></div>
-                    <div class="mitzvah-detail-row"><span class="detail-icon">😴</span><span>Many fulfill the drinking obligation by having a little wine and taking a nap!</span></div>
                 </div>
                 <div class="mitzvah-tip">💡 Begin the feast before sunset. The feast is the climax of Purim — this is when the hidden miracle of the whole story is truly celebrated.</div>
             </div>
@@ -2688,9 +3028,19 @@ const welcomeOpts   = document.querySelectorAll('.welcome-option');
 welcomeOpts.forEach(opt => {
     opt.addEventListener('click', e => {
         e.preventDefault();
-        opt.classList.toggle('selected');
-        const cb = opt.querySelector('input');
-        if (cb) cb.checked = opt.classList.contains('selected');
+        // Single-select: deselect all others first
+        const wasSelected = opt.classList.contains('selected');
+        welcomeOpts.forEach(o => {
+            o.classList.remove('selected');
+            const cb = o.querySelector('input');
+            if (cb) cb.checked = false;
+        });
+        // Toggle this one on (if it wasn't already selected)
+        if (!wasSelected) {
+            opt.classList.add('selected');
+            const cb = opt.querySelector('input');
+            if (cb) cb.checked = true;
+        }
     });
 });
 
@@ -2771,9 +3121,20 @@ langOverlay.addEventListener('click', () => closeLangPanel());
 langOptions.forEach(opt => {
     opt.addEventListener('click', () => {
         const layer = opt.dataset.layer;
-        opt.classList.toggle('active');
-        const isOn = opt.classList.contains('active');
-        document.querySelectorAll('.' + layer).forEach(el => el.classList.toggle('visible', isOn));
+        const wasActive = opt.classList.contains('active');
+
+        // Deactivate all layers first
+        langOptions.forEach(o => {
+            o.classList.remove('active');
+            document.querySelectorAll('.' + o.dataset.layer).forEach(el => el.classList.remove('visible'));
+        });
+
+        // If it wasn't active, activate this one
+        if (!wasActive) {
+            opt.classList.add('active');
+            document.querySelectorAll('.' + layer).forEach(el => el.classList.add('visible'));
+        }
+
         updateColumnWidths();
     });
 });
@@ -2877,16 +3238,18 @@ function runConfetti() {
 }
 
 // ═══════════════════════════════════════
-//  MITZVAH CARDS — new card structure
+//  MITZVAH CARDS
 // ═══════════════════════════════════════
 const checkedMitzvot = new Set();
 const mitzvahCards   = document.querySelectorAll('.mitzvah-card');
 const progressFraction = document.getElementById('progressFraction');
 const allDoneMsg     = document.getElementById('allDoneMsg');
-const purimPips      = document.querySelectorAll('.purim-pip');
-
-// Pip data-id order: megillah-night, megillah-day, mishloach, matanot, seudah
-const PIP_ORDER = ['megillah-night','megillah-day','mishloach','matanot','seudah'];
+// 4 pips: megillah, mishloach, matanot, seudah
+const pipMegillah  = document.querySelector('.purim-pip[data-pip="megillah"]');
+const pipMishloach = document.querySelector('.purim-pip[data-pip="mishloach"]');
+const pipMatanot   = document.querySelector('.purim-pip[data-pip="matanot"]');
+const pipSeudah    = document.querySelector('.purim-pip[data-pip="seudah"]');
+const PIP_MAP = { megillah: pipMegillah, mishloach: pipMishloach, matanot: pipMatanot, seudah: pipSeudah };
 
 // Expand button toggles
 document.querySelectorAll('.mitzvah-expand-btn').forEach(btn => {
@@ -2907,11 +3270,13 @@ document.querySelectorAll('.mitzvah-expand-btn').forEach(btn => {
     });
 });
 
-// Check buttons
+// Check buttons (mishloach + seudah only — megillah and matanot use counters)
 document.querySelectorAll('.mitzvah-check-btn').forEach(btn => {
     btn.addEventListener('click', e => {
         e.stopPropagation();
         const id = btn.dataset.check;
+        // Megillah and matanot are counter-driven — checkmark is read-only visual
+        if (id === 'megillah' || id === 'matanot') return;
         const card = document.querySelector('.mitzvah-card[data-id="' + id + '"]');
         if (checkedMitzvot.has(id)) {
             checkedMitzvot.delete(id);
@@ -2927,22 +3292,138 @@ document.querySelectorAll('.mitzvah-check-btn').forEach(btn => {
 
 function updateProgress() {
     const n = checkedMitzvot.size;
-    const total = 5;
-    progressFraction.textContent = n + ' / ' + total;
+    progressFraction.textContent = n + ' / 4';
 
     // Update pips
-    purimPips.forEach((pip, i) => {
-        pip.classList.toggle('done', checkedMitzvot.has(PIP_ORDER[i]));
+    Object.entries(PIP_MAP).forEach(([id, pip]) => {
+        if (!pip) return;
+        pip.classList.toggle('done', checkedMitzvot.has(id));
     });
 
-    if (n === total) {
+    // Megillah half-state
+    const megillahReads = parseInt(document.getElementById('megillahCount').textContent) || 0;
+    if (pipMegillah) {
+        pipMegillah.classList.toggle('half', megillahReads === 1);
+    }
+
+    if (n === 4) {
         setTimeout(() => { allDoneMsg.classList.add('show'); launchConfetti(); launchConfetti(); }, 400);
     } else {
         allDoneMsg.classList.remove('show');
     }
 }
 
-// Spin up particles on purim page canvas
+// ═══════════════════════════════════════
+//  MEGILLAH COUNTER
+// ═══════════════════════════════════════
+let megillahReads = 0;
+const megillahCountEl  = document.getElementById('megillahCount');
+const megillahStatus   = document.getElementById('megillahStatus');
+const megillahPlus     = document.getElementById('megillahPlus');
+const megillahMinus    = document.getElementById('megillahMinus');
+const readingState0    = document.getElementById('readingState0'); // Night
+const readingState1    = document.getElementById('readingState1'); // Day
+
+function updateMegillahCounter(delta) {
+    megillahReads = Math.max(0, Math.min(2, megillahReads + delta));
+    megillahCountEl.textContent = megillahReads;
+
+    // Bump animation
+    megillahCountEl.classList.add('bump');
+    setTimeout(() => megillahCountEl.classList.remove('bump'), 150);
+
+    // Reading state dots
+    readingState0.classList.toggle('done', megillahReads >= 1);
+    readingState1.classList.toggle('done', megillahReads >= 2);
+
+    // Status text
+    if (megillahReads === 0) {
+        megillahStatus.innerHTML = 'Tap <strong>+</strong> after each reading';
+        megillahStatus.classList.remove('fulfilled');
+    } else if (megillahReads === 1) {
+        megillahStatus.innerHTML = '🌙 Night done! Tap <strong>+</strong> after the day reading';
+        megillahStatus.classList.remove('fulfilled');
+    } else {
+        megillahStatus.innerHTML = '✅ <strong>Both readings complete!</strong> פורים שמח';
+        megillahStatus.classList.add('fulfilled');
+    }
+
+    // Update pip half-fill
+    if (pipMegillah) {
+        pipMegillah.classList.toggle('half', megillahReads === 1);
+    }
+
+    // Auto-check/uncheck the card
+    const card = document.querySelector('.mitzvah-card[data-id="megillah"]');
+    if (megillahReads === 2 && !checkedMitzvot.has('megillah')) {
+        checkedMitzvot.add('megillah');
+        card.classList.add('done');
+        launchConfetti();
+        updateProgress();
+    } else if (megillahReads < 2 && checkedMitzvot.has('megillah')) {
+        checkedMitzvot.delete('megillah');
+        card.classList.remove('done');
+        updateProgress();
+    } else {
+        updateProgress(); // still update pip half-state
+    }
+}
+
+megillahPlus.addEventListener('click',  () => updateMegillahCounter(+1));
+megillahMinus.addEventListener('click', () => updateMegillahCounter(-1));
+
+
+// ═══════════════════════════════════════
+//  CHARITY COUNTER
+// ═══════════════════════════════════════
+let charityCount = 0;
+const charityCountEl = document.getElementById('charityCount');
+const charityStatus  = document.getElementById('charityStatus');
+const counterPlus    = document.getElementById('counterPlus');
+const counterMinus   = document.getElementById('counterMinus');
+
+function updateCharityCounter(delta) {
+    charityCount = Math.max(0, charityCount + delta);
+    charityCountEl.textContent = charityCount;
+
+    // Bump animation
+    charityCountEl.classList.add('bump');
+    setTimeout(() => charityCountEl.classList.remove('bump'), 150);
+
+    // Update status text
+    if (charityCount === 0) {
+        charityStatus.innerHTML = 'Give to at least <strong>2 people</strong> to fulfill the mitzvah';
+        charityStatus.classList.remove('fulfilled');
+    } else if (charityCount === 1) {
+        charityStatus.innerHTML = 'Great! Give to <strong>1 more person</strong> to complete the mitzvah';
+        charityStatus.classList.remove('fulfilled');
+    } else {
+        const extra = charityCount > 2 ? ` + ${charityCount - 2} extra — how generous! 🎉` : '';
+        charityStatus.innerHTML = '✅ <strong>Mitzvah fulfilled!</strong>' + extra;
+        charityStatus.classList.add('fulfilled');
+
+        // Auto-check the card if reaching 2 for the first time
+        if (charityCount >= 2 && !checkedMitzvot.has('matanot')) {
+            const matanotCard = document.querySelector('.mitzvah-card[data-id="matanot"]');
+            checkedMitzvot.add('matanot');
+            matanotCard.classList.add('done');
+            launchConfetti();
+            updateProgress();
+        }
+    }
+
+    // Un-check if they go back below 2
+    if (charityCount < 2 && checkedMitzvot.has('matanot')) {
+        const matanotCard = document.querySelector('.mitzvah-card[data-id="matanot"]');
+        checkedMitzvot.delete('matanot');
+        matanotCard.classList.remove('done');
+        updateProgress();
+    }
+}
+
+counterPlus.addEventListener('click',  () => updateCharityCounter(+1));
+counterMinus.addEventListener('click', () => updateCharityCounter(-1));
+
 (function() {
     const canvas = document.getElementById('purimParticleCanvas');
     if (!canvas) return;
