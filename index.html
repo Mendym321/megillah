@@ -416,13 +416,13 @@
 
         .lang-panel {
             position: fixed;
-            bottom: 56px; left: 0; right: 0;
+            bottom: 0; left: 0; right: 0;
             background: var(--parchment);
             border-top: 2px solid var(--parchment-dark);
             border-radius: 16px 16px 0 0;
-            padding: 1.25rem 1.5rem 1.5rem;
+            padding: 1.25rem 1.5rem calc(56px + 1rem);
             z-index: 301;
-            transform: translateY(100%);
+            transform: translateY(110%);
             transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
             box-shadow: 0 -8px 32px rgba(0,0,0,0.12);
         }
@@ -1108,7 +1108,15 @@
             letter-spacing: 0.8rem;
         }
 
-        /* ─── CONTROLS LABEL ─── */
+        /* ─── Bottom padding for tab bar ─── */
+        main, .purim-page { padding-bottom: 5rem; }
+
+        /* ─── Purim page starts hidden, JS shows/hides ─── */
+        #page-purim { display: none; }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* ─── Controls label ─── */
         .controls-label {
             font-family: 'Cinzel', serif;
             font-size: 0.6rem;
@@ -1116,12 +1124,6 @@
             text-transform: uppercase;
             color: var(--ink-light);
         }
-
-        /* ─── BOTTOM PADDING for tab bar ─── */
-        main, .purim-page { padding-bottom: 5rem; }
-
-        /* ─── Hide pages / megillah main by default ─── */
-        #page-purim { display: none; }
     </style>
 </head>
 <body>
@@ -2055,30 +2057,28 @@ startBtn.addEventListener('click', () => {
 const megillahMain = document.querySelector('main');
 const purimPage    = document.getElementById('page-purim');
 const tabBtns      = document.querySelectorAll('.tab-btn');
+let currentView    = 'megillah'; // track which content tab is active
+
+function showView(viewId) {
+    currentView = viewId;
+    megillahMain.style.display = viewId === 'megillah' ? '' : 'none';
+    purimPage.style.display    = viewId === 'purim'    ? 'block' : 'none';
+    document.getElementById('header').style.display = viewId === 'megillah' ? '' : 'none';
+}
 
 function switchTab(tabId) {
-    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
-    if (tabId === 'megillah') {
-        megillahMain.style.display = '';
-        purimPage.style.display    = 'none';
-        document.getElementById('header').style.display = '';
-        closeLangPanel();
-    } else if (tabId === 'purim') {
-        megillahMain.style.display = 'none';
-        purimPage.style.display    = 'block';
-        document.getElementById('header').style.display = 'none';
-        closeLangPanel();
-    } else if (tabId === 'languages') {
-        const isOpen = document.getElementById('langPanel').classList.contains('open');
-        if (isOpen) {
-            closeLangPanel();
-            const activeView = megillahMain.style.display === 'none' ? 'purim' : 'megillah';
-            tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === activeView));
-        } else {
-            openLangPanel();
-        }
+    if (tabId === 'languages') {
+        // Toggle panel without changing view
+        const isOpen = langPanel.classList.contains('open');
+        isOpen ? closeLangPanel() : openLangPanel();
+        return; // don't update tab highlight yet — openLangPanel handles it
     }
+    // Close panel if open when switching real tabs
+    closeLangPanel(false);
+    showView(tabId);
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === tabId));
 }
+
 tabBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
 
 // ═══════════════════════════════════════
@@ -2088,14 +2088,23 @@ const langPanel   = document.getElementById('langPanel');
 const langOverlay = document.getElementById('langOverlay');
 const langOptions = document.querySelectorAll('.lang-option');
 
-function openLangPanel()  { langPanel.classList.add('open'); langOverlay.classList.add('open'); }
-function closeLangPanel() {
+function openLangPanel() {
+    langPanel.classList.add('open');
+    langOverlay.classList.add('open');
+    // Highlight the languages tab while panel is open
+    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === 'languages'));
+}
+
+function closeLangPanel(restoreTab = true) {
     langPanel.classList.remove('open');
     langOverlay.classList.remove('open');
-    const activeView = megillahMain.style.display === 'none' ? 'purim' : 'megillah';
-    tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === activeView));
+    // Restore highlight to whichever content view is showing
+    if (restoreTab) {
+        tabBtns.forEach(b => b.classList.toggle('active', b.dataset.tab === currentView));
+    }
 }
-langOverlay.addEventListener('click', closeLangPanel);
+
+langOverlay.addEventListener('click', () => closeLangPanel());
 
 langOptions.forEach(opt => {
     opt.addEventListener('click', () => {
