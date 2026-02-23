@@ -6,33 +6,37 @@
     <title>מגילת אסתר | Megillat Esther</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --parchment:      #f7f2e3;
-            --parchment-mid:  #ede5cc;
-            --parchment-dark: #d6c9a8;
-            --ink:            #1c1712;
-            --ink-mid:        #3d3628;
-            --ink-light:      #7a6e5a;
-            --gold:           #b8882a;
-            --gold-bright:    #d4a53a;
-            --gold-pale:      #e8d49a;
-            --burgundy:       #6b1f34;
-            --burgundy-light: #8a3048;
-            --cream:          #fdfaf0;
-            --eng-color:      #2e5e3e;
-            --translit-color: #5e2e50;
-            --rus-color:      #1e3a5e;
-            --rus-translit-color: #5e4a1e;
+            --parchment:      #faf7f0;
+            --parchment-mid:  #ede5d0;
+            --parchment-dark: #d8ccb0;
+            --ink:            #18120e;
+            --ink-mid:        #3a2e24;
+            --ink-light:      #8a7d6a;
+            --gold:           #c49a2a;
+            --gold-bright:    #e0b535;
+            --gold-pale:      #f0dfa0;
+            --burgundy:       #7a1f38;
+            --burgundy-light: #9e2f4f;
+            --cream:          #fffdf6;
+            --surface:        rgba(255,253,246,0.85);
+            --eng-color:      #1a6644;
+            --translit-color: #6b2080;
+            --rus-color:      #1040a0;
+            --rus-translit-color: #7a4a10;
             --header-h: 120px;
+            --radius:   12px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.10);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
 
         body {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-family: 'Inter', 'Outfit', system-ui, sans-serif;
             background-color: var(--parchment);
             color: var(--ink);
             min-height: 100vh;
@@ -140,8 +144,9 @@
         }
 
         .welcome-eyebrow {
-            font-family: 'Cinzel', serif;
-            font-size: 0.7rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gold);
@@ -176,16 +181,17 @@
         }
 
         .welcome-subtitle {
-            font-family: 'Cinzel', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-            letter-spacing: 0.25em;
+            font-weight: 600;
+            letter-spacing: 0.3em;
             color: var(--gold-bright);
             margin-bottom: 0.4rem;
         }
         .welcome-tagline {
-            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
             color: rgba(255,255,255,0.38);
-            font-style: italic;
             margin-bottom: 1.1rem;
         }
 
@@ -203,90 +209,103 @@
         }
 
         .welcome-label {
-            font-family: 'Cinzel', serif;
-            font-size: 0.68rem;
-            letter-spacing: 0.15em;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: rgba(255,255,255,0.4);
-            margin-bottom: 0.6rem;
+            color: rgba(255,255,255,0.35);
+            margin-bottom: 0.7rem;
         }
 
         .welcome-options {
             display: flex;
             flex-direction: column;
-            gap: 0.42rem;
+            gap: 0.5rem;
             width: 100%;
-            max-width: 280px;
-            margin: 0 auto 1.4rem;
+            max-width: 300px;
+            margin: 0 auto 1.6rem;
         }
         .welcome-option {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            padding: 0.65rem 0.9rem;
-            background: rgba(255,255,255,0.035);
-            border: 1px solid rgba(184,136,42,0.2);
-            border-radius: 6px;
+            gap: 0.85rem;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s;
         }
         .welcome-option:hover {
-            border-color: var(--gold);
-            background: rgba(184,136,42,0.09);
-            transform: translateX(3px);
+            border-color: rgba(196,154,42,0.5);
+            background: rgba(196,154,42,0.07);
         }
         .welcome-option.selected {
-            border-color: var(--gold-bright);
-            background: rgba(184,136,42,0.13);
+            border-color: rgba(196,154,42,0.6);
+            background: rgba(196,154,42,0.12);
         }
         .welcome-option input { display: none; }
         .welcome-check {
-            width: 19px; height: 19px;
-            border: 1.5px solid rgba(184,136,42,0.45);
-            border-radius: 4px;
+            width: 22px; height: 22px;
+            border: 2px solid rgba(196,154,42,0.4);
+            border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 11px; color: transparent;
+            font-size: 12px; color: transparent;
             flex-shrink: 0; transition: all 0.2s;
         }
         .welcome-option.selected .welcome-check {
             background: var(--gold-bright);
             border-color: var(--gold-bright);
-            color: #1a1612;
+            color: #0e0c08;
+            font-weight: 900;
         }
-        .welcome-option-text { font-size: 0.9rem;  color: rgba(255,255,255,0.85); text-align: left; }
-        .welcome-option-sub  { font-size: 0.7rem;  color: rgba(255,255,255,0.3);  margin-top: 1px; }
+        .welcome-option-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.88);
+            text-align: left;
+        }
+        .welcome-option-sub {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.67rem;
+            color: rgba(255,255,255,0.28);
+            margin-top: 2px;
+        }
 
-        /* Pulsing CTA button */
+        /* CTA button */
         .welcome-btn {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            padding: 0.9rem 3rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            padding: 0.95rem 3.5rem;
             background: linear-gradient(135deg, var(--gold-bright), var(--gold));
             color: #0e0c08;
             border: none;
-            border-radius: 30px;
+            border-radius: 50px;
             cursor: pointer;
             transition: transform 0.25s, box-shadow 0.25s;
-            box-shadow: 0 4px 24px rgba(184,136,42,0.4);
+            box-shadow: 0 4px 24px rgba(196,154,42,0.4);
             margin-bottom: 1.4rem;
             opacity: 0;
             animation: fadeSlideUp 0.65s ease 1.05s forwards, btnPulse 3s ease-in-out 2s infinite;
+            text-transform: uppercase;
         }
         @keyframes btnPulse {
-            0%,100% { box-shadow: 0 4px 24px rgba(184,136,42,0.4); }
-            50%      { box-shadow: 0 6px 38px rgba(184,136,42,0.7); }
+            0%,100% { box-shadow: 0 4px 24px rgba(196,154,42,0.4); }
+            50%      { box-shadow: 0 6px 38px rgba(196,154,42,0.65); }
         }
         .welcome-btn:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 10px 40px rgba(184,136,42,0.65);
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 10px 40px rgba(196,154,42,0.6);
         }
 
         .welcome-footer { text-align: center; }
-        .welcome-powered    { font-size: 0.68rem; color: rgba(255,255,255,0.25); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.2rem; }
-        .welcome-org        { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold); letter-spacing: 0.12em; margin-bottom: 0.3rem; }
-        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.76rem; color: rgba(255,255,255,0.25); direction: rtl; }
+        .welcome-powered    { font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 500; color: rgba(255,255,255,0.2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
+        .welcome-org        { font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.78rem; color: rgba(255,255,255,0.22); direction: rtl; }
 
         /* ════════════════════════════════
            ROTATE NUDGE — gentle toast, not blocking
@@ -327,7 +346,7 @@
             90%,100%{ transform: rotate(0deg); }
         }
         .rotate-nudge-text {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 0.88rem;
             color: rgba(255,255,255,0.82);
             line-height: 1.3;
@@ -352,14 +371,15 @@
         .tab-bar {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            height: 56px;
-            background: linear-gradient(180deg, rgba(247,242,227,0.97) 0%, var(--parchment) 100%);
-            backdrop-filter: blur(10px);
-            border-top: 1.5px solid var(--parchment-dark);
-            display: none; /* shown after welcome */
+            height: 58px;
+            background: rgba(250,247,240,0.97);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-top: 1px solid var(--parchment-mid);
+            display: none;
             align-items: stretch;
             z-index: 200;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.07);
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.06);
         }
         .tab-bar.visible { display: flex; }
 
@@ -369,14 +389,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 2px;
+            gap: 3px;
             border: none;
             background: transparent;
             cursor: pointer;
             color: var(--ink-light);
-            font-family: 'Cinzel', serif;
-            font-size: 0.55rem;
-            letter-spacing: 0.06em;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.58rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
             transition: color 0.15s;
             padding: 0;
@@ -385,15 +406,16 @@
         .tab-btn::before {
             content: '';
             position: absolute;
-            top: 0; left: 20%; right: 20%;
-            height: 2px;
+            bottom: 4px;
+            left: 50%; transform: translateX(-50%);
+            width: 4px; height: 4px;
+            border-radius: 50%;
             background: var(--burgundy);
-            border-radius: 0 0 2px 2px;
-            transform: scaleX(0);
-            transition: transform 0.2s;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
         .tab-btn.active { color: var(--burgundy); }
-        .tab-btn.active::before { transform: scaleX(1); }
+        .tab-btn.active::before { opacity: 1; }
         .tab-btn:hover { color: var(--burgundy); }
         .tab-icon { font-size: 1.3rem; line-height: 1; }
 
@@ -435,8 +457,9 @@
             margin: 0 auto 1rem;
         }
         .lang-panel-title {
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
             letter-spacing: 0.18em;
             text-transform: uppercase;
             color: var(--ink-light);
@@ -484,8 +507,8 @@
         .lang-option[data-layer="russian-translit"].active     { border-color: var(--rus-translit-color); background: rgba(94,74,30,0.06); }
         .lang-option[data-layer="russian-translit"].active .lang-dot { background: var(--rus-translit-color); border-color: var(--rus-translit-color); }
 
-        .lang-option-label { font-size: 0.92rem; color: var(--ink); font-weight: 500; }
-        .lang-option-sub   { font-size: 0.72rem; color: var(--ink-light); margin-top: 1px; }
+        .lang-option-label { font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+        .lang-option-sub   { font-family: 'Inter', sans-serif; font-size: 0.7rem; color: var(--ink-light); margin-top: 2px; }
 
         /* ════════════════════════════════
            PURIM GUIDE PAGE
@@ -519,8 +542,9 @@
         }
         .purim-header-content { position: relative; z-index: 1; }
         .purim-eyebrow {
-            font-family: 'Cinzel', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.65rem;
+            font-weight: 700;
             letter-spacing: 0.25em;
             text-transform: uppercase;
             color: var(--gold-pale);
@@ -535,10 +559,10 @@
             line-height: 1.1;
         }
         .purim-main-sub {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 400;
             color: rgba(255,255,255,0.55);
-            font-style: italic;
         }
         .purim-floating-icons {
             display: flex;
@@ -570,14 +594,15 @@
             margin-bottom: 0.4rem;
         }
         .purim-progress-text {
-            font-family: 'Cinzel', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.65rem;
-            letter-spacing: 0.12em;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--ink-light);
         }
         .purim-progress-count {
-            font-family: 'Frank Ruhl Libre', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 1rem;
             font-weight: 700;
             color: var(--burgundy);
@@ -650,18 +675,19 @@
             margin-bottom: 0.1rem;
         }
         .mitzvah-name {
-            font-family: 'Cinzel', serif;
-            font-size: 0.72rem;
-            letter-spacing: 0.12em;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--ink-mid);
             margin-bottom: 0.2rem;
         }
         .mitzvah-tagline {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.85rem;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 400;
             color: var(--ink-light);
-            font-style: italic;
         }
 
         .mitzvah-check {
@@ -694,28 +720,25 @@
             padding: 0 1.1rem 1rem;
         }
         .mitzvah-desc {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
             line-height: 1.7;
             color: var(--ink-mid);
             border-top: 1px solid var(--parchment-dark);
             padding-top: 0.75rem;
         }
-        .mitzvah-desc strong {
-            color: var(--burgundy);
-            font-weight: 600;
-        }
+        .mitzvah-desc strong { color: var(--burgundy); font-weight: 700; }
         .mitzvah-desc .mitzvah-tip {
-            display: inline-block;
-            margin-top: 0.5rem;
-            background: rgba(184,136,42,0.1);
+            display: block;
+            margin-top: 0.6rem;
+            background: rgba(196,154,42,0.1);
             border-left: 3px solid var(--gold-bright);
-            padding: 0.4rem 0.65rem;
-            border-radius: 0 4px 4px 0;
-            font-size: 0.85rem;
+            padding: 0.45rem 0.7rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.82rem;
             font-style: normal;
             color: var(--ink);
-            width: 100%;
+            line-height: 1.55;
         }
 
         /* Confetti canvas */
@@ -746,7 +769,7 @@
             margin-bottom: 0.25rem;
         }
         .all-done-sub {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 0.9rem;
             color: rgba(255,255,255,0.6);
             font-style: italic;
@@ -757,18 +780,19 @@
         ════════════════════════════════ */
         header {
             position: sticky; top: 0;
-            background: linear-gradient(180deg, var(--parchment) 0%, rgba(247,242,227,0.97) 100%);
-            backdrop-filter: blur(8px);
+            background: rgba(250,247,240,0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             z-index: 100;
-            border-bottom: 2px solid var(--parchment-dark);
-            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            border-bottom: 1px solid var(--parchment-mid);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
             transition: all 0.3s;
         }
 
         .header-inner {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 0.75rem 1.5rem;
+            padding: 0.65rem 1.25rem;
         }
 
         /* Title block (full) */
@@ -791,23 +815,25 @@
             margin-bottom: 0.1rem;
         }
         .site-subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: clamp(0.7rem, 2vw, 0.9rem);
-            letter-spacing: 0.22em;
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(0.7rem, 2vw, 0.85rem);
+            font-weight: 600;
+            letter-spacing: 0.3em;
             color: var(--gold);
             text-transform: uppercase;
         }
         .site-credit {
-            font-family: 'Cinzel', serif;
+            font-family: 'Inter', sans-serif;
             font-size: 0.6rem;
-            letter-spacing: 0.1em;
+            font-weight: 500;
+            letter-spacing: 0.08em;
             color: var(--ink-light);
             margin-top: 0.4rem;
             text-transform: uppercase;
         }
         .site-dedication {
             font-family: 'Frank Ruhl Libre', serif;
-            font-size: 0.75rem;
+            font-size: 0.78rem;
             color: var(--gold);
             direction: rtl;
             margin-top: 0.15rem;
@@ -823,7 +849,7 @@
         }
         .mini-title-row:hover { opacity: 0.8; }
         .mini-heb { font-family: 'Frank Ruhl Libre', serif; font-size: 1.2rem; font-weight: 700; color: var(--burgundy); }
-        .mini-eng { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.12em; color: var(--gold); margin-left: 0.5rem; text-transform: uppercase; }
+        .mini-eng { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.62rem; letter-spacing: 0.15em; color: var(--gold); margin-left: 0.5rem; text-transform: uppercase; }
 
         header.collapsed .title-block { display: none; }
         header.collapsed .mini-title-row { display: block; }
@@ -839,29 +865,14 @@
             border-top: 1px solid var(--parchment-dark);
         }
 
-        .toggle-group { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: center; }
-
-        .toggle-btn {
-            font-family: 'Cinzel', serif;
-            font-size: 0.68rem;
+        .controls-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.6rem;
             font-weight: 600;
-            letter-spacing: 0.08em;
-            padding: 0.4rem 0.85rem;
-            border: 1.5px solid var(--parchment-dark);
-            background: transparent;
-            color: var(--ink-mid);
-            border-radius: 3px;
-            cursor: pointer;
-            transition: all 0.15s;
-            white-space: nowrap;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-light);
         }
-        .toggle-btn:hover { border-color: var(--gold); color: var(--gold); }
-        .toggle-btn.active { background: var(--ink); border-color: var(--ink); color: var(--cream); }
-
-        .toggle-btn[data-layer="english-translation"].active  { background: var(--eng-color); border-color: var(--eng-color); }
-        .toggle-btn[data-layer="english-translit"].active     { background: var(--translit-color); border-color: var(--translit-color); }
-        .toggle-btn[data-layer="russian-translation"].active  { background: var(--rus-color); border-color: var(--rus-color); }
-        .toggle-btn[data-layer="russian-translit"].active     { background: var(--rus-translit-color); border-color: var(--rus-translit-color); }
 
         .chapter-nav {
             display: flex; gap: 0.3rem;
@@ -870,11 +881,12 @@
             border-left: 1px solid var(--parchment-dark);
         }
         .chapter-link {
-            font-family: 'Cinzel', serif;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
             font-size: 0.7rem;
-            width: 1.6rem; height: 1.6rem;
+            width: 1.7rem; height: 1.7rem;
             display: flex; align-items: center; justify-content: center;
-            border: 1px solid var(--parchment-dark);
+            border: 1.5px solid var(--parchment-dark);
             color: var(--ink-light);
             text-decoration: none;
             border-radius: 50%;
@@ -886,63 +898,70 @@
            MAIN
         ════════════════════════════════ */
         main {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1.5rem 6rem;
+            padding: 1.5rem 1rem 6rem;
             position: relative; z-index: 1;
         }
 
         .chapter {
-            background: rgba(253,250,240,0.7);
-            border-radius: 4px;
-            border: 1px solid var(--parchment-dark);
-            margin-bottom: 2.5rem;
+            background: var(--cream);
+            border-radius: 16px;
+            border: 1px solid var(--parchment-mid);
+            margin-bottom: 1.5rem;
             overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.05);
         }
 
         .chapter-title {
             font-family: 'Frank Ruhl Libre', serif;
-            font-size: 1.2rem;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: var(--cream);
             text-align: center;
-            padding: 0.75rem 1.5rem;
-            background: var(--burgundy);
+            padding: 0.9rem 1.5rem;
+            background: linear-gradient(135deg, var(--burgundy) 0%, #2d0a15 100%);
             display: flex; align-items: center; justify-content: center;
-            gap: 0.75rem;
-            letter-spacing: 0.04em;
+            gap: 1rem;
+            letter-spacing: 0.02em;
         }
-        .chapter-title span { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.18em; opacity: 0.8; }
+        .chapter-title span {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            opacity: 0.6;
+            text-transform: uppercase;
+        }
 
         /* ─── VERSE ─── */
         .verse {
             display: grid;
-            /* verse-num | hebrew | [layers...] */
             grid-template-columns: 2rem 1fr;
             gap: 0;
-            border-bottom: 1px solid rgba(184,136,42,0.12);
-            transition: background 0.15s;
+            border-bottom: 1px solid var(--parchment-mid);
+            transition: background 0.2s;
         }
         .verse:last-of-type { border-bottom: none; }
-        .verse:hover { background: rgba(184,136,42,0.04); }
+        .verse:hover { background: rgba(196,154,42,0.05); }
 
         .verse-num-col {
-            padding: 0.6rem 0.25rem 0.6rem 0.5rem;
-            border-right: 2px solid var(--parchment-dark);
+            padding: 0.7rem 0.2rem 0.7rem 0.5rem;
+            border-right: 2px solid var(--parchment-mid);
             display: flex;
             align-items: flex-start;
             justify-content: center;
-            padding-top: 0.75rem;
+            padding-top: 0.85rem;
         }
         .verse-num {
-            font-family: 'Cinzel', serif;
-            font-size: 0.55rem;
-            font-weight: 600;
-            color: var(--ink-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.48rem;
+            font-weight: 800;
+            color: var(--gold);
             writing-mode: vertical-rl;
             text-orientation: mixed;
             transform: rotate(180deg);
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
 
         /* The content area holds hebrew + any visible layers side by side */
@@ -953,17 +972,18 @@
         }
 
         .col-hebrew {
-            flex: 0 0 auto; /* will be sized by JS or CSS */
+            flex: 0 0 auto;
             min-width: 0;
-            padding: 0.65rem 0.75rem;
+            padding: 0.8rem 1rem;
             direction: rtl;
             text-align: right;
-            border-right: 1px solid var(--parchment-dark);
+            border-right: 1px solid var(--parchment-mid);
+            background: rgba(196,154,42,0.025);
         }
         .col-hebrew p {
             font-family: 'Frank Ruhl Libre', serif;
-            font-size: 1.1rem;
-            line-height: 1.85;
+            font-size: 1.15rem;
+            line-height: 1.9;
             color: var(--ink);
         }
 
@@ -971,67 +991,128 @@
             display: none;
             flex: 1;
             min-width: 0;
-            padding: 0.65rem 0.75rem;
-            border-right: 1px solid var(--parchment-dark);
+            padding: 0.8rem 0.85rem;
+            border-right: 1px solid var(--parchment-mid);
         }
         .layer:last-child { border-right: none; }
         .layer.visible { display: block; }
-        .layer p { font-size: 0.88rem; line-height: 1.65; margin: 0; }
+        .layer p { font-size: 0.85rem; line-height: 1.7; margin: 0; }
 
         /* Column widths when layers are shown */
-        /* Default: hebrew takes 40%, each layer splits the rest */
-        .verse-content.has-1 .col-hebrew { width: 45%; }
-        .verse-content.has-2 .col-hebrew { width: 35%; }
+        .verse-content.has-0 .col-hebrew { width: 100%; border-right: none; background: none; }
+        .verse-content.has-1 .col-hebrew { width: 48%; }
+        .verse-content.has-2 .col-hebrew { width: 38%; }
         .verse-content.has-3 .col-hebrew { width: 30%; }
         .verse-content.has-4 .col-hebrew { width: 25%; }
-        .verse-content.has-0 .col-hebrew { width: 100%; border-right: none; }
 
-        /* Layer accent strips */
-        .english-translation  { border-top: 2px solid var(--eng-color) !important; background: rgba(46,94,62,0.03); }
-        .english-translation p { font-family: 'Cormorant Garamond', serif; color: var(--ink); }
+        /* Layer color coding — left stripe instead of top border */
+        .english-translation  { border-left: 3px solid var(--eng-color); background: rgba(26,102,68,0.03); }
+        .english-translation p { font-family: 'Inter', sans-serif; font-size: 0.84rem; color: var(--ink); line-height: 1.7; }
 
-        .english-translit     { border-top: 2px solid var(--translit-color) !important; background: rgba(94,46,80,0.03); }
-        .english-translit p   { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--ink-mid); }
+        .english-translit     { border-left: 3px solid var(--translit-color); background: rgba(107,32,128,0.03); }
+        .english-translit p   { font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
 
-        .russian-translation  { border-top: 2px solid var(--rus-color) !important; background: rgba(30,58,94,0.03); }
-        .russian-translation p { font-family: 'Cormorant Garamond', serif; color: var(--ink); }
+        .russian-translation  { border-left: 3px solid var(--rus-color); background: rgba(16,64,160,0.03); }
+        .russian-translation p { font-family: 'Inter', sans-serif; font-size: 0.84rem; color: var(--ink); line-height: 1.7; }
 
-        .russian-translit     { border-top: 2px solid var(--rus-translit-color) !important; background: rgba(94,74,30,0.03); }
-        .russian-translit p   { font-family: 'Cormorant Garamond', serif; font-style: italic; color: var(--ink-mid); }
+        .russian-translit     { border-left: 3px solid var(--rus-translit-color); background: rgba(122,74,16,0.03); }
+        .russian-translit p   { font-family: 'Outfit', sans-serif; font-size: 0.82rem; font-style: italic; color: var(--ink-mid); line-height: 1.7; }
 
-        /* ─── GRAGGER ─── */
+        /* ─── GRAGGER BUTTON ─── */
         .gragger-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.3rem;
-            background: var(--burgundy);
+            gap: 0.4rem;
+            background: linear-gradient(135deg, var(--burgundy), #3d0f1e);
             color: var(--cream);
             border: none;
-            border-radius: 20px;
-            padding: 0.2rem 0.55rem 0.2rem 0.35rem;
-            font-family: 'Cinzel', serif;
-            font-size: 0.6rem;
-            letter-spacing: 0.08em;
+            border-radius: 50px;
+            padding: 0.35rem 0.9rem 0.35rem 0.55rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
             cursor: pointer;
             vertical-align: middle;
-            margin: 0 0.15rem;
-            transition: all 0.15s;
+            margin: 0.1rem 0.2rem;
+            transition: all 0.2s;
             white-space: nowrap;
+            box-shadow: 0 2px 10px rgba(122,31,56,0.35);
+            position: relative;
+            overflow: hidden;
         }
-        .gragger-btn:hover { background: var(--burgundy-light); transform: scale(1.05); }
-        .gragger-btn .rattle-icon { font-size: 0.9rem; transition: transform 0.15s; }
+        .gragger-btn::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+            pointer-events: none;
+        }
+        .gragger-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 4px 16px rgba(122,31,56,0.5);
+        }
+        .gragger-btn:active { transform: scale(0.97); }
+
+        .gragger-btn .rattle-icon {
+            font-size: 1.1rem;
+            line-height: 1;
+            display: inline-block;
+        }
         .gragger-btn.rattling .rattle-icon { animation: rattle 0.7s ease-in-out; }
+
+        /* SHAKE MODE — user has armed it for motion detection */
+        .gragger-btn.shake-mode {
+            background: linear-gradient(135deg, #1a6644, #0d3a25);
+            box-shadow: 0 2px 10px rgba(26,102,68,0.4), 0 0 0 3px rgba(26,102,68,0.25);
+            animation: shakeModePulse 1.5s ease-in-out infinite;
+        }
+        @keyframes shakeModePulse {
+            0%,100% { box-shadow: 0 2px 10px rgba(26,102,68,0.4), 0 0 0 3px rgba(26,102,68,0.2); }
+            50%     { box-shadow: 0 2px 10px rgba(26,102,68,0.6), 0 0 0 6px rgba(26,102,68,0.1); }
+        }
+        .gragger-btn.shake-mode .rattle-icon { animation: gentleWiggle 0.8s ease-in-out infinite; }
+        @keyframes gentleWiggle {
+            0%,100% { transform: rotate(-5deg); }
+            50%     { transform: rotate(5deg); }
+        }
+
+        /* Rattle animation — plays when sound fires */
         @keyframes rattle {
             0%   { transform: rotate(0deg)   scale(1); }
-            10%  { transform: rotate(-22deg) scale(1.15); }
-            22%  { transform: rotate(22deg)  scale(1.18); }
-            34%  { transform: rotate(-20deg) scale(1.16); }
-            46%  { transform: rotate(20deg)  scale(1.16); }
-            58%  { transform: rotate(-16deg) scale(1.12); }
-            70%  { transform: rotate(16deg)  scale(1.1); }
-            82%  { transform: rotate(-8deg)  scale(1.05); }
-            91%  { transform: rotate(6deg)   scale(1.02); }
+            10%  { transform: rotate(-24deg) scale(1.2); }
+            22%  { transform: rotate(24deg)  scale(1.22); }
+            34%  { transform: rotate(-22deg) scale(1.18); }
+            46%  { transform: rotate(22deg)  scale(1.18); }
+            58%  { transform: rotate(-18deg) scale(1.14); }
+            70%  { transform: rotate(18deg)  scale(1.12); }
+            82%  { transform: rotate(-10deg) scale(1.06); }
+            91%  { transform: rotate(7deg)   scale(1.03); }
             100% { transform: rotate(0deg)   scale(1); }
+        }
+
+        /* Shake mode tooltip */
+        .shake-toast {
+            position: fixed;
+            bottom: 5rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(12px);
+            background: rgba(26,102,68,0.95);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 0.6rem 1.1rem;
+            border-radius: 30px;
+            white-space: nowrap;
+            z-index: 400;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .shake-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         /* ─── MOBILE portrait: true side-by-side, smaller fonts ─── */
@@ -1124,7 +1205,7 @@
 
         /* ─── Controls label ─── */
         .controls-label {
-            font-family: 'Cinzel', serif;
+            font-family: 'Outfit', sans-serif;
             font-size: 0.6rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -1325,12 +1406,12 @@
                     <!-- 
                         HOW TO ADD THE GRAGGER BUTTON:
                         Paste this anywhere in any <p> tag where you want the noise button to appear:
-                        <button class="gragger-btn" aria-label="Make noise!"><span class="rattle-icon">🪇</span> Boo!</button>
+                        <button class="gragger-btn" aria-label="Make noise!"><span class="rattle-icon">🪇</span><span class="gragger-label">BOO!</span></button>
                         
                         In later chapters, add it every time the name "Haman" (הָמָן) appears.
                         For now here's a demo in verse 1:1:
                     -->
-                    <p>It came to pass in the days of Achashverosh <button class="gragger-btn" aria-label="Make noise!"><span class="rattle-icon">🪇</span> Boo!</button> — that same Achashverosh who reigned from Hodu to Kush, over one hundred and twenty-seven provinces.</p>
+                    <p>It came to pass in the days of Achashverosh <button class="gragger-btn" aria-label="Make noise!"><span class="rattle-icon">🪇</span><span class="gragger-label">BOO!</span></button> — that same Achashverosh who reigned from Hodu to Kush, over one hundred and twenty-seven provinces.</p>
                 </div>
                 <div class="layer english-translit">
                     <p>(1:1) Vay'hi bi-m'ei Achashverosh, hu Achashverosh ha-molech me-Hodu ve-ad Kush, sheva ve-esrim u-me'ah medinah.</p>
@@ -1938,6 +2019,9 @@
 <!-- Confetti canvas -->
 <canvas id="confettiCanvas"></canvas>
 
+<!-- Shake mode toast -->
+<div class="shake-toast" id="shakeToast">📳 Now shake your phone!</div>
+
 <script>
 // ═══════════════════════════════════════
 //  PARTICLES (welcome screen only)
@@ -1997,120 +2081,190 @@ function ensureAudio() {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     if (audioCtx.state === 'suspended') audioCtx.resume();
 }
-function playRattle() {
-    ensureAudio();
+
+// ── Single rattle "shake" — one back-and-forth motion ──
+function playOneShake(intensity = 1.0) {
     const ctx = audioCtx;
     const now = ctx.currentTime;
+    const vol = Math.min(1, 0.3 + intensity * 0.5);
 
-    // ── Helper: create a buffer of filtered noise ──
-    function makeNoiseBurst(startTime, duration, freq, q, gainVal, fadeIn=0.005, fadeOut=0.04) {
+    function makeNoiseBurst(t, dur, freq, q, gainVal) {
         const sr = ctx.sampleRate;
-        const buf = ctx.createBuffer(1, Math.ceil(sr * duration), sr);
+        const buf = ctx.createBuffer(1, Math.ceil(sr * dur), sr);
         const data = buf.getChannelData(0);
         for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-
         const src = ctx.createBufferSource();
         src.buffer = buf;
-
         const filt = ctx.createBiquadFilter();
-        filt.type = 'bandpass';
-        filt.frequency.value = freq;
-        filt.Q.value = q;
-
+        filt.type = 'bandpass'; filt.frequency.value = freq; filt.Q.value = q;
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(0, startTime);
-        gain.gain.linearRampToValueAtTime(gainVal, startTime + fadeIn);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration - fadeOut);
-
-        src.connect(filt);
-        filt.connect(gain);
-        gain.connect(ctx.destination);
-        src.start(startTime);
-        src.stop(startTime + duration);
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(gainVal, t + 0.004);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + dur - 0.01);
+        src.connect(filt); filt.connect(gain); gain.connect(ctx.destination);
+        src.start(t); src.stop(t + dur);
     }
 
-    // ── Helper: wooden click (short pitched thump) ──
-    function makeClick(startTime, freq, gainVal, dur=0.035) {
+    function makeClick(t, freq, gainVal) {
         const osc = ctx.createOscillator();
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq * 2.2, startTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, startTime + dur);
-
+        osc.frequency.setValueAtTime(freq * 2.2, t);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, t + 0.03);
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(gainVal, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(startTime);
-        osc.stop(startTime + dur);
+        gain.gain.setValueAtTime(gainVal, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.04);
     }
 
-    // ── Helper: body resonance (low wooden thud) ──
-    function makeThud(startTime, gainVal) {
-        const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.12), ctx.sampleRate);
+    function makeThud(t, gainVal) {
+        const buf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.08), ctx.sampleRate);
         const data = buf.getChannelData(0);
         for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-
-        const src = ctx.createBufferSource();
-        src.buffer = buf;
-
-        const lp = ctx.createBiquadFilter();
-        lp.type = 'lowpass';
-        lp.frequency.value = 280;
-
+        const src = ctx.createBufferSource(); src.buffer = buf;
+        const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260;
         const gain = ctx.createGain();
-        gain.gain.setValueAtTime(gainVal, startTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
-
-        src.connect(lp);
-        lp.connect(gain);
-        gain.connect(ctx.destination);
-        src.start(startTime);
+        gain.gain.setValueAtTime(gainVal, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+        src.connect(lp); lp.connect(gain); gain.connect(ctx.destination); src.start(t);
     }
 
-    // ══════════════════════════════════════
-    // THE RATTLE: ~0.7s of 5 back-and-forth shakes
-    // Each "shake" = click + seed noise burst + body thud
-    // ══════════════════════════════════════
-    const shakeCount = 5;
-    const shakeDur   = 0.13; // seconds between shakes
+    // click + seeds + body
+    makeClick(now, 370, vol * 0.75);
+    makeNoiseBurst(now + 0.004, 0.065, 2900 + Math.random() * 500, 2.5, vol * 0.65);
+    makeNoiseBurst(now + 0.004, 0.065, 1650 + Math.random() * 350, 1.8, vol * 0.45);
+    makeThud(now, vol * 0.55);
+}
 
+// ── Full rattle sequence (tap mode) — 5 shakes over 0.7s ──
+function playFullRattle() {
+    ensureAudio();
+    const shakeCount = 5, shakeDur = 0.13;
     for (let i = 0; i < shakeCount; i++) {
-        const t = now + i * shakeDur;
-
-        // Alternate pitch slightly for back-and-forth feel
-        const pitchMod = i % 2 === 0 ? 1.0 : 0.88;
-        // Louder in the middle, softer at start/end
+        const t = i * shakeDur * 1000;
         const env = Math.sin((i / (shakeCount - 1)) * Math.PI);
-        const vol = 0.35 + env * 0.35;
-
-        // Wooden click at the turn
-        makeClick(t, 380 * pitchMod, vol * 0.7);
-
-        // Seed rattle — high freq noise (the beads/seeds inside)
-        makeNoiseBurst(t + 0.005, 0.07, 2800 + Math.random()*600, 2.5, vol * 0.6, 0.003, 0.025);
-        makeNoiseBurst(t + 0.005, 0.07, 1600 + Math.random()*400, 1.8, vol * 0.4, 0.003, 0.025);
-
-        // Body resonance on every other shake
-        if (i % 2 === 0) makeThud(t, vol * 0.5);
+        setTimeout(() => playOneShake(0.6 + env * 0.4), t);
     }
+    if (navigator.vibrate) navigator.vibrate([30,55,30,55,35,55,35,55,30]);
+}
 
-    // Vibration pattern that matches the shakes
-    if (navigator.vibrate) {
-        navigator.vibrate([30, 60, 30, 60, 40, 60, 40, 60, 30]);
+// ═══════════════════════════════════════
+//  SHAKE MODE — continuous motion detection
+// ═══════════════════════════════════════
+let shakeMode = false;           // is a gragger in shake mode?
+let activeGraggerBtn = null;     // which button is armed
+let shakePermissionGranted = false;
+let lastShakeTime = 0;
+let lastX = null, lastY = null, lastZ = null;
+const SHAKE_THRESHOLD = 12;
+const SHAKE_COOLDOWN  = 110;      // ms minimum between shake sounds
+const shakeToast = document.getElementById('shakeToast');
+
+function setShakeMode(btn, on) {
+    shakeMode = on;
+    activeGraggerBtn = on ? btn : null;
+
+    // Update all gragger buttons
+    document.querySelectorAll('.gragger-btn').forEach(b => {
+        b.classList.remove('shake-mode');
+        b.querySelector('.gragger-label').textContent = 'BOO!';
+    });
+
+    if (on) {
+        btn.classList.add('shake-mode');
+        btn.querySelector('.gragger-label').textContent = 'SHAKING…';
+        shakeToast.classList.add('show');
+        setTimeout(() => shakeToast.classList.remove('show'), 3000);
     }
 }
 
+function handleMotion(e) {
+    if (!shakeMode) return;
+    const acc = e.accelerationIncludingGravity || e.acceleration;
+    if (!acc) return;
+    const x = acc.x || 0, y = acc.y || 0, z = acc.z || 0;
+
+    if (lastX !== null) {
+        const delta = Math.abs(x - lastX) + Math.abs(y - lastY) + Math.abs(z - lastZ);
+        const now = Date.now();
+        if (delta > SHAKE_THRESHOLD && now - lastShakeTime > SHAKE_COOLDOWN) {
+            lastShakeTime = now;
+            // Fire a single shake sound scaled by intensity
+            const intensity = Math.min(delta / 40, 1);
+            playOneShake(intensity);
+
+            // Animate the button icon
+            if (activeGraggerBtn) {
+                const icon = activeGraggerBtn.querySelector('.rattle-icon');
+                icon.style.animation = 'none';
+                icon.offsetHeight; // reflow
+                icon.style.animation = '';
+                activeGraggerBtn.classList.add('rattling');
+                setTimeout(() => activeGraggerBtn.classList.remove('rattling'), 150);
+            }
+            // Short vibration pulse
+            if (navigator.vibrate) navigator.vibrate(18);
+        }
+    }
+    lastX = x; lastY = y; lastZ = z;
+}
+
+async function enableShakeMode(btn) {
+    if (shakeMode && activeGraggerBtn === btn) {
+        // Tap again to disarm
+        setShakeMode(btn, false);
+        window.removeEventListener('devicemotion', handleMotion, true);
+        return;
+    }
+
+    // Request iOS permission if needed
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function' &&
+        !shakePermissionGranted) {
+        try {
+            const result = await DeviceMotionEvent.requestPermission();
+            if (result !== 'granted') {
+                // No permission — just play the rattle normally
+                playFullRattle();
+                return;
+            }
+            shakePermissionGranted = true;
+        } catch (err) {
+            playFullRattle();
+            return;
+        }
+    }
+
+    window.removeEventListener('devicemotion', handleMotion, true);
+    window.addEventListener('devicemotion', handleMotion, true);
+    setShakeMode(btn, true);
+}
+
+// ── Click handler: on mobile arm shake mode, on desktop just play ──
 document.addEventListener('click', e => {
     const btn = e.target.closest('.gragger-btn');
     if (!btn) return;
     ensureAudio();
-    playRattle();
-    // Animate for the full duration of the sound (~0.7s)
-    btn.classList.add('rattling');
-    setTimeout(() => btn.classList.remove('rattling'), 700);
+
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+
+    if (isMobile) {
+        enableShakeMode(btn);
+    } else {
+        // Desktop: just play full rattle on click
+        playFullRattle();
+        btn.classList.add('rattling');
+        setTimeout(() => btn.classList.remove('rattling'), 700);
+    }
 });
+
+// Tap anywhere else on mobile to disarm shake mode
+document.addEventListener('touchstart', e => {
+    if (!shakeMode) return;
+    if (!e.target.closest('.gragger-btn')) {
+        setShakeMode(activeGraggerBtn, false);
+    }
+}, { passive: true });
 
 // ═══════════════════════════════════════
 //  WELCOME SCREEN
