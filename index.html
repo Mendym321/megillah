@@ -973,6 +973,29 @@
             border-color: #2e7a44;
             transform: translateX(3px);
         }
+        /* WhatsApp variant */
+        .charity-org-whatsapp {
+            background: rgba(37,211,102,0.07);
+            border-color: rgba(37,211,102,0.4);
+        }
+        .charity-org-whatsapp:hover {
+            background: rgba(37,211,102,0.14);
+            border-color: #25d366;
+            transform: translateX(3px);
+        }
+        .charity-whatsapp-badge {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: #25d366;
+            background: rgba(37,211,102,0.12);
+            border: 1px solid rgba(37,211,102,0.3);
+            border-radius: 6px;
+            padding: 0.2rem 0.45rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
         .charity-org-icon { font-size: 1.3rem; flex-shrink: 0; }
         .charity-org-info {
             flex: 1;
@@ -2625,37 +2648,21 @@
             <div class="charity-panel">
                 <p class="charity-intro">The Rambam says this mitzvah is <strong>greater than all other Purim spending</strong>. Give money to at least 2 poor people.</p>
 
-                <p class="charity-orgs-label">🔗 Give now — trusted organizations</p>
+                <p class="charity-orgs-label">🔗 Give now</p>
                 <div class="charity-orgs">
-                    <a class="charity-org-btn" href="https://www.chabadcentralqueens.com/donate" target="_blank" rel="noopener">
-                        <span class="charity-org-icon">🕍</span>
+                    <a class="charity-org-btn charity-org-whatsapp" href="https://wa.me/17185551234?text=Hi%20Rabbi!%20I%20would%20like%20to%20give%20Matanot%20La%E2%80%99evyonim%20for%20Purim.%20Please%20let%20me%20know%20how%20to%20send%20a%20donation.%20Chag%20Sameach!%20%F0%9F%8E%89" target="_blank" rel="noopener">
+                        <span class="charity-org-icon">💬</span>
                         <span class="charity-org-info">
-                            <strong>Chabad of Eastern Queens</strong>
-                            <small>Local — fulfills mitzvah in your community</small>
+                            <strong>Message the Rabbi — Chabad of Eastern Queens</strong>
+                            <small>Opens WhatsApp with a pre-filled message · local &amp; personal</small>
                         </span>
-                        <span class="charity-org-arrow">↗</span>
-                    </a>
-                    <a class="charity-org-btn" href="https://masbia.org/donate" target="_blank" rel="noopener">
-                        <span class="charity-org-icon">🍞</span>
-                        <span class="charity-org-info">
-                            <strong>Masbia Soup Kitchen</strong>
-                            <small>NYC — feeds the hungry on Purim day</small>
-                        </span>
-                        <span class="charity-org-arrow">↗</span>
+                        <span class="charity-whatsapp-badge">WhatsApp ↗</span>
                     </a>
                     <a class="charity-org-btn" href="https://colelchabad.org/donate" target="_blank" rel="noopener">
                         <span class="charity-org-icon">🌿</span>
                         <span class="charity-org-info">
                             <strong>Colel Chabad</strong>
-                            <small>Israel — distributes on Purim to thousands</small>
-                        </span>
-                        <span class="charity-org-arrow">↗</span>
-                    </a>
-                    <a class="charity-org-btn" href="https://charidy.com" target="_blank" rel="noopener">
-                        <span class="charity-org-icon">💛</span>
-                        <span class="charity-org-info">
-                            <strong>Charidy.com</strong>
-                            <small>Browse verified Jewish charities — give to any two</small>
+                            <small>Israel — distributes on Purim to thousands of families</small>
                         </span>
                         <span class="charity-org-arrow">↗</span>
                     </a>
@@ -2732,7 +2739,7 @@
             <div class="gragger-overlay-icon">🪇</div>
         </div>
         <p class="gragger-overlay-title">Shake to make noise!</p>
-        <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">20</span>s</p>
+        <p class="gragger-overlay-sub">Shaking <span id="graggerCountdown">10</span>s</p>
         <button class="gragger-overlay-stop" id="graggerOverlayStop">Stop</button>
     </div>
 </div>
@@ -2876,12 +2883,12 @@ let lastShakeTime = 0;
 let lastX = null, lastY = null, lastZ = null;
 const SHAKE_THRESHOLD = 12;
 const SHAKE_COOLDOWN  = 110;
-const SHAKE_TIMEOUT_MS = 20000; // 20 seconds auto-off
+const SHAKE_TIMEOUT_MS = 10000; // 10 seconds auto-off
 const RING_CIRCUMFERENCE = 276.46; // 2π × 44
 
 let shakeCountdownInterval = null;
 let shakeTimeoutHandle = null;
-let shakeSecondsLeft = 20;
+let shakeSecondsLeft = 10;
 
 const graggerOverlay  = document.getElementById('graggerOverlay');
 const graggerRingFill = document.getElementById('graggerRingFill');
@@ -2889,7 +2896,7 @@ const graggerCountdown = document.getElementById('graggerCountdown');
 const graggerOverlayStop = document.getElementById('graggerOverlayStop');
 
 function updateRing(secondsLeft) {
-    const fraction = secondsLeft / 20;
+    const fraction = secondsLeft / 10;
     const offset = RING_CIRCUMFERENCE * (1 - fraction);
     graggerRingFill.style.strokeDashoffset = offset;
     graggerRingFill.classList.toggle('urgent', secondsLeft <= 5);
@@ -2897,7 +2904,7 @@ function updateRing(secondsLeft) {
 }
 
 function openGraggerOverlay() {
-    shakeSecondsLeft = 20;
+    shakeSecondsLeft = 10;
     updateRing(20);
     graggerOverlay.classList.add('active');
 
