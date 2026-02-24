@@ -6,6 +6,14 @@
     <title>מגילת אסתר | Megillat Esther</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="shortcut icon" href="favicon.ico">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7P68FYQDDZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-7P68FYQDDZ');
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Frank+Ruhl+Libre:wght@300;400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -6506,9 +6514,81 @@ counterMinus.addEventListener('click', () => updateCharityCounter(-1));
         });
         requestAnimationFrame(loop);
     }
-    loop();
+loop();
 })();
-
 </script>
+
+<!-- ANALYTICS TRACKING -->
+<script>
+// 1. Track language selected on welcome screen
+document.querySelectorAll('.welcome-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        gtag('event', 'language_selected', { language: opt.dataset.layer });
+    }, { capture: true });
+});
+
+// 2. Track site entry
+const startBtn = document.getElementById('startReading');
+if (startBtn) {
+    startBtn.addEventListener('click', () => {
+        const activeLang = document.querySelector('.welcome-option.selected');
+        gtag('event', 'site_entered', { language: activeLang ? activeLang.dataset.layer : 'unknown' });
+    }, { capture: true });
+}
+
+// 3. Track language changes from Languages panel
+document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+        gtag('event', 'language_changed', { language: opt.dataset.layer });
+    }, { capture: true });
+});
+
+// 4. Track chapter navigation
+document.querySelectorAll('.chapter-link').forEach(link => {
+    link.addEventListener('click', () => {
+        gtag('event', 'chapter_visited', { chapter: link.textContent.trim() });
+    }, { capture: true });
+});
+
+// 5. Track gragger shakes
+const gragBtn = document.getElementById('shakeBtn');
+if (gragBtn) {
+    gragBtn.addEventListener('click', () => {
+        gtag('event', 'gragger_shaken');
+    }, { capture: true });
+}
+
+// 6. Track mitzvot checked
+document.querySelectorAll('.mitzvah-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const name = card.querySelector('h3')?.textContent?.trim() || 'unknown';
+        gtag('event', 'mitzvah_checked', { mitzvah: name });
+    }, { capture: true });
+});
+
+// 7. Track tab switches
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        if (btn.dataset.tab !== 'languages') {
+            gtag('event', 'tab_switched', { tab: btn.dataset.tab });
+        }
+    }, { capture: true });
+});
+
+// 8. Track scroll depth
+(function() {
+    const milestones = { 25: false, 50: false, 75: false, 100: false };
+    window.addEventListener('scroll', () => {
+        const pct = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+        [25, 50, 75, 100].forEach(m => {
+            if (!milestones[m] && pct >= m) {
+                milestones[m] = true;
+                gtag('event', 'scroll_depth', { depth: m + '%' });
+            }
+        });
+    }, { passive: true });
+})();
+</script>
+
 </body>
 </html>
