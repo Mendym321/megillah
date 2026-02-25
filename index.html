@@ -6520,75 +6520,162 @@ loop();
 
 <!-- ANALYTICS TRACKING -->
 <script>
-// 1. Track language selected on welcome screen
+// ─── MEGILLAH ANALYTICS TRACKING ─────────────────────────────────
+
+// Safely fire gtag (won't crash if GA hasn't loaded yet)
+function track(event, params) {
+    if (typeof gtag === 'function') gtag('event', event, params || {});
+}
+
+// 1. Language selected on welcome screen
 document.querySelectorAll('.welcome-option').forEach(opt => {
     opt.addEventListener('click', () => {
-        gtag('event', 'language_selected', { language: opt.dataset.layer });
+        const cb = opt.querySelector('input[type="checkbox"]');
+        if (cb) track('language_selected', { language: opt.dataset.layer });
     }, { capture: true });
 });
 
-// 2. Track site entry
+// 2. Site entered (ENTER button)
 const startBtn = document.getElementById('startReading');
 if (startBtn) {
     startBtn.addEventListener('click', () => {
-        const activeLang = document.querySelector('.welcome-option.selected');
-        gtag('event', 'site_entered', { language: activeLang ? activeLang.dataset.layer : 'unknown' });
+        const active = document.querySelector('.welcome-option.selected');
+        track('site_entered', { language: active ? active.dataset.layer : 'unknown' });
     }, { capture: true });
 }
 
-// 3. Track language changes from Languages panel
+// 3. Language changed from Languages panel
 document.querySelectorAll('.lang-option').forEach(opt => {
     opt.addEventListener('click', () => {
-        gtag('event', 'language_changed', { language: opt.dataset.layer });
+        track('language_changed', { language: opt.dataset.layer });
     }, { capture: true });
 });
 
-// 4. Track chapter navigation
+// 4. Chapter navigation clicked
 document.querySelectorAll('.chapter-link').forEach(link => {
     link.addEventListener('click', () => {
-        gtag('event', 'chapter_visited', { chapter: link.textContent.trim() });
+        track('chapter_visited', { chapter: 'Chapter ' + link.textContent.trim() });
     }, { capture: true });
 });
 
-// 5. Track gragger shakes
-const gragBtn = document.getElementById('shakeBtn');
-if (gragBtn) {
-    gragBtn.addEventListener('click', () => {
-        gtag('event', 'gragger_shaken');
-    }, { capture: true });
-}
-
-// 6. Track mitzvot checked
-document.querySelectorAll('.mitzvah-card').forEach(card => {
-    card.addEventListener('click', () => {
-        const name = card.querySelector('h3')?.textContent?.trim() || 'unknown';
-        gtag('event', 'mitzvah_checked', { mitzvah: name });
-    }, { capture: true });
-});
-
-// 7. Track tab switches
+// 5. Tab switched (Megillah / Purim Guide)
 document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         if (btn.dataset.tab !== 'languages') {
-            gtag('event', 'tab_switched', { tab: btn.dataset.tab });
+            track('tab_switched', { tab: btn.dataset.tab });
         }
     }, { capture: true });
 });
 
-// 8. Track scroll depth
+// 6. Gragger overlay opened
+const shakeBtn = document.getElementById('shakeBtn');
+if (shakeBtn) {
+    shakeBtn.addEventListener('click', () => {
+        track('gragger_opened');
+    }, { capture: true });
+}
+
+// 7. Gragger stopped
+const stopBtn = document.getElementById('graggerOverlayStop');
+if (stopBtn) {
+    stopBtn.addEventListener('click', () => {
+        track('gragger_stopped');
+    }, { capture: true });
+}
+
+// 8. Megillah reading counter
+const megillahPlus  = document.getElementById('megillahPlus');
+const megillahMinus = document.getElementById('megillahMinus');
+if (megillahPlus) {
+    megillahPlus.addEventListener('click', () => {
+        const count = parseInt(document.getElementById('megillahCount').textContent) || 0;
+        track('megillah_reading_marked', { reading_number: count + 1 });
+        if (count + 1 >= 2) track('mitzvah_completed', { mitzvah: 'megillah' });
+    }, { capture: true });
+}
+
+// 9. Charity (Matanot L'evyonim) counter
+const charityPlus = document.getElementById('counterPlus');
+if (charityPlus) {
+    charityPlus.addEventListener('click', () => {
+        const count = parseInt(document.getElementById('charityCount').textContent) || 0;
+        track('charity_given', { people_count: count + 1 });
+        if (count + 1 >= 2) track('mitzvah_completed', { mitzvah: 'matanot_levyonim' });
+    }, { capture: true });
+}
+
+// 10. Mishloach Manot + Seudah checked
+document.querySelectorAll('.mitzvah-check-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const id = btn.dataset.check;
+        if (id === 'megillah' || id === 'matanot') return; // handled by counters
+        const card = document.querySelector('.mitzvah-card[data-id="' + id + '"]');
+        const willBeChecked = !card.classList.contains('done');
+        if (willBeChecked) track('mitzvah_completed', { mitzvah: id });
+        else track('mitzvah_unchecked', { mitzvah: id });
+    }, { capture: true });
+});
+
+// 11. Mitzvah card expanded (Learn more)
+document.querySelectorAll('.mitzvah-expand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const id = btn.dataset.expand;
+        const card = document.querySelector('.mitzvah-card[data-id="' + id + '"]');
+        if (!card.classList.contains('expanded')) {
+            track('mitzvah_expanded', { mitzvah: id });
+        }
+    }, { capture: true });
+});
+
+// 12. All 4 mitzvot completed 🎉
+const observer = new MutationObserver(() => {
+    const allDone = document.getElementById('allDoneMsg');
+    if (allDone && allDone.classList.contains('show')) {
+        track('all_mitzvot_completed');
+    }
+});
+const allDoneMsg = document.getElementById('allDoneMsg');
+if (allDoneMsg) observer.observe(allDoneMsg, { attributes: true, attributeFilter: ['class'] });
+
+// 13. Share button clicked
+const shareBtn = document.getElementById('shareBtn');
+if (shareBtn) {
+    shareBtn.addEventListener('click', () => {
+        track('share_clicked');
+    }, { capture: true });
+}
+
+// 14. Charity org link clicked (Chabad EQ donation link)
+document.querySelectorAll('.charity-org-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        track('donation_link_clicked', { org: btn.querySelector('strong')?.textContent?.trim() });
+    }, { capture: true });
+});
+
+// 15. Scroll depth through Megillah
 (function() {
     const milestones = { 25: false, 50: false, 75: false, 100: false };
     window.addEventListener('scroll', () => {
-        const pct = Math.round((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
+        const pct = Math.round(
+            (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+        );
         [25, 50, 75, 100].forEach(m => {
             if (!milestones[m] && pct >= m) {
                 milestones[m] = true;
-                gtag('event', 'scroll_depth', { depth: m + '%' });
+                track('scroll_depth', { depth: m + '%' });
             }
         });
     }, { passive: true });
 })();
-</script>
 
+// 16. Time spent — fire at 1min, 3min, 5min, 10min
+(function() {
+    const checkpoints = [60, 180, 300, 600];
+    checkpoints.forEach(secs => {
+        setTimeout(() => track('time_on_site', { seconds: secs }), secs * 1000);
+    });
+})();
+
+</script>
 </body>
 </html>
