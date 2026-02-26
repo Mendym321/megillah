@@ -125,15 +125,17 @@
             opacity: 0;
             animation: fadeSlideUp 0.65s ease forwards;
         }
-        .welcome-content > *:nth-child(1) { animation-delay: 0.05s; }
-        .welcome-content > *:nth-child(2) { animation-delay: 0.2s;  }
-        .welcome-content > *:nth-child(3) { animation-delay: 0.35s; }
-        .welcome-content > *:nth-child(4) { animation-delay: 0.47s; }
-        .welcome-content > *:nth-child(5) { animation-delay: 0.57s; }
-        .welcome-content > *:nth-child(6) { animation-delay: 0.66s; }
-        .welcome-content > *:nth-child(7) { animation-delay: 0.74s; }
-        .welcome-content > *:nth-child(8) { animation-delay: 0.81s; }
-        .welcome-content > *:nth-child(9) { animation-delay: 0.88s; }
+        .welcome-content > *:nth-child(1)  { animation-delay: 0.05s; }
+        .welcome-content > *:nth-child(2)  { animation-delay: 0.2s;  }
+        .welcome-content > *:nth-child(3)  { animation-delay: 0.35s; }
+        .welcome-content > *:nth-child(4)  { animation-delay: 0.47s; }
+        .welcome-content > *:nth-child(5)  { animation-delay: 0.57s; }
+        .welcome-content > *:nth-child(6)  { animation-delay: 0.66s; }
+        .welcome-content > *:nth-child(7)  { animation-delay: 0.74s; }
+        .welcome-content > *:nth-child(8)  { animation-delay: 0.81s; }
+        .welcome-content > *:nth-child(9)  { animation-delay: 0.88s; }
+        .welcome-content > *:nth-child(10) { animation-delay: 0.94s; }
+        .welcome-content > *:nth-child(11) { animation-delay: 1.0s;  }
         @keyframes fadeSlideUp {
             from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
@@ -161,6 +163,8 @@
             text-transform: uppercase;
             color: var(--gold);
             margin-bottom: 0.55rem;
+            opacity: 0;
+            animation: fadeSlideUp 0.65s ease 0.2s forwards;
         }
 
         /* Shimmering title */
@@ -231,18 +235,15 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.3rem;
-            padding: 0.7rem 0.4rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(196,154,42,0.25);
-            border-radius: 12px;
+            gap: 0.35rem;
             font-family: 'Inter', sans-serif;
-            font-size: 0.62rem;
-            font-weight: 600;
-            color: rgba(255,255,255,0.55);
-            letter-spacing: 0.04em;
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
         }
-        .welcome-feature span:first-child { font-size: 1.4rem; }
+        .welcome-feature span:first-child { font-size: 1.6rem; filter: drop-shadow(0 0 6px rgba(196,154,42,0.3)); }
 
         .welcome-label {
             font-family: 'Inter', sans-serif;
@@ -346,9 +347,9 @@
         }
 
         .welcome-footer { text-align: center; }
-        .welcome-powered    { font-family: 'Inter', sans-serif; font-size: 0.62rem; font-weight: 500; color: rgba(255,255,255,0.2); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.2rem; }
-        .welcome-org        { font-family: 'Outfit', sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 0.3rem; }
-        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 0.78rem; color: rgba(255,255,255,0.7); direction: rtl; }
+        .welcome-powered    { font-family: 'Inter', sans-serif; font-size: 0.55rem; font-weight: 400; color: rgba(255,255,255,0.18); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+        .welcome-org        { font-family: 'Inter', sans-serif; font-size: 0.58rem; font-weight: 500; color: rgba(255,255,255,0.28); letter-spacing: 0.08em; }
+        .welcome-dedication { font-family: 'Frank Ruhl Libre', serif; font-size: 1.05rem; color: rgba(255,255,255,0.82); direction: rtl; margin-bottom: 0.3rem; line-height: 1.4; }
         /* ════════════════════════════════
            TAB NAVIGATION
         ════════════════════════════════ */
@@ -1820,6 +1821,46 @@
             letter-spacing: 0.8rem;
         }
 
+        /* ─── Font Size FAB ─── */
+        .font-fab {
+            position: fixed;
+            bottom: 72px; /* sits just above the tab bar */
+            right: 14px;
+            display: none;
+            align-items: center;
+            gap: 0px;
+            background: rgba(24,18,14,0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(196,154,42,0.3);
+            border-radius: 50px;
+            padding: 5px 7px;
+            z-index: 190;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.25);
+        }
+        .font-fab.visible { display: flex; }
+        .font-fab-btn {
+            width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center;
+            background: none; border: none; cursor: pointer;
+            color: rgba(196,154,42,0.85);
+            font-size: 1rem; font-weight: 700;
+            border-radius: 50%;
+            transition: color 0.15s, opacity 0.15s;
+            line-height: 1;
+        }
+        .font-fab-btn:hover { color: var(--gold-bright); }
+        .font-fab-btn:disabled { opacity: 0.25; cursor: default; }
+        .font-fab-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: rgba(196,154,42,0.5);
+            padding: 0 4px;
+            user-select: none;
+        }
+
         /* ─── Bottom padding for tab bar ─── */
         main, .purim-page { padding-bottom: 5rem; }
 
@@ -1904,9 +1945,8 @@
         <button class="welcome-btn" id="startReading">ENTER ›</button>
 
         <div class="welcome-footer">
-            <p class="welcome-powered">A project of</p>
-            <p class="welcome-org">Chabad of Eastern Queens</p>
             <p class="welcome-dedication">לזכות רפואה שלימה לחנה בת לאה</p>
+            <p class="welcome-powered">A project of &nbsp;<span class="welcome-org">MMM</span></p>
         </div>
     </div>
 </div>
@@ -5518,6 +5558,13 @@
     <div class="scroll-ornament">❧ ✦ ❧</div>
 </main>
 
+<!-- Font Size FAB -->
+<div class="font-fab" id="fontFab">
+    <button class="font-fab-btn" id="fontDecrease" title="Smaller text">A−</button>
+    <span class="font-fab-label">A</span>
+    <button class="font-fab-btn" id="fontIncrease" title="Larger text">A+</button>
+</div>
+
 <!-- ═══════════════════════════════════════
      PURIM GUIDE PAGE
 ════════════════════════════════════════ -->
@@ -6675,6 +6722,57 @@ document.querySelectorAll('.charity-org-btn').forEach(function(btn) {
 });
 
 })(); // end isolation wrapper
+</script>
+
+<!-- FONT SIZE FAB -->
+<script>
+(function() {
+    const SIZES = [0.80, 0.88, 0.96, 1.04, 1.12, 1.22, 1.34];
+    let idx = 2; // default (0.96 — slightly smaller than 1 to leave room to grow)
+
+    const fab      = document.getElementById('fontFab');
+    const btnUp    = document.getElementById('fontIncrease');
+    const btnDn    = document.getElementById('fontDecrease');
+
+    // Only show FAB on the Megillah page (not welcome screen, not Purim guide)
+    function checkVisibility() {
+        const welcome = document.querySelector('.welcome-screen');
+        const purim   = document.getElementById('page-purim');
+        const onWelcome = welcome && !welcome.classList.contains('hidden');
+        const onPurim   = purim && purim.classList.contains('active');
+        if (!onWelcome && !onPurim) {
+            fab.classList.add('visible');
+        } else {
+            fab.classList.remove('visible');
+        }
+    }
+
+    // Watch for tab switches
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() { setTimeout(checkVisibility, 50); });
+    });
+
+    // Watch for welcome screen dismissal
+    const startBtn = document.getElementById('startReading');
+    if (startBtn) startBtn.addEventListener('click', function() { setTimeout(checkVisibility, 300); });
+
+    function applySize() {
+        const scale = SIZES[idx];
+        document.querySelectorAll('.col-hebrew p, .col-hebrew-poem p').forEach(function(el) {
+            el.style.fontSize = (1.15 * scale) + 'rem';
+        });
+        document.querySelectorAll('.layer p').forEach(function(el) {
+            el.style.fontSize = (0.85 * scale) + 'rem';
+        });
+        btnUp.disabled = idx >= SIZES.length - 1;
+        btnDn.disabled = idx <= 0;
+    }
+
+    btnUp.addEventListener('click', function() { if (idx < SIZES.length - 1) { idx++; applySize(); } });
+    btnDn.addEventListener('click', function() { if (idx > 0) { idx--; applySize(); } });
+
+    applySize();
+})();
 </script>
 </body>
 </html>
